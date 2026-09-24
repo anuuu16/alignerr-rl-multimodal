@@ -1,20 +1,20 @@
 # RL Multimodal: submissions tracker
 
-Limit: **2 tasks**. Used: **1 / 2**
+Limit: **2 tasks**. Used: **2 / 2**
 
 | # | Task | Submitted | Repo @ commit | Labelbox | My verdict | Status |
 |---|---|---|---|---|---|---|
 | 1 | CmdPaletteMobileClip | 2026-09-24 | sairam0424/anvilry @ `51be61c` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz0197073875pfghqy) | Astra better (phone readability); Astra desktop regression noted | Submitted, awaiting review |
-| 2 | — | — | — | — | — | — |
+| 2 | MdxListInlineCode | 2026-09-24 | sairam0424/anvilry @ `638b594` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz018j07381i5bjoxj) | Astra better (Gemini's patch makes all 99 bullet dots invisible) | Submitted, awaiting review |
 
-Status values: `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
+Status values: `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
 
 ---
 
 ## 1. CmdPaletteMobileClip
 - **Task name:** Command palette clipped on both edges at 320px mobile width
 - **Rework context:** `_working/CmdPaletteMobileClip/REWORK_CONTEXT.md` (paths, sessions, how to regenerate evidence, likely reviewer objections)
-- **Files:** `RL Multimodal_CmdPaletteMobileClip.zip` · form answers in `outputs/CmdPaletteMobileClip/labelbox_form.md`
+- **Files:** `RL Multimodal_CmdPaletteMobileClip.zip` + separate upload `outputs/CmdPaletteMobileClip/CmdPaletteMobileClip_Author_Notes_and_Overall_UI.txt` · form answers in `outputs/CmdPaletteMobileClip/labelbox_form.md`
 - **Ratings submitted:** Astra better on 1, 2, 3, 6, 9 · Tie on 4, 5, 7, 8, 10
 - **Decisive difference:** at 320px, Gemini's placeholder is still cut off ("…or sw") and 44 descriptions are truncated; Astra shows everything
 - **Known weakness:** Astra's "Trelix" row overlaps at 768px and above
@@ -30,7 +30,24 @@ Status values: `Submitted, awaiting review` · `Approved` · `Rework requested` 
 
 ---
 
+## 2. MdxListInlineCode
+- **Task name:** Bullet list items split into columns when they contain bold or inline code
+- **Notes:** `_working/MdxListInlineCode/TASK.md` (ground truth + checks) · candidates considered: `_working/TASK2_CANDIDATES.md`
+- **Rework context:** `_working/MdxListInlineCode/REWORK_CONTEXT.md`
+- **Files:** `RL Multimodal_MdxListInlineCode.zip` + separate upload `outputs/MdxListInlineCode/MdxListInlineCode_Author_Notes_and_Overall_UI.txt` · form answers in `outputs/MdxListInlineCode/labelbox_form.md`
+- **Ratings:** Astra better on 4, 9, 10 · Tie on 1, 2, 3, 6, 8 · N/A on 5, 7
+- **Decisive difference:** identical layout fix, but Gemini's template-string className drops Tailwind's `before:bg-accent`, so all 99 bullet dots render transparent (confirmed in fresh dev and production build)
+- **Known weakness:** Astra ran fewer automated checks; Gemini's wrapper approach is structurally fine
+- **Same repo as task 1, earlier commit** (allowed: each task just needs a public repo and a specific commit)
+
+### Reviewer response
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
 ## Lessons for next tasks
-- Run both models with full access from the start. The Codex sandbox blocks Chromium on macOS.
+- Run both models with full access from the start: Codex `--dangerously-bypass-approvals-and-sandbox`, OpenCode `run --auto`. The Codex sandbox blocks Chromium on macOS, and `opencode run` without `--auto` auto-rejects permission prompts and ends the run.
 - Top up AI Studio prepay credits before starting. The free tier (20 requests/day) isn't enough for one agent run.
 - Pick a bug where Gemini is likely to miss the main requirement. In task 1, both found the same root cause, so the win came down to readability details.

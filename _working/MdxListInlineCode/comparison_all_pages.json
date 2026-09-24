@@ -1,0 +1,98 @@
+{
+  "original": {
+    "390": {
+      "li": 99,
+      "splitLi": 67,
+      "maxCodeH": 960,
+      "codeStretched": 24,
+      "dotMisaligned": 0,
+      "liHeightSum": 13416,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "static:8"
+      ],
+      "consoleErrors": []
+    },
+    "1440": {
+      "li": 99,
+      "splitLi": 46,
+      "maxCodeH": 264,
+      "codeStretched": 23,
+      "dotMisaligned": 0,
+      "liHeightSum": 5664,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "static:8"
+      ],
+      "consoleErrors": []
+    }
+  },
+  "Astra": {
+    "390": {
+      "li": 99,
+      "splitLi": 31,
+      "maxCodeH": 46,
+      "codeStretched": 3,
+      "dotMisaligned": 0,
+      "liHeightSum": 9624,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "absolute:8"
+      ],
+      "consoleErrors": []
+    },
+    "1440": {
+      "li": 99,
+      "splitLi": 11,
+      "maxCodeH": 46,
+      "codeStretched": 2,
+      "dotMisaligned": 0,
+      "liHeightSum": 4920,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "absolute:8"
+      ],
+      "consoleErrors": []
+    }
+  },
+  "Gemini": {
+    "390": {
+      "li": 99,
+      "splitLi": 31,
+      "maxCodeH": 46,
+      "codeStretched": 3,
+      "dotMisaligned": 0,
+      "liHeightSum": 9624,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "static:8"
+      ],
+      "consoleErrors": []
+    },
+    "1440": {
+      "li": 99,
+      "splitLi": 10,
+      "maxCodeH": 46,
+      "codeStretched": 2,
+      "dotMisaligned": 0,
+      "liHeightSum": 4920,
+      "textLeftSet": [
+        12
+      ],
+      "dotLeftSet": [
+        "static:8"
+      ],
+      "consoleErrors": []
+    }
+  }
+}

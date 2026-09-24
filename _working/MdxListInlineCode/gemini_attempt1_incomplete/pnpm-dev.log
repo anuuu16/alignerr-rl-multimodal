@@ -1,0 +1,70 @@
+ WARN  Unsupported engine: wanted: {"node":">=22 <23"} (current: {"node":"v23.9.0","pnpm":"10.10.0"})
+
+> anvilry@3.6.0 predev /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/gemini2-anvilry
+> velite
+
+[33m[VELITE][0m issues:
+content/articles/feature-flags-at-scale-devto.mdx
+ info The content is empty  body
+
+content/articles/feature-flags-at-scale-substack.mdx
+ info The content is empty  body
+
+content/articles/how-dns-works-devto.mdx
+ info The content is empty  body
+
+content/articles/how-dns-works-hashnode.mdx
+ info The content is empty  body
+
+content/articles/how-dns-works.mdx
+ info The content is empty  body
+
+content/articles/how-i-traced-one-browser-request-devto.mdx
+ info The content is empty  body
+
+content/articles/how-i-traced-one-browser-request-hashnode.mdx
+ info The content is empty  body
+
+content/articles/how-i-traced-one-browser-request-medium.mdx
+ info The content is empty  body
+
+content/articles/how-i-traced-one-browser-request-substack.mdx
+ info The content is empty  body
+
+content/articles/inkforge-build-devto.mdx
+ info The content is empty  body
+
+content/articles/tombstone-launch-devto.mdx
+ info The content is empty  body
+
+content/articles/tombstone-launch-substack.mdx
+ info The content is empty  body
+
+content/articles/tombstone-v1-2-devto.mdx
+ info The content is empty  body
+
+content/articles/trelix-v1-launch-devto.mdx
+ info The content is empty  body
+
+content/articles/trelix-v1-launch-substack.mdx
+ info The content is empty  body 
+[32m[VELITE][0m build finished in 730.86ms
+
+> anvilry@3.6.0 dev /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/gemini2-anvilry
+> next dev
+
+▲ Next.js 16.3.0 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.6:3000
+- Environments: .env.local
+✓ Ready in 1112ms
+⚠ `experimental.cacheComponents` has been moved to `cacheComponents`. Please update your next.config.ts file accordingly.
+✓ Running next.config.ts took 120ms
+[config] {"vercel_env":"local","node_env":"development","region":"us-east-1","flag_driver":"local","flags_sdk_configured":false,"flags_secret_configured":false,"beast_flags":{"orb_postprocessing":false,"ink_transition":false,"skill_tree":false,"orb_404":false,"visitor_counter":false},"integrations":{"bedrock":true,"upstash_redis":false,"google_tts":false,"github_token":false,"admin_password":false,"telemetry_ip_salt":false},"llm_provider":"bedrock","llm_sdk":"anthropic-bedrock"}
+- Cache Components enabled
+- Experiments (use with caution):
+  ✓ cacheComponents
+  ✓ inlineCss
+  · optimizePackageImports
+
+[?25h

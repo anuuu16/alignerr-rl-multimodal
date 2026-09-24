@@ -1,0 +1,39 @@
+Task: Command palette clipped on both edges at 320px mobile width
+Repo: https://github.com/sairam0424/anvilry
+Commit: 51be61c3a82eb1c3472460dabf2418bf7f893998
+Models: ChatGPT Astra (gpt-6-astra, reasoning medium, Codex CLI) vs Gemini 3.8 Flash (google/gemini-3.8-flash, OpenCode)
+Conditions: same prompt, same two screenshots (palette open at 320px and at 1440px), single turn, no follow-ups, full shell and browser access for both.
+
+
+==============================
+OVERALL UI COMPARISON
+==============================
+
+Astra has a verifiable advantage on the main requirement. The prompt is about a 320px phone where the placeholder and the result rows are cut off and the names and descriptions can't be read.
+
+Both models found the same root cause and both keep the palette inside the viewport. Only Astra makes the content readable. In Gemini's result the placeholder still cuts off mid-word at "...or sw" (311px of text in a 236px input), and every Switch View description is truncated ("the standard...", "full-pag...", "scan-frien..."). Astra shows the full placeholder and every description at 320px and 375px (0 truncated texts vs 44 for Gemini at 320px). Interactions, styling, icons and accessibility are equivalent.
+
+Astra is not flawless. At 768px and above, the "Trelix" row's label and description overlap, while Gemini renders that row correctly. This row is below the fold of the desktop screenshot in the prompt, and Gemini also changes two lower desktop rows. I weigh Astra's phone-width result as the decisive difference because it is the defect the prompt reports. The desktop overlap is a real but secondary regression.
+
+
+==============================
+AUTHOR NOTES
+==============================
+
+Required: at 320px the palette, placeholder and result rows are clipped. Names and descriptions must become readable without horizontal scroll, while desktop stays as in screenshot 2.
+
+What Astra did: constrained cmdk's wrapper (w-full min-w-0 max-w-lg, 12px side padding), shortened the placeholder on phones, and moved descriptions under the labels. At 320px and 375px nothing is clipped or truncated, and at 1440px the card is 512px wide and centered.
+
+What Gemini did: made the same wrapper fix (16px side padding) but kept the full placeholder and truncated the descriptions. At 320px the placeholder cuts off at "...or sw" and the view descriptions read "the standard...", "full-pag..." and "scan-frien..." (44 truncated text spans).
+
+Evidence: after_320px_search_row.png and after_320px_palette_open.png in both model folders; measurements.json in both folders (placeholder: 311px of text in a 236px input for Gemini vs 136px in a 244px input for Astra; truncatedTexts: 0 for Astra vs 44 for Gemini). Interaction checks (Cmd+K, arrow keys, Enter, Escape, focus, resize 320px to 1440px and back) are recorded for both in recordings/interaction_320px_open_keyboard_escape_resize_enter.webm, with identical results.
+
+Why it matters: on a phone, a user of Gemini's version still can't read what most commands do, or the search hint, which was the reported problem.
+
+Astra limitations: at 768px and 1440px the "Trelix" row label overlaps its description (after_1440px_row_Trelix.png compared with before_1440px_row_Trelix.png), and Astra's summary wrongly says the desktop layout is preserved.
+
+Gemini strengths: same correct root-cause diagnosis, correct desktop rendering of that row, equivalent keyboard, focus and resize behavior, and thorough browser verification.
+
+Comparability note: an earlier Astra run was made inside the Codex sandbox, which blocked Chromium. I discarded it and reran Astra with full access so both models had the same browser access. Earlier Gemini attempts stopped on API quota and billing errors before producing a result. Neither of those is part of this comparison.
+
+All "after" evidence was captured from both final patches under identical conditions (same Chromium, same viewports, palette opened the same way).
