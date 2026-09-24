@@ -1,0 +1,2057 @@
+Reading additional input from stdin...
+OpenAI Codex v0.156.1
+--------
+workdir: /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+model: gpt-6-astra
+provider: openai
+approval: never
+sandbox: workspace-write [workdir, /tmp, $TMPDIR] (network access enabled)
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a0cf6b-0d12-7f92-bfe5-054a154f3412
+--------
+user
+Repo: https://github.com/sairam0424/anvilry
+Commit: 51be61c3a82eb1c3472460dabf2418bf7f893998 (already checked out in this directory, deps installed, run with `pnpm dev`)
+
+Attached screenshots:
+1. before_320px_palette_open.png  - home page at 320px wide with the command palette (Cmd+K) open
+2. before_1440px_palette_open.png - the same palette on a 1440px desktop
+
+On a 320px-wide phone the command palette is broken, as in screenshot 1: the search placeholder and every result row are cut off on both the left and the right edge, so the view names and descriptions can't be read. The palette should fit inside the screen with a small side margin at phone widths, with nothing clipped and no horizontal scrolling. On desktop it should keep looking exactly like screenshot 2.
+
+Please find the root cause and fix it properly (not just hide the overflow), then check the result in a browser at 320px, 375px and 1440px and show me what you verified.
+codex
+I’ll trace the palette’s sizing, fix the mobile layout, and check it in the browser at all three widths while preserving the desktop appearance.
+exec
+/bin/zsh -lc "pwd; rg -n 'CommandPalette|command-palette|Jump to a page' . --glob '"'!pnpm-lock.yaml'"' --glob '"'!package-lock.json'"'" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 636ms:
+./VOICE.md:58:7. **Voice command group** (`src/components/command-palette.tsx`) — the six toggles/actions for all voice features, in the ⌘K palette's **Voice** group (see [§3](#3-feature-flags--settings-reference)).
+./VOICE.md:636:1. Remove the **"Voice"** group from `src/components/command-palette.tsx`.
+./VOICE.md:737:5. Add a palette toggle in `command-palette.tsx` (UI is already engine-agnostic).
+./CLAUDE.md:117:| `resume` | never | Recruiter view. Reached via Cmd+K → "Recruiter view" (`command-palette.tsx:179` calls `switchTo("resume")`) or `?view=resume`. **Distinct from the standalone `/resume` page**, which renders `ResumeViewInline` and never touches the view store |
+./CHANGELOG.md:716:- The command-palette voice-surface toggle is relabeled "Show / Hide voice modal
+./e2e/views.spec.ts:94:  // CommandPalette live in the persistent layout.tsx, so the palette is reachable
+./src/app/globals.css:229: * ask-portfolio.tsx), the command-palette trigger (bottom-5 right-5, command-palette.tsx),
+./docs/superpowers/specs/2026-06-13-terminal-dev-mode-design.md:20:- **Not a 4th view:** a `dev` view would edit the `View` union, switcher, router, command-palette, and `page.tsx`, and duplicate the WebGL-dispose / deep-link / escape-hatch / SEO / reduced-motion scaffolding. Expanding in Play inherits all of it free. "Easy to miss" is a *prominence* bug — fixed with layout + a labelled panel + chips + a ⌘K "Developer mode" entry.
+./docs/superpowers/specs/2026-06-13-terminal-dev-mode-design.md:79:- **Modified:** `src/components/game/game-view.tsx` (re-rank + maximize), `src/components/command-palette.tsx` (⌘K "Developer mode" entry).
+./next.config.ts:95:  // noopener,noreferrer (command-palette, article cards), so they never relied on
+./src/components/command-palette-content.tsx:94:type CommandPaletteContentProps = {
+./src/components/command-palette-content.tsx:101:export function CommandPaletteContent({
+./src/components/command-palette-content.tsx:106:}: CommandPaletteContentProps) {
+./src/components/command-palette-content.tsx:638:              placeholder="Jump to a page, run an action, or switch view…"
+./docs/superpowers/plans/2026-06-13-terminal-dev-mode.md:35:- **Modified:** `src/components/game/game-view.tsx` (re-rank + maximize), `src/components/command-palette.tsx` (⌘K "Developer mode" entry), delete old `src/components/game/terminal.tsx` (moves into `terminal/`).
+./docs/superpowers/plans/2026-06-13-terminal-dev-mode.md:837:### Task 14: ⌘K "Developer mode" command-palette entry
+./docs/superpowers/plans/2026-06-13-terminal-dev-mode.md:840:- Modify: `src/components/command-palette.tsx`
+./src/app/layout.tsx:7:import { CommandPalette } from "@/components/command-palette";
+./src/app/layout.tsx:120:          <CommandPalette discoveryBadgesEnabled={discoveryBadgesEnabled} />
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:32:| `src/components/command-palette.tsx` | **Modify** | Accept `discoveryBadgesEnabled: boolean` prop instead of inline `process.env` read. |
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:234:## Task 3: Remove inline `process.env` reads from `command-palette.tsx`
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:245:- Modify: `src/components/command-palette.tsx`
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:248:- Consumes: `discoveryBadgesEnabled: boolean` prop (injected from wherever `<CommandPalette>` is mounted)
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:250:- [ ] **Step 1: Find where `<CommandPalette>` is mounted**
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:253:grep -rn "CommandPalette" src/ --include="*.tsx" --include="*.ts"
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:258:- [ ] **Step 2: Add `discoveryBadgesEnabled` prop to `CommandPalette`**
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:260:In `src/components/command-palette.tsx`, find the component's prop type (look for `type Props = {...}` or the function signature) and add:
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:287:<CommandPalette discoveryBadgesEnabled={discoveryBadgesEnabled} />
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:292:- [ ] **Step 4: Remove the now-unused `unlockAll` import from `command-palette.tsx` if it was only used in the conditional block**
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:295:grep -n "unlockAll" src/components/command-palette.tsx
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:311:git add src/components/command-palette.tsx src/app/layout.tsx
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:312:git commit -m "refactor(flags): remove inline process.env read from command-palette"
+./docs/superpowers/plans/2026-06-18-vercel-flags-sdk.md:481:Expected: 5 commits on `feat/vercel-flags-sdk` — install+flags.ts, layout+providers, command-palette, manifest route, docs.
+./src/components/game/discovery-badge.tsx:14: * - Positioned directly above the command-palette trigger button
+./src/components/game/discovery-badge.tsx:15: *   (command-palette.tsx's `fixed bottom-5 right-5` pill) instead of sharing its
+./docs/index/15-invariants-and-gotchas.md:487:| Command-palette actions whose **label** mutates must pin a stable `value` or cmdk re-scores mid-interaction | `src/components/command-palette-content.tsx:321-323` (`copy-email`), `:454-455` (`voice-tts`), plus four other voice toggles |
+./docs/index/15-invariants-and-gotchas.md:488:| Recent palette items need a `valuePrefix="recent"` so their cmdk values do not collide with the canonical copies | `src/components/command-palette-content.tsx:656`, `:719` |
+./docs/index/15-invariants-and-gotchas.md:489:| `VoicePicker`/`VoiceSettingsDialog` are siblings of the palette dialog, opened only after it closes, to avoid two stacked Radix focus traps | `src/components/command-palette-content.tsx:678-681` |
+./docs/index/05-components-chat-voice.md:77:| `talk-overlay-store.ts` | `open: boolean`, `opener: HTMLElement \| null` (module-scope, `talk-overlay-store.ts:17-18`) | `openTalkMode(triggerEl?)` (:30), `setTalkModeOpen(next)` (:38); force-close registered as `"modal"` (:46) | `useTalkModeOpen()` (:54), `getTalkOpener()` (:49). Called by `command-palette-content.tsx:427`, `talk-launch-button.tsx:33`, `header-orb-trigger.tsx:76`, `wake-word-controller.tsx:51`, `game/build-graph.tsx:11` | `false` (:57) |
+./docs/index/05-components-chat-voice.md:397:- **Consumed by:** `talk-mode.tsx:19` (`mode="dialog"`), `voice-settings-dialog.tsx:7` (`mode="inline"`), `command-palette-content.tsx:56` (rendered at :682).
+./docs/index/05-components-chat-voice.md:405:- **Consumed by:** `command-palette-content.tsx:57` (rendered at :692).
+./docs/index/14-subsystems.md:82:handlers, and `command-palette.tsx` (~44 non-test importers in total, per section 03).
+./docs/index/08-components-site-shell-ui.md:29:| `src/components/command-palette.tsx` | ⌘K/Ctrl-K cmdk palette: views, nav, actions, voice settings, work/project items, MRU recents | `CommandPalette` |
+./docs/index/08-components-site-shell-ui.md:167:### `src/components/command-palette.tsx`
+./docs/index/08-components-site-shell-ui.md:169:- **Exports:** `CommandPalette` (component) — props `{ discoveryBadgesEnabled: boolean }`. `Group` is module-private (`:535`).
+./docs/index/08-components-site-shell-ui.md:260:- **Consumed by:** `site-nav.tsx`, `site-footer.tsx`, `mobile-nav.tsx`, `command-palette.tsx`, `project-card.tsx`, `home/hero.tsx`, `home/contact.tsx`, `chat/chat-card.tsx`, `game/developer-rail.tsx`, `game/dossier-card.tsx`, `src/app/projects/[slug]/page.tsx`.
+./docs/index/08-components-site-shell-ui.md:349:- `src/components/command-palette.tsx`
+./docs/index/04-lib-ai-voice-infra.md:161:- **Consumed by:** `src/app/api/tts/route.ts:8`, `src/app/api/tts-google/route.ts:5`, `src/components/command-palette-content.tsx:55`, `src/components/chat/voice-picker.tsx:12`, `src/components/chat/use-speech-synthesis.ts:9`, `src/components/chat/voice-settings-dialog.tsx:18`, `src/components/chat/talk-mode.tsx:21`, `src/lib/voice-settings-context.tsx:4`.
+./docs/index/04-lib-ai-voice-infra.md:175:- **Consumed by:** `src/components/command-palette-content.tsx:49`, `src/components/chat/chat-messages.tsx:11`, `use-voice-session.ts:7`, `talk-launch-button.tsx:6`, `voice-settings-dialog.tsx:17`, `use-speech-synthesis.ts:14`, `talk-mode.tsx:20`, `wake-word-controller.tsx:6`, `mic-button.tsx:6`.
+./src/components/game/terminal/terminal-overlay.tsx:17: * triggerRef — mirroring command-palette.tsx's triggerRef pattern.
+./docs/index/03-lib-content-data.md:150:- **Consumed by:** ~44 non-test files including all four content route trees, `sitemap.ts`, `feed.xml/route.ts`, all four `/api/md/*` routes, all four `[slug].md` routes, `command-palette.tsx`, `game/terminal/commands.ts`, and the five sibling lib derivations (`corpus.ts`, `game-model.ts`, `llms-txt.ts`, `resume-json.ts`, `mcp-tools.ts`, `article-grouping.ts` type-only, `profile.ts`, `agent-trace.ts`).
+./docs/index/03-lib-content-data.md:241:- **Consumed by:** `chat/chat-messages.tsx`, `command-palette.tsx`, `game/discovery-badge.tsx`, `game/dossier-card.tsx`, `game/easter-eggs.tsx`, `game/terminal/use-terminal.ts`, `components/view-context.tsx`.
+./docs/index/11-config-build-ci-infra.md:323:| `NEXT_PUBLIC_RESUME_VARIANTS` | No (default off) | `src/app/resume/page.tsx:24`; `src/components/home/resume-view.tsx:42`; `src/components/command-palette-content.tsx:327`; `src/components/game/terminal/commands.ts:206` | Show all 5 resume variants vs only `resumeVariants[0]` | **Undocumented in `.env.example`** despite 4 call sites |
+./docs/index/11-config-build-ci-infra.md:745:  `src/components/command-palette-content.tsx:327`, `src/components/game/terminal/commands.ts:206`). The MCP
+./docs/index/13-dependencies-and-versions.md:64:| `src/components/command-palette.tsx` | Only consumer of `cmdk`; also `@radix-ui/react-dialog` + `@vercel/analytics` `track` | `CommandPalette` |
+./docs/index/13-dependencies-and-versions.md:85:| `@radix-ui/react-dialog` | `^1.1.23` | prod | Accessible dialog primitives for 5 overlays | `src/components/command-palette-content.tsx:18`; `src/components/chat/talk-mode-overlay.tsx:3`; `src/components/chat/voice-picker.tsx:4`; `src/components/game/terminal/terminal-overlay.tsx:3` (also `chat/voice-settings-dialog.tsx:4`) | Client-bundled |
+./docs/index/13-dependencies-and-versions.md:92:| `@vercel/analytics` | `^2.0.1` | prod | `<Analytics/>` beacon + imperative `track()` events | `src/app/layout.tsx:16,123`; `src/components/command-palette-content.tsx:11`; `src/components/game/terminal/terminal.tsx:4`; `src/components/game/terminal/use-terminal.ts:6` | Client-bundled. `va.vercel-scripts.com` is allow-listed in `script-src`/`connect-src` (`next.config.ts`) |
+./docs/index/13-dependencies-and-versions.md:96:| `cmdk` | `^1.1.1` | prod | Command palette primitives (`Command.Dialog/Input/List/Group/Item`) | `src/components/command-palette-content.tsx:12,610,633,650,713,718` — only import site | Client-bundled |
+./docs/index/13-dependencies-and-versions.md:371:- `src/components/command-palette.tsx`
+./docs/index/01-routes-pages.md:109:- **Client boundary:** `Providers` (`src/components/providers.tsx:1` is `"use client"`) wraps `SiteNav`, the `#main-content` div holding `children`, `SiteFooter`, `CommandPalette`, `AskPortfolio`, `TalkModeMount`, `AnvilInlinePanel`, `AnvilCoreSurface`, `WakeWordController`, `ViewHint`, `EasterEggs` (`:97-122`). `Providers` mounts `MotionConfig reducedMotion="user"` → `ViewProvider` → `ScrollFlagsSync` and lazily `InkTransition` + (conditionally) `DiscoveryBadge`. `ViewProvider` is what mounts `ViewQuerySync` (`src/components/view-context.tsx:182`), the post-hydration `?view=` applier.
+./docs/index/12-docs-knowledge-and-harness.md:161:| 1.3.0 (2026-06-14) | Engineering-visible release: command-palette upgrades, notes scaffolding, view-transition polish, first-party GitHub feed, MCP endpoint fixes. |
+./docs/index/14b-subsystems.md:258:| `NEXT_PUBLIC_RESUME_VARIANTS` | `resume/page.tsx:24`, `home/resume-view.tsx:42`, `command-palette-content.tsx:327`, `game/terminal/commands.ts:206` | all 5 résumé PDFs vs only `resumeVariants[0]`. **`developer-rail.tsx:35-47` is NOT gated** — it always lists all five. |
+./docs/index/14b-subsystems.md:290:| `vi.stubEnv` stops working in tests | Hoisting a flag read from inside a function body to module scope. Deliberately inside the body at `resume/page.tsx:23-24`, `home/resume-view.tsx:41-43`, `command-palette-content.tsx:325-327`, `commands.ts:204-206`, `hero.tsx:15-16`, `hero-avatar/index.tsx:49`. |
+./docs/index/14b-subsystems.md:686:| Palette `value` pinning | `command-palette-content.tsx:321-323` (`copy-email`), `:454-455` (`voice-tts`), plus four other voice toggles — cmdk re-scores when a label mutates |
+./src/components/command-palette.tsx:12:const CommandPaletteContent = dynamic(
+./src/components/command-palette.tsx:14:    import("@/components/command-palette-content").then(
+./src/components/command-palette.tsx:15:      (m) => m.CommandPaletteContent,
+./src/components/command-palette.tsx:20:type CommandPaletteProps = {
+./src/components/command-palette.tsx:24:export function CommandPalette({
+./src/components/command-palette.tsx:26:}: CommandPaletteProps) {
+./src/components/command-palette.tsx:74:        <CommandPaletteContent
+
+exec
+/bin/zsh -lc "git status --short; cat package.json; sed -n '590,770p' src/components/command-palette-content.tsx; rg -n 'cmdk|command' src/app/globals.css; cat playwright.config.ts; ls node_modules/next/dist/docs/01-app/02-guides; rg --files -g AGENTS.md -g '*palette*' e2e src" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 187ms:
+{
+  "name": "anvilry",
+  "version": "3.6.0",
+  "private": true,
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "predev": "velite",
+    "dev": "next dev",
+    "build": "velite --clean && vitest run && next build && pagefind --site .next/server/app --output-path public/pagefind",
+    "analyze": "velite --clean && ANALYZE=true next build --webpack",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "content": "velite --clean",
+    "clean": "rm -rf .next .turbo node_modules/.cache .velite",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@anthropic-ai/bedrock-sdk": "^0.33.3",
+    "@anthropic-ai/sdk": "^0.122.0",
+    "@aws-sdk/client-polly": "^3.1121.0",
+    "@aws-sdk/client-transcribe-streaming": "^3.1121.0",
+    "@modelcontextprotocol/sdk": "1.26.0",
+    "@radix-ui/react-dialog": "^1.1.23",
+    "@radix-ui/react-tooltip": "^1.2.16",
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@react-three/postprocessing": "3.0.4",
+    "@types/three": "^0.185.4",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "@whatisjery/react-fluid-distortion": "^1.6.3",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "flags": "^4.3.0",
+    "lucide-react": "^1.31.0",
+    "mcp-handler": "^1.1.0",
+    "motion": "^12.40.0",
+    "next": "16.3.3",
+    "pdfjs-dist": "^6.2.108",
+    "postprocessing": "^6.39.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "tailwind-merge": "^3.6.0",
+    "three": "^0.185.1",
+    "use-stick-to-bottom": "^1.1.6",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^16.3.3",
+    "@playwright/test": "^1.62.1",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.3",
+    "happy-dom": "^20.12.0",
+    "pagefind": "^1.5.2",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "velite": "^0.4.0",
+    "vitest": "^4.1.11",
+    "web-vitals": "^6.1.1"
+  }
+}
+  // Resolve recent ids → live Action objects (ignoring any that no longer exist,
+  // e.g. a removed project slug). Shown ONLY on an empty query, so a recent item
+  // is never on-screen alongside its canonical copy during filtering.
+  const allActions = [
+    ...views,
+    ...nav,
+    ...actions,
+    ...voice,
+    ...workItems,
+    ...projItems,
+    ...links,
+  ];
+  const byId = new Map(allActions.map((a) => [a.id, a])); // eslint-disable-line react-hooks/refs -- false positive; byId is a plain Map, not a ref
+  const recentItems: Action[] = recent
+    .map((id) => byId.get(id))
+    .filter((a): a is Action => Boolean(a));
+  const showRecent = search.trim() === "" && recentItems.length > 0;
+
+  return (
+    <>
+      <Command.Dialog
+        open={open}
+        onOpenChange={setOpen}
+        label="Command palette"
+        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
+      >
+        {/* Accessible name + description for the underlying Radix DialogContent
+            (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+            console error; these register because they share cmdk's Radix instance. */}
+        <DialogTitle className="sr-only">Command palette</DialogTitle>
+        <DialogDescription className="sr-only">
+          Search and jump to a page, project, link, or switch the view.
+        </DialogDescription>
+        <div
+          className="fixed inset-0 bg-bg-base/70 backdrop-blur-sm"
+          onClick={() => setOpen(false)}
+        />
+        <div className="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-border-strong bg-bg-surface shadow-2xl">
+          {/* The search row carries the focus affordance (accent bottom-border via
+              focus-within) — cleaner than the glaring global :focus-visible box that
+              would otherwise ring the autofocused input inside the modal. */}
+          <div className="flex items-center gap-2 border-b border-border px-4 transition-colors focus-within:border-accent">
+            <span className="font-mono text-accent">{">"}</span>
+            <Command.Input
+              autoFocus
+              value={search}
+              onValueChange={setSearch}
+              aria-label="Search commands"
+              placeholder="Jump to a page, run an action, or switch view…"
+              spellCheck={false}
+              autoComplete="off"
+              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+            />
+          </div>
+          {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+              cmdk option's label, which is NOT a live region — screen readers wouldn't
+              announce it. This polite region speaks the success without moving focus. */}
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {copied ? "Email copied to clipboard" : ""}
+          </div>
+          <Command.List className="max-h-[50vh] overflow-y-auto p-2">
+            <Command.Empty className="px-3 py-6 text-center text-sm text-fg-subtle">
+              No results.
+            </Command.Empty>
+            {/* Recent — MRU, idle-only (empty query). Prefixed value keeps it from
+                colliding with the canonical copy under cmdk's value-based nav. */}
+            {showRecent && (
+              <Group
+                heading="Recent"
+                actions={recentItems}
+                onRun={record}
+                valuePrefix="recent"
+              />
+            )}
+            <Group heading="Switch view" actions={views} onRun={record} />
+            <Group heading="Navigate" actions={nav} onRun={record} />
+            <Group heading="Actions" actions={actions} onRun={record} />
+            {/* eslint-disable-next-line react-hooks/refs -- false positive; voice is a plain Action[], not a ref */}
+            {voice.length > 0 && (
+              <Group heading="Voice" actions={voice} onRun={record} />
+            )}
+            <Group heading="Work" actions={workItems} onRun={record} />
+            <Group heading="Projects" actions={projItems} onRun={record} />
+            <Group heading="Links" actions={links} onRun={record} />
+          </Command.List>
+        </div>
+      </Command.Dialog>
+
+      {/* Voice picker dialog. Mounted as a sibling to the palette so the palette's
+          own Dialog can close cleanly before this one opens (avoids two stacked
+          Radix focus-traps fighting). The trigger that opened it is the palette's
+          own kbd shortcut, so focus restores to the palette pill via triggerRef. */}
+      <VoicePicker
+        mode="dialog"
+        open={voicePickerOpen}
+        onOpenChange={setVoicePickerOpen}
+        currentVoiceId={currentVoiceId}
+        onPick={(id) => set({ voiceId: id })}
+        getOpener={() => triggerRef.current}
+      />
+
+      {/* Canonical voice settings dialog — engine, character, toggles in one place. */}
+      <VoiceSettingsDialog
+        open={voiceSettingsOpen}
+        onOpenChange={setVoiceSettingsOpen}
+        getOpener={() => triggerRef.current}
+      />
+    </>
+  );
+}
+
+function Group({
+  heading,
+  actions,
+  onRun,
+  valuePrefix,
+}: {
+  heading: string;
+  actions: Action[];
+  onRun?: (id: string) => void;
+  valuePrefix?: string;
+}) {
+  return (
+    <Command.Group
+      heading={heading}
+      className="px-2 py-1.5 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-fg-subtle"
+    >
+      {actions.map((a) => (
+        <Command.Item
+          key={valuePrefix ? `${valuePrefix}-${a.id}` : a.id}
+          value={`${valuePrefix ? `${valuePrefix} ` : ""}${a.value ?? `${a.label} ${a.hint ?? ""} ${a.keywords ?? ""}`}`}
+          onSelect={() => {
+            onRun?.(a.id);
+            a.run();
+          }}
+          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
+        >
+          <span className="text-accent">{a.icon}</span>
+          <span className="flex-1">{a.label}</span>
+          {a.hint && (
+            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
+          )}
+          <ArrowUpRight size={13} className="text-fg-subtle" />
+        </Command.Item>
+      ))}
+    </Command.Group>
+  );
+}
+229: * ask-portfolio.tsx), the command-palette trigger (bottom-5 right-5, command-palette.tsx),
+import { defineConfig, devices } from "@playwright/test";
+
+export default defineConfig({
+  testDir: "./e2e",
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: "html",
+  use: {
+    baseURL: "http://localhost:3000",
+    trace: "on-first-retry",
+    video: "on-first-retry",
+  },
+  projects: [
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "mobile-safari",
+      use: { ...devices["iPhone 13"] },
+    },
+  ],
+  // Server management.
+  //
+  // Previously this was deliberately absent ("run `pnpm dev` first"), which respected the
+  // /dev-local workflow but had a real failure mode: if a STALE server already held :3000 (or a
+  // new one failed to bind with EADDRINUSE), Playwright silently tested whatever was listening —
+  // an older build. That produced 5 "failures" twice during a release audit and read exactly like
+  // an app regression. Nothing surfaced the cause.
+  //
+  // `reuseExistingServer: !process.env.CI` keeps the existing local workflow intact (an already-
+  // running `pnpm dev` / `pnpm start` is reused, nothing is duplicated), while guaranteeing that a
+  // server IS up and answering before any test runs. In CI it always starts a fresh one, so the
+  // suite is self-contained and needs no manual setup step.
+  webServer: {
+    command: "pnpm start",
+    url: "http://localhost:3000",
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+    stdout: "ignore",
+    stderr: "pipe",
+  },
+});
+adopting-partial-prefetching.md
+ai-agents.md
+analytics.md
+authentication-with-cache-components.md
+authentication.md
+backend-for-frontend.md
+building.md
+caching-without-cache-components.md
+cdn-caching.md
+ci-build-caching.md
+client-side-data-fetching
+content-security-policy.md
+css-in-js.md
+custom-server.md
+data-security.md
+debugging.md
+deploying-to-platforms.md
+draft-mode.md
+environment-variables.md
+forms.md
+how-revalidation-works.md
+incremental-static-regeneration-cache-components.md
+incremental-static-regeneration.md
+index.md
+instant-navigation.md
+instrumentation.md
+interactive-apps.md
+internationalization.md
+json-ld.md
+lazy-loading.md
+local-development.md
+mcp.md
+mdx.md
+memory-usage.md
+migrating
+migrating-to-cache-components.md
+multi-tenant.md
+multi-zones.md
+offline-support.md
+open-telemetry.md
+optimizing-prefetching.md
+package-bundling.md
+ppr-platform-guide.md
+prefetching.md
+preserving-ui-state.md
+preventing-flash-before-hydration.md
+production-checklist.md
+progressive-web-apps.md
+public-static-pages.md
+redirecting.md
+rendering-philosophy.md
+sass.md
+scripts.md
+self-hosting.md
+server-actions.md
+server-and-client-boundary.md
+single-page-applications.md
+static-exports.md
+streaming.md
+tailwind-v3-css.md
+testing
+third-party-libraries.md
+upgrading
+videos.md
+view-transitions.md
+src/components/command-palette-content.tsx
+src/components/command-palette.tsx
+
+exec
+/bin/zsh -lc "cat node_modules/next/dist/docs/01-app/01-getting-started/05-css.md; rg -n 'contentClassName|cmdk-root' node_modules/cmdk/dist/index.mjs; sed -n '1,125p' e2e/views.spec.ts; cat src/components/command-palette.tsx" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 75ms:
+1:"use client";import{a as ae}from"./chunk-NZJY6EH4.mjs";import*as w from"@radix-ui/react-dialog";import*as t from"react";import{Primitive as D}from"@radix-ui/react-primitive";import{useId as H}from"@radix-ui/react-id";import{composeRefs as G}from"@radix-ui/react-compose-refs";var N='[cmdk-group=""]',Y='[cmdk-group-items=""]',be='[cmdk-group-heading=""]',le='[cmdk-item=""]',ce=`${le}:not([aria-disabled="true"])`,Z="cmdk-item-select",T="data-value",Re=(r,o,n)=>ae(r,o,n),ue=t.createContext(void 0),K=()=>t.useContext(ue),de=t.createContext(void 0),ee=()=>t.useContext(de),fe=t.createContext(void 0),me=t.forwardRef((r,o)=>{let n=L(()=>{var e,a;return{search:"",value:(a=(e=r.value)!=null?e:r.defaultValue)!=null?a:"",selectedItemId:void 0,filtered:{count:0,items:new Map,groups:new Set}}}),u=L(()=>new Set),c=L(()=>new Map),d=L(()=>new Map),f=L(()=>new Set),p=pe(r),{label:b,children:m,value:R,onValueChange:x,filter:C,shouldFilter:S,loop:A,disablePointerSelection:ge=!1,vimBindings:j=!0,...O}=r,$=H(),q=H(),_=H(),I=t.useRef(null),v=ke();k(()=>{if(R!==void 0){let e=R.trim();n.current.value=e,E.emit()}},[R]),k(()=>{v(6,ne)},[]);let E=t.useMemo(()=>({subscribe:e=>(f.current.add(e),()=>f.current.delete(e)),snapshot:()=>n.current,setState:(e,a,s)=>{var i,l,g,y;if(!Object.is(n.current[e],a)){if(n.current[e]=a,e==="search")J(),z(),v(1,W);else if(e==="value"){if(document.activeElement.hasAttribute("cmdk-input")||document.activeElement.hasAttribute("cmdk-root")){let h=document.getElementById(_);h?h.focus():(i=document.getElementById($))==null||i.focus()}if(v(7,()=>{var h;n.current.selectedItemId=(h=M())==null?void 0:h.id,E.emit()}),s||v(5,ne),((l=p.current)==null?void 0:l.value)!==void 0){let h=a!=null?a:"";(y=(g=p.current).onValueChange)==null||y.call(g,h);return}}E.emit()}},emit:()=>{f.current.forEach(e=>e())}}),[]),U=t.useMemo(()=>({value:(e,a,s)=>{var i;a!==((i=d.current.get(e))==null?void 0:i.value)&&(d.current.set(e,{value:a,keywords:s}),n.current.filtered.items.set(e,te(a,s)),v(2,()=>{z(),E.emit()}))},item:(e,a)=>(u.current.add(e),a&&(c.current.has(a)?c.current.get(a).add(e):c.current.set(a,new Set([e]))),v(3,()=>{J(),z(),n.current.value||W(),E.emit()}),()=>{d.current.delete(e),u.current.delete(e),n.current.filtered.items.delete(e);let s=M();v(4,()=>{J(),(s==null?void 0:s.getAttribute("id"))===e&&W(),E.emit()})}),group:e=>(c.current.has(e)||c.current.set(e,new Set),()=>{d.current.delete(e),c.current.delete(e)}),filter:()=>p.current.shouldFilter,label:b||r["aria-label"],getDisablePointerSelection:()=>p.current.disablePointerSelection,listId:$,inputId:_,labelId:q,listInnerRef:I}),[]);function te(e,a){var i,l;let s=(l=(i=p.current)==null?void 0:i.filter)!=null?l:Re;return e?s(e,n.current.search,a):0}function z(){if(!n.current.search||p.current.shouldFilter===!1)return;let e=n.current.filtered.items,a=[];n.current.filtered.groups.forEach(i=>{let l=c.current.get(i),g=0;l.forEach(y=>{let h=e.get(y);g=Math.max(h,g)}),a.push([i,g])});let s=I.current;V().sort((i,l)=>{var h,F;let g=i.getAttribute("id"),y=l.getAttribute("id");return((h=e.get(y))!=null?h:0)-((F=e.get(g))!=null?F:0)}).forEach(i=>{let l=i.closest(Y);l?l.appendChild(i.parentElement===l?i:i.closest(`${Y} > *`)):s.appendChild(i.parentElement===s?i:i.closest(`${Y} > *`))}),a.sort((i,l)=>l[1]-i[1]).forEach(i=>{var g;let l=(g=I.current)==null?void 0:g.querySelector(`${N}[${T}="${encodeURIComponent(i[0])}"]`);l==null||l.parentElement.appendChild(l)})}function W(){let e=V().find(s=>s.getAttribute("aria-disabled")!=="true"),a=e==null?void 0:e.getAttribute(T);E.setState("value",a||void 0)}function J(){var a,s,i,l;if(!n.current.search||p.current.shouldFilter===!1){n.current.filtered.count=u.current.size;return}n.current.filtered.groups=new Set;let e=0;for(let g of u.current){let y=(s=(a=d.current.get(g))==null?void 0:a.value)!=null?s:"",h=(l=(i=d.current.get(g))==null?void 0:i.keywords)!=null?l:[],F=te(y,h);n.current.filtered.items.set(g,F),F>0&&e++}for(let[g,y]of c.current)for(let h of y)if(n.current.filtered.items.get(h)>0){n.current.filtered.groups.add(g);break}n.current.filtered.count=e}function ne(){var a,s,i;let e=M();e&&(((a=e.parentElement)==null?void 0:a.firstChild)===e&&((i=(s=e.closest(N))==null?void 0:s.querySelector(be))==null||i.scrollIntoView({block:"nearest"})),e.scrollIntoView({block:"nearest"}))}function M(){var e;return(e=I.current)==null?void 0:e.querySelector(`${le}[aria-selected="true"]`)}function V(){var e;return Array.from(((e=I.current)==null?void 0:e.querySelectorAll(ce))||[])}function X(e){let s=V()[e];s&&E.setState("value",s.getAttribute(T))}function Q(e){var g;let a=M(),s=V(),i=s.findIndex(y=>y===a),l=s[i+e];(g=p.current)!=null&&g.loop&&(l=i+e<0?s[s.length-1]:i+e===s.length?s[0]:s[i+e]),l&&E.setState("value",l.getAttribute(T))}function re(e){let a=M(),s=a==null?void 0:a.closest(N),i;for(;s&&!i;)s=e>0?we(s,N):De(s,N),i=s==null?void 0:s.querySelector(ce);i?E.setState("value",i.getAttribute(T)):Q(e)}let oe=()=>X(V().length-1),ie=e=>{e.preventDefault(),e.metaKey?oe():e.altKey?re(1):Q(1)},se=e=>{e.preventDefault(),e.metaKey?X(0):e.altKey?re(-1):Q(-1)};return t.createElement(D.div,{ref:o,tabIndex:-1,...O,"cmdk-root":"",onKeyDown:e=>{var s;(s=O.onKeyDown)==null||s.call(O,e);let a=e.nativeEvent.isComposing||e.keyCode===229;if(!(e.defaultPrevented||a))switch(e.key){case"n":case"j":{j&&e.ctrlKey&&ie(e);break}case"ArrowDown":{ie(e);break}case"p":case"k":{j&&e.ctrlKey&&se(e);break}case"ArrowUp":{se(e);break}case"Home":{e.preventDefault(),X(0);break}case"End":{e.preventDefault(),oe();break}case"Enter":{e.preventDefault();let i=M();if(i){let l=new Event(Z);i.dispatchEvent(l)}}}}},t.createElement("label",{"cmdk-label":"",htmlFor:U.inputId,id:U.labelId,style:Te},b),B(r,e=>t.createElement(de.Provider,{value:E},t.createElement(ue.Provider,{value:U},e))))}),he=t.forwardRef((r,o)=>{var _,I;let n=H(),u=t.useRef(null),c=t.useContext(fe),d=K(),f=pe(r),p=(I=(_=f.current)==null?void 0:_.forceMount)!=null?I:c==null?void 0:c.forceMount;k(()=>{if(!p)return d.item(n,c==null?void 0:c.id)},[p]);let b=ve(n,u,[r.value,r.children,u],r.keywords),m=ee(),R=P(v=>v.value&&v.value===b.current),x=P(v=>p||d.filter()===!1?!0:v.search?v.filtered.items.get(n)>0:!0);t.useEffect(()=>{let v=u.current;if(!(!v||r.disabled))return v.addEventListener(Z,C),()=>v.removeEventListener(Z,C)},[x,r.onSelect,r.disabled]);function C(){var v,E;S(),(E=(v=f.current).onSelect)==null||E.call(v,b.current)}function S(){m.setState("value",b.current,!0)}if(!x)return null;let{disabled:A,value:ge,onSelect:j,forceMount:O,keywords:$,...q}=r;return t.createElement(D.div,{ref:G(u,o),...q,id:n,"cmdk-item":"",role:"option","aria-disabled":!!A,"aria-selected":!!R,"data-disabled":!!A,"data-selected":!!R,onPointerMove:A||d.getDisablePointerSelection()?void 0:S,onClick:A?void 0:C},r.children)}),Ee=t.forwardRef((r,o)=>{let{heading:n,children:u,forceMount:c,...d}=r,f=H(),p=t.useRef(null),b=t.useRef(null),m=H(),R=K(),x=P(S=>c||R.filter()===!1?!0:S.search?S.filtered.groups.has(f):!0);k(()=>R.group(f),[]),ve(f,p,[r.value,r.heading,b]);let C=t.useMemo(()=>({id:f,forceMount:c}),[c]);return t.createElement(D.div,{ref:G(p,o),...d,"cmdk-group":"",role:"presentation",hidden:x?void 0:!0},n&&t.createElement("div",{ref:b,"cmdk-group-heading":"","aria-hidden":!0,id:m},n),B(r,S=>t.createElement("div",{"cmdk-group-items":"",role:"group","aria-labelledby":n?m:void 0},t.createElement(fe.Provider,{value:C},S))))}),ye=t.forwardRef((r,o)=>{let{alwaysRender:n,...u}=r,c=t.useRef(null),d=P(f=>!f.search);return!n&&!d?null:t.createElement(D.div,{ref:G(c,o),...u,"cmdk-separator":"",role:"separator"})}),Se=t.forwardRef((r,o)=>{let{onValueChange:n,...u}=r,c=r.value!=null,d=ee(),f=P(m=>m.search),p=P(m=>m.selectedItemId),b=K();return t.useEffect(()=>{r.value!=null&&d.setState("search",r.value)},[r.value]),t.createElement(D.input,{ref:o,...u,"cmdk-input":"",autoComplete:"off",autoCorrect:"off",spellCheck:!1,"aria-autocomplete":"list",role:"combobox","aria-expanded":!0,"aria-controls":b.listId,"aria-labelledby":b.labelId,"aria-activedescendant":p,id:b.inputId,type:"text",value:c?r.value:f,onChange:m=>{c||d.setState("search",m.target.value),n==null||n(m.target.value)}})}),Ce=t.forwardRef((r,o)=>{let{children:n,label:u="Suggestions",...c}=r,d=t.useRef(null),f=t.useRef(null),p=P(m=>m.selectedItemId),b=K();return t.useEffect(()=>{if(f.current&&d.current){let m=f.current,R=d.current,x,C=new ResizeObserver(()=>{x=requestAnimationFrame(()=>{let S=m.offsetHeight;R.style.setProperty("--cmdk-list-height",S.toFixed(1)+"px")})});return C.observe(m),()=>{cancelAnimationFrame(x),C.unobserve(m)}}},[]),t.createElement(D.div,{ref:G(d,o),...c,"cmdk-list":"",role:"listbox",tabIndex:-1,"aria-activedescendant":p,"aria-label":u,id:b.listId},B(r,m=>t.createElement("div",{ref:G(f,b.listInnerRef),"cmdk-list-sizer":""},m)))}),xe=t.forwardRef((r,o)=>{let{open:n,onOpenChange:u,overlayClassName:c,contentClassName:d,container:f,...p}=r;return t.createElement(w.Root,{open:n,onOpenChange:u},t.createElement(w.Portal,{container:f},t.createElement(w.Overlay,{"cmdk-overlay":"",className:c}),t.createElement(w.Content,{"aria-label":r.label,"cmdk-dialog":"",className:d},t.createElement(me,{ref:o,...p}))))}),Ie=t.forwardRef((r,o)=>P(u=>u.filtered.count===0)?t.createElement(D.div,{ref:o,...r,"cmdk-empty":"",role:"presentation"}):null),Pe=t.forwardRef((r,o)=>{let{progress:n,children:u,label:c="Loading...",...d}=r;return t.createElement(D.div,{ref:o,...d,"cmdk-loading":"",role:"progressbar","aria-valuenow":n,"aria-valuemin":0,"aria-valuemax":100,"aria-label":c},B(r,f=>t.createElement("div",{"aria-hidden":!0},f)))}),_e=Object.assign(me,{List:Ce,Item:he,Input:Se,Group:Ee,Separator:ye,Dialog:xe,Empty:Ie,Loading:Pe});function we(r,o){let n=r.nextElementSibling;for(;n;){if(n.matches(o))return n;n=n.nextElementSibling}}function De(r,o){let n=r.previousElementSibling;for(;n;){if(n.matches(o))return n;n=n.previousElementSibling}}function pe(r){let o=t.useRef(r);return k(()=>{o.current=r}),o}var k=typeof window=="undefined"?t.useEffect:t.useLayoutEffect;function L(r){let o=t.useRef();return o.current===void 0&&(o.current=r()),o}function P(r){let o=ee(),n=()=>r(o.snapshot());return t.useSyncExternalStore(o.subscribe,n,n)}function ve(r,o,n,u=[]){let c=t.useRef(),d=K();return k(()=>{var b;let f=(()=>{var m;for(let R of n){if(typeof R=="string")return R.trim();if(typeof R=="object"&&"current"in R)return R.current?(m=R.current.textContent)==null?void 0:m.trim():c.current}})(),p=u.map(m=>m.trim());d.value(r,f,p),(b=o.current)==null||b.setAttribute(T,f),c.current=f}),c}var ke=()=>{let[r,o]=t.useState(),n=L(()=>new Map);return k(()=>{n.current.forEach(u=>u()),n.current=new Map},[r]),(u,c)=>{n.current.set(u,c),o({})}};function Me(r){let o=r.type;return typeof o=="function"?o(r.props):"render"in o?o.render(r.props):r}function B({asChild:r,children:o},n){return r&&t.isValidElement(o)?t.cloneElement(Me(o),{ref:o.ref},n(o.props.children)):n(o)}var Te={position:"absolute",width:"1px",height:"1px",padding:"0",margin:"-1px",overflow:"hidden",clip:"rect(0, 0, 0, 0)",whiteSpace:"nowrap",borderWidth:"0"};export{_e as Command,xe as CommandDialog,Ie as CommandEmpty,Ee as CommandGroup,Se as CommandInput,he as CommandItem,Ce as CommandList,Pe as CommandLoading,me as CommandRoot,ye as CommandSeparator,Re as defaultFilter,P as useCommandState};
+import { test, expect } from "@playwright/test";
+
+// ── Classic view (default, SSG, SEO) ──────────────────────────────────────────
+
+test("classic view loads and shows portfolio content", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).toHaveTitle(/Sairam/i);
+  // Hero section is present
+  await expect(page.locator("main")).toBeVisible();
+  // View switcher is available. NOTE: the old selector here was '[data-view]', which has
+  // never existed in src — the only similar attribute is `data-view-dir` (set on the shell
+  // for ::view-transition direction). Assert the real switcher by accessible name.
+  //
+  // Below `sm` (640px, see src/components/site-nav.tsx), the top-row compact switcher is
+  // hidden — packing it in alongside the logo, orb trigger, and hamburger overflowed the
+  // row on narrow phones (320px class) and pushed the hamburger off-screen. It moves into
+  // the MobileNav drawer instead, so it's still reachable, just not directly visible
+  // without opening the drawer first.
+  const viewport = page.viewportSize();
+  const isNarrow = viewport !== null && viewport.width < 640;
+  if (isNarrow) {
+    await page.getByRole("button", { name: /open menu/i }).click();
+  }
+  await expect(
+    page.getByRole("button", { name: /classic/i }).first(),
+  ).toBeVisible();
+});
+
+test("classic view: navigation to articles page works", async ({ page }) => {
+  await page.goto("/articles");
+  await expect(page).toHaveURL("/articles");
+  await expect(page.locator("main")).toBeVisible();
+});
+
+test("classic view: navigation to projects page works", async ({ page }) => {
+  await page.goto("/projects");
+  await expect(page).toHaveURL("/projects");
+  await expect(page.locator("main")).toBeVisible();
+});
+
+test("classic view: navigation to work page works", async ({ page }) => {
+  await page.goto("/work");
+  await expect(page).toHaveURL("/work");
+  await expect(page.locator("main")).toBeVisible();
+});
+
+// ── Chat view ─────────────────────────────────────────────────────────────────
+
+test("chat view switches and renders chat interface", async ({ page }) => {
+  await page.goto("/?view=chat");
+  // Chat input is present. NOTE: the composer is `<input value ... aria-label=...>` with NO
+  // `type` attribute, so the old 'input[type="text"]' selector could never match it.
+  // SSR is always Classic (see CLAUDE.md), so allow time for the post-hydration view switch.
+  await expect(page.getByLabel("Ask a question about Sairam")).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+test("chat view: typing a message and submitting works", async ({ page }) => {
+  await page.goto("/?view=chat");
+  const input = page.getByLabel("Ask a question about Sairam");
+  await expect(input).toBeVisible({ timeout: 15000 });
+  await input.fill("What projects have you worked on?");
+  await page.keyboard.press("Enter");
+  // A response should stream in. NOTE: the old selectors ('[data-role="assistant"]',
+  // '[aria-label*="thinking"]', '[aria-label*="loading"]') do not exist in the chat markup —
+  // assistant turns are not tagged with data-role. Assert on the aria-live status region the
+  // a11y layer maintains (useChatA11y announces "Answering…" while streaming), then on the
+  // answer text actually appearing. Requires Bedrock creds; skipped when chat is not configured.
+  const live = page.locator('[aria-live="polite"]').first();
+  await expect(live).toBeAttached({ timeout: 15000 });
+  // The transcript must grow beyond the echoed user message.
+  await expect
+    .poll(async () => (await page.textContent("main")) ?? "", {
+      timeout: 30000,
+    })
+    .not.toMatch(/^\s*$/);
+  const body = (await page.textContent("main")) ?? "";
+  // Either a real answer streamed, or chat is not configured in this environment (503 path).
+  expect(body).toMatch(
+    /Sairam|Ascendion|projects|isn't switched on yet|went wrong/i,
+  );
+});
+
+// ── Phase 3: cross-route view switching (view-context.tsx setViewInternal fix) ──
+
+test("switching views via ⌘K from a non-home route navigates home with ?view= applied", async ({
+  page,
+}) => {
+  // Regression this guards: setViewInternal used to do `history.replaceState` on the
+  // CURRENT url only — never navigating — so a view switch triggered from any route
+  // other than "/" silently did nothing visible. The fix routes through a
+  // routerBridge and pushes to "/" (or "/?view=<view>") instead. SiteNav and
+  // CommandPalette live in the persistent layout.tsx, so the palette is reachable
+  // from every route, not just "/".
+  await page.goto("/about");
+  await expect(page.locator("main")).toBeVisible();
+
+  await page.keyboard.press("Meta+k");
+  await expect(page.getByRole("dialog")).toBeVisible();
+
+  // No search query needed — the full action list renders by default, and "Chat
+  // view" is the only option whose accessible name contains "chat".
+  await page.getByRole("option", { name: /chat view/i }).click();
+
+  // Real cross-route navigation, not a dead param rewrite on /about.
+  await expect(page).toHaveURL("/?view=chat");
+  // ...and a visible content swap, not just a URL change — the chat composer
+  // actually renders after the deep-linked view applies post-hydration.
+  await expect(page.getByLabel("Ask a question about Sairam")).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+// ── Developer (terminal) view ─────────────────────────────────────────────────
+
+test("developer view switches and renders terminal", async ({ page }) => {
+  await page.goto("/?view=developer");
+  // Terminal prompt is present (post-hydration; SSR is always Classic).
+  await expect(page.locator("main input").first()).toBeVisible({
+    timeout: 15000,
+  });
+});
+
+test("developer view: 'help' command shows available commands", async ({
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
+import { TerminalSquare } from "lucide-react";
+import { Tooltip } from "@/components/ui/tooltip";
+
+// The palette's guts (cmdk, Radix dialog, voice picker/settings, and the
+// content-corpus-backed action lists) are ~140KB and only ever needed after
+// the first ⌘K / click — kept off the initial bundle the same way
+// ask-portfolio.tsx keeps its markdown renderer off the initial bundle.
+const CommandPaletteContent = dynamic(
+  () =>
+    import("@/components/command-palette-content").then(
+      (m) => m.CommandPaletteContent,
+    ),
+  { ssr: false },
+);
+
+type CommandPaletteProps = {
+  discoveryBadgesEnabled: boolean;
+};
+
+export function CommandPalette({
+  discoveryBadgesEnabled,
+}: CommandPaletteProps) {
+  const [loaded, setLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // This listener is the whole reason the shell stays mounted eagerly: most
+  // ⌘K presses happen before the user has ever clicked the trigger pill.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setLoaded(true);
+        setOpen((o) => !o);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, []);
+
+  return (
+    <>
+      {/* Trigger pill — bottom-right, terminal-styled */}
+      <Tooltip content="Open command palette (⌘K)">
+        <button
+          ref={triggerRef}
+          onClick={() => {
+            setLoaded(true);
+            setOpen(true);
+          }}
+          aria-label="Open command palette"
+          className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-lg border border-border-strong bg-bg-surface/90 px-3 py-2 font-mono text-xs text-fg-muted shadow-lg backdrop-blur transition-colors hover:border-accent hover:text-fg"
+        >
+          <TerminalSquare size={14} className="text-accent" />
+          <span className="hidden sm:inline">Command</span>
+          <kbd
+            aria-keyshortcuts="Meta+K"
+            aria-hidden="true"
+            className="rounded bg-bg-elevated px-1.5 py-0.5 text-[10px]"
+          >
+            ⌘K
+          </kbd>
+        </button>
+      </Tooltip>
+
+      {/* Mounted once loaded and left mounted (never unmounted again) so its
+          own open/close state, recents, and dialogs behave exactly as if it
+          had been here from the start. */}
+      {loaded && (
+        <CommandPaletteContent
+          discoveryBadgesEnabled={discoveryBadgesEnabled}
+          open={open}
+          onOpenChange={setOpen}
+          triggerRef={triggerRef}
+        />
+      )}
+    </>
+  );
+}
+
+exec
+/bin/zsh -lc 'pnpm dev' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+exec
+/bin/zsh -lc "rg --files node_modules/next/dist/docs | rg '/.*css|testing/playwright'; ls ~/Library/Caches/ms-playwright; sed -n '1,70p' src/app/globals.css; cat .gitignore" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 53ms:
+node_modules/next/dist/docs/01-app/02-guides/tailwind-v3-css.md
+node_modules/next/dist/docs/01-app/02-guides/css-in-js.md
+node_modules/next/dist/docs/01-app/01-getting-started/11-css.md
+node_modules/next/dist/docs/01-app/02-guides/testing/playwright.md
+node_modules/next/dist/docs/02-pages/01-getting-started/06-css.md
+node_modules/next/dist/docs/02-pages/02-guides/tailwind-v3-css.md
+node_modules/next/dist/docs/02-pages/02-guides/css-in-js.md
+node_modules/next/dist/docs/02-pages/02-guides/testing/playwright.md
+node_modules/next/dist/docs/02-pages/02-guides/post-css.md
+node_modules/next/dist/docs/01-app/03-api-reference/05-config/01-next-config-js/useLightningcss.md
+node_modules/next/dist/docs/01-app/03-api-reference/05-config/01-next-config-js/cssChunking.md
+node_modules/next/dist/docs/01-app/03-api-reference/05-config/01-next-config-js/turbopackLocalPostcssConfig.md
+node_modules/next/dist/docs/02-pages/04-api-reference/04-config/01-next-config-js/useLightningcss.md
+chromium-1234
+chromium_headless_shell-1234
+ffmpeg-1011
+@import "tailwindcss";
+
+/*
+  Design system — dark-technical "beast" base.
+  Palette pairs deep ink backgrounds with an electric-cyan + violet accent,
+  echoing the ContextOS/Graph-Forge dashboards. WCAG AA verified on bg-base.
+*/
+:root {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg-base: #07080d;        /* page background */
+  --bg-surface: #0d0f17;     /* cards */
+  --bg-elevated: #141826;    /* hovered / elevated */
+  --border: #1f2433;
+  --border-strong: #2c3346;
+
+  /* text */
+  --fg: #e9ecf5;             /* primary text — 14.8:1 on bg-base */
+  --fg-muted: #9aa3b8;       /* secondary — 6.9:1 on bg-base (AA) */
+  --fg-subtle: #747e99;      /* tertiary / captions — 4.7:1 on bg-base (WCAG AA) */
+
+  /* accents */
+  --accent: #38e1ff;         /* electric cyan — links, focus, graph edges */
+  --accent-strong: #0fb8db;
+  --violet: #a78bfa;         /* secondary accent — AI/agent motifs */
+  --green: #4ade80;          /* metrics up / success */
+  --amber: #fbbf24;          /* highlights */
+
+  /* effects */
+  --glow-accent: 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
+                 0 0 24px -4px color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+/*
+  Light theme override — applied via `document.documentElement.dataset.theme`
+  (src/lib/theme-context.tsx), toggled by <ThemeToggle> in site-nav.tsx/mobile-nav.tsx.
+  Re-declares every custom property from :root above so @theme inline's Tailwind
+  mapping needs zero utility-class changes anywhere else in the app.
+
+  OPEN RISK (not resolved by this change — flag in the PR): unlike the dark palette
+  above, whose per-color contrast ratios are documented from direct verification,
+  these light-mode values were chosen from standard accessible Tailwind-scale
+  anchors (cyan-700 / violet-600 / green-700 / amber-700 range) but have NOT been run
+  through an actual contrast checker against #f7f8fb / #ffffff. Verify before
+  shipping — --green is the highest-risk hue for small text. --glow-accent needs no
+  explicit override here (it resolves from whichever --accent is active via
+  color-mix()), but the body gradient wash and skeleton shimmer were designed
+  against the dark values and should be spot-checked visually under light mode.
+*/
+[data-theme="light"] {
+  color-scheme: light;
+  --bg-base: #f7f8fb; --bg-surface: #ffffff; --bg-elevated: #eef1f6;
+  --border: #dde1ea; --border-strong: #c7ccd9;
+  --fg: #12141c; --fg-muted: #4b5164; --fg-subtle: #6b7184;
+  --accent: #0e7490; --accent-strong: #0b5b73; --violet: #7c3aed;
+  --green: #15803d; --amber: #b45309;
+}
+
+@theme inline {
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# velite generated content
+.velite
+.gstack/
+
+# Pagefind search index — generated by `pnpm build` (see package.json's build
+# script) from .next/server/app on every build; never stale-committed.
+/public/pagefind/
+
+# Private working notes (daily logs, scratch) — never commit
+scratch-pad/
+
+# Playwright E2E test output
+test-results/
+playwright-report/
+
+# Agent-tooling state (claude-flow / Ruflo). Written into the CURRENT working
+# directory, so a `cd` into any subdirectory drops a second copy there too.
+# ~5.9 MB of regenerable binaries at last measure, and growing — never commit.
+ruvector.db
+agentdb.rvf
+agentdb.rvf.*
+.swarm/
+.claude-flow/
+
+exec
+/bin/zsh -lc "node -e 'const fs=require(\"fs\");const s=fs.readFileSync(\"node_modules/cmdk/dist/index.mjs\",\"utf8\");const i=s.indexOf(\"contentClassName\");console.log(s.slice(i-250,i+950))'" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 114ms:
+c,"cmdk-list":"",role:"listbox",tabIndex:-1,"aria-activedescendant":p,"aria-label":u,id:b.listId},B(r,m=>t.createElement("div",{ref:G(f,b.listInnerRef),"cmdk-list-sizer":""},m)))}),xe=t.forwardRef((r,o)=>{let{open:n,onOpenChange:u,overlayClassName:c,contentClassName:d,container:f,...p}=r;return t.createElement(w.Root,{open:n,onOpenChange:u},t.createElement(w.Portal,{container:f},t.createElement(w.Overlay,{"cmdk-overlay":"",className:c}),t.createElement(w.Content,{"aria-label":r.label,"cmdk-dialog":"",className:d},t.createElement(me,{ref:o,...p}))))}),Ie=t.forwardRef((r,o)=>P(u=>u.filtered.count===0)?t.createElement(D.div,{ref:o,...r,"cmdk-empty":"",role:"presentation"}):null),Pe=t.forwardRef((r,o)=>{let{progress:n,children:u,label:c="Loading...",...d}=r;return t.createElement(D.div,{ref:o,...d,"cmdk-loading":"",role:"progressbar","aria-valuenow":n,"aria-valuemin":0,"aria-valuemax":100,"aria-label":c},B(r,f=>t.createElement("div",{"aria-hidden":!0},f)))}),_e=Object.assign(me,{List:Ce,Item:he,Input:Se,Group:Ee,Separator:ye,Dialog:xe,Empty:Ie,Loading:Pe});function we(r,o){let n=r.nextElementSibling;for(;n;){if(n.matches(o))return n;n=n.nextElementSibling}}function De(r,o){let n=r.prev
+
+exec
+/bin/zsh -lc 'cat node_modules/next/dist/docs/01-app/01-getting-started/11-css.md; cat node_modules/next/dist/docs/01-app/02-guides/testing/playwright.md' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 0ms:
+exec
+/bin/zsh -lc "mkdir -p test-results/palette; node -e 'const {chromium}=require(\"@playwright/test\"); (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:320,height:640}});await p.goto(\"http://localhost:3000\");await p.getByRole(\"button\",{name:\"Open command palette\",exact:true}).click();await p.getByRole(\"dialog\").waitFor();console.log(await p.locator(\"[cmdk-root], [cmdk-root] > div.relative\").evaluateAll(es=>es.map(e=>({tag:e.outerHTML.slice(0,220),width:e.getBoundingClientRect().width,x:e.getBoundingClientRect().x}))));await p.setViewportSize({width:1440,height:900});await p.screenshot({path:\"test-results/palette/before-1440.png\"});await b.close()})()'" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ exited 1 in 3072ms:
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+browserType.launch: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /Users/anu/Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/f2/x_qrr7lx061_f0qvwpfkdk7m0000gn/T/playwright_chromiumdev_profile-8KL7w9 --remote-debugging-pipe --no-startup-window
+<launched> pid=83586
+[pid=83586][err] [0923/232910.112148:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9
+[pid=83586][err] [0923/232910.117744:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.
+[pid=83586][err] [0923/232910.119187:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.83586: Permission denied (1100)
+Call log:
+[2m  - <launching> /Users/anu/Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/f2/x_qrr7lx061_f0qvwpfkdk7m0000gn/T/playwright_chromiumdev_profile-8KL7w9 --remote-debugging-pipe --no-startup-window[22m
+[2m  - <launched> pid=83586[22m
+[2m  - [pid=83586][err] [0923/232910.112148:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9[22m
+[2m  - [pid=83586][err] [0923/232910.117744:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.[22m
+[2m  - [pid=83586][err] [0923/232910.119187:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.83586: Permission denied (1100)[22m
+[2m  - [pid=83586] <gracefully close start>[22m
+[2m  - [pid=83586] <kill>[22m
+[2m  - [pid=83586] <will force kill>[22m
+[2m  - [pid=83586] exception while trying to kill process: Error: kill EPERM[22m
+[2m  - [pid=83586] <process did exit: exitCode=null, signal=SIGTRAP>[22m
+[2m  - [pid=83586] starting temporary directories cleanup[22m
+[2m  - [pid=83586] finished temporary directories cleanup[22m
+[2m  - [pid=83586] <gracefully close end>[22m
+
+    at [eval]:1:81
+    at [eval]:1:635
+    at [eval]-wrapper:6:24 {
+  log: [
+    '  - <launching> /Users/anu/Library/Caches/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-mac-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/var/folders/f2/x_qrr7lx061_f0qvwpfkdk7m0000gn/T/playwright_chromiumdev_profile-8KL7w9 --remote-debugging-pipe --no-startup-window',
+    '  - <launched> pid=83586',
+    '  - [pid=83586][err] [0923/232910.112148:ERROR:base/power_monitor/thermal_state_observer_mac.mm:140] ThermalStateObserverMac unable to register to power notifications. Result: 9',
+    '  - [pid=83586][err] [0923/232910.117744:ERROR:net/dns/dns_config_service_posix.cc:138] DNS config watch failed to start.',
+    '  - [pid=83586][err] [0923/232910.119187:FATAL:base/apple/mach_port_rendezvous_mac.cc:159] Check failed: kr == KERN_SUCCESS. bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer.83586: Permission denied (1100)',
+    '  - [pid=83586] <gracefully close start>',
+    '  - [pid=83586] <kill>',
+    '  - [pid=83586] <will force kill>',
+    '  - [pid=83586] exception while trying to kill process: Error: kill EPERM',
+    '  - [pid=83586] <process did exit: exitCode=null, signal=SIGTRAP>',
+    '  - [pid=83586] starting temporary directories cleanup',
+    '  - [pid=83586] finished temporary directories cleanup',
+    '  - [pid=83586] <gracefully close end>'
+  ]
+}
+
+Node.js v23.9.0
+
+codex
+The sizing rules are on the inner panel, but `cmdk` adds an unstyled wrapper that becomes the centered flex item. That wrapper can grow wider than the phone. The result rows also assume there’s room for labels and descriptions side by side.
+
+I’ll constrain the actual wrapper and stack descriptions below labels on phones. Browser verification has hit a local sandbox restriction that prevents Chromium from launching; I’m checking whether an existing browser connection is available.
+exec
+/bin/zsh -lc 'curl -s http://localhost:9222/json/version; lsof -nP -iTCP -sTCP:LISTEN | head -20' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 264ms:
+COMMAND     PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+rapportd   1814  anu   10u  IPv4 0x1fb6c6bdbc7afc26      0t0  TCP *:50326 (LISTEN)
+rapportd   1814  anu   11u  IPv6 0x88ce75b954c4e7ef      0t0  TCP *:50326 (LISTEN)
+rapportd   1814  anu   18u  IPv6 0xb387daf2034d47b2      0t0  TCP *:54174 (LISTEN)
+rapportd   1814  anu   20u  IPv6 0x60177e3371e9fa07      0t0  TCP *:54175 (LISTEN)
+ControlCe  1913  anu    9u  IPv4 0x43ba910522e8b836      0t0  TCP *:7000 (LISTEN)
+ControlCe  1913  anu   10u  IPv6 0xcaefb107151c989c      0t0  TCP *:7000 (LISTEN)
+ControlCe  1913  anu   11u  IPv4 0x5d3b3f0152b484eb      0t0  TCP *:5000 (LISTEN)
+ControlCe  1913  anu   12u  IPv6  0xea2fba4b66b8cd2      0t0  TCP *:5000 (LISTEN)
+Kiro\x20H  2222  anu   32u  IPv4 0xd1f71214a5044796      0t0  TCP 127.0.0.1:59975 (LISTEN)
+Kiro\x20H  2222  anu   33u  IPv4 0x27a85c0ad94f065c      0t0  TCP 127.0.0.1:49442 (LISTEN)
+Kiro\x20H  2228  anu   35u  IPv4  0xe6876376b48e4c9      0t0  TCP 127.0.0.1:49470 (LISTEN)
+php-fpm    3368  anu    9u  IPv4 0x2abf148277cac7be      0t0  TCP 127.0.0.1:9000 (LISTEN)
+php-fpm    3983  anu   10u  IPv4 0x2abf148277cac7be      0t0  TCP 127.0.0.1:9000 (LISTEN)
+php-fpm    3984  anu   10u  IPv4 0x2abf148277cac7be      0t0  TCP 127.0.0.1:9000 (LISTEN)
+postgres   4393  anu    7u  IPv6 0x4b44f8f0f073e312      0t0  TCP [::1]:5432 (LISTEN)
+postgres   4393  anu    8u  IPv4 0xc434ac81a7df9c05      0t0  TCP 127.0.0.1:5432 (LISTEN)
+com.docke 13478  anu   77u  IPv6 0x91af0c3647986f5f      0t0  TCP *:8080 (LISTEN)
+node      65172  anu   27u  IPv6 0xd060f427af954675      0t0  TCP [::1]:5173 (LISTEN)
+node      65234  anu   23u  IPv6 0x634ae76313f1ef14      0t0  TCP *:4310 (LISTEN)
+
+exec
+/bin/zsh -lc "rg -n 'useMedia|matchMedia' src/hooks src/components/command-palette-content.tsx; sed -n '1,110p' src/components/command-palette-content.tsx; lsof -nP -iTCP -sTCP:LISTEN | tail -12" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 91ms:
+rg: src/hooks: No such file or directory (os error 2)
+"use client";
+
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  type RefObject,
+} from "react";
+import { useRouter } from "next/navigation";
+import { track } from "@vercel/analytics";
+import { Command } from "cmdk";
+// Radix Dialog Title/Description — same instance cmdk bundles (deduped to one
+// version), so these register with cmdk's internal <Dialog.Content> context and
+// satisfy the a11y requirement (resolves the "DialogContent requires DialogTitle"
+// console error). Hidden via the existing sr-only class (no extra dep).
+import {
+  Title as DialogTitle,
+  Description as DialogDescription,
+} from "@radix-ui/react-dialog";
+import {
+  Home,
+  FolderGit2,
+  User,
+  FileText,
+  Mail,
+  Briefcase,
+  ArrowUpRight,
+  TerminalSquare,
+  LayoutGrid,
+  Gamepad2,
+  MessagesSquare,
+  Copy,
+  Download,
+  Plug,
+  Volume2,
+  VolumeX,
+  AudioLines,
+  Mic,
+  Ear,
+  Sparkles,
+  CalendarDays,
+} from "lucide-react";
+import { Github, Linkedin } from "@/components/icons";
+import { profile, resumeVariants } from "@/lib/profile";
+import { unlockAll } from "@/lib/discovery-store";
+import { allProjects, allWork } from "@/lib/content";
+import { useView } from "@/components/view-context";
+import { useVoiceSettings } from "@/lib/voice-settings-context";
+import { openTalkMode } from "@/components/chat/talk-overlay-store";
+import {
+  CURATED_VOICES,
+  getDefaultVoiceId,
+  getVoiceById,
+} from "@/lib/voice-catalog";
+import { VoicePicker } from "@/components/chat/voice-picker";
+import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+import { Settings } from "lucide-react";
+
+type Action = {
+  id: string;
+  label: string;
+  hint?: string;
+  icon: React.ReactNode;
+  run: () => void;
+  keywords?: string;
+  // Stable cmdk search value. Defaults to label+hint+keywords, but actions whose LABEL
+  // mutates (e.g. copy-email flipping to "Copied!") set this so the value cmdk scores
+  // against never changes mid-interaction.
+  value?: string;
+};
+
+// Recently-run actions persist in localStorage so the palette opens to "what you
+// just did" instead of a cold list. SSR-safe: read only after mount (the dialog
+// content mounts on open, post-hydration, so there's no markup to mismatch).
+const RECENT_KEY = "anvilry:cmd:recent";
+const RECENT_MAX = 5;
+
+function loadRecent(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = window.localStorage.getItem(RECENT_KEY);
+    const arr: unknown = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr)
+      ? arr
+          .filter((x): x is string => typeof x === "string")
+          .slice(0, RECENT_MAX)
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+type CommandPaletteContentProps = {
+  discoveryBadgesEnabled: boolean;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  triggerRef: RefObject<HTMLButtonElement | null>;
+};
+
+export function CommandPaletteContent({
+  discoveryBadgesEnabled,
+  open,
+  onOpenChange: setOpen,
+  triggerRef,
+}: CommandPaletteContentProps) {
+  const [search, setSearch] = useState("");
+  const [recent, setRecent] = useState<string[]>([]);
+  const [copied, setCopied] = useState(false);
+  const router = useRouter();
+php-fpm    3984  anu   10u  IPv4 0x2abf148277cac7be      0t0  TCP 127.0.0.1:9000 (LISTEN)
+postgres   4393  anu    7u  IPv6 0x4b44f8f0f073e312      0t0  TCP [::1]:5432 (LISTEN)
+postgres   4393  anu    8u  IPv4 0xc434ac81a7df9c05      0t0  TCP 127.0.0.1:5432 (LISTEN)
+com.docke 13478  anu   77u  IPv6 0x91af0c3647986f5f      0t0  TCP *:8080 (LISTEN)
+node      65172  anu   27u  IPv6 0xd060f427af954675      0t0  TCP [::1]:5173 (LISTEN)
+node      65234  anu   23u  IPv6 0x634ae76313f1ef14      0t0  TCP *:4310 (LISTEN)
+Kiro\x20H 71337  anu   34u  IPv4 0x9dedd798b6356988      0t0  TCP 127.0.0.1:62101 (LISTEN)
+Kiro\x20H 71337  anu   35u  IPv4 0x48629539b847b8c0      0t0  TCP 127.0.0.1:51126 (LISTEN)
+Kiro\x20H 73736  anu   33u  IPv4 0xa5d3fd39dac40d4c      0t0  TCP 127.0.0.1:51626 (LISTEN)
+Kiro\x20H 73736  anu   39u  IPv4 0xff36be7730f5f00c      0t0  TCP 127.0.0.1:32235 (LISTEN)
+Kiro\x20H 73738  anu   37u  IPv4 0x460ff234ca31a1c5      0t0  TCP 127.0.0.1:51630 (LISTEN)
+node      83673  anu   13u  IPv6 0xf4356e958d6d4874      0t0  TCP *:3000 (LISTEN)
+
+exec
+/bin/zsh -lc "rg -n 'useMediaQuery|useSyncExternalStore|matchMedia' src/lib | head -30" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ succeeded in 1ms:
+src/lib/use-media-query.ts:1:import { useSyncExternalStore } from "react";
+src/lib/use-media-query.ts:7:export function useMediaQuery(query: string): boolean {
+src/lib/use-media-query.ts:8:  return useSyncExternalStore(
+src/lib/use-media-query.ts:10:      const mq = window.matchMedia(query);
+src/lib/use-media-query.ts:14:    () => window.matchMedia(query).matches,
+src/lib/use-media-query.ts:29:  return useSyncExternalStore(
+src/lib/theme-context.tsx:3:import { useCallback, useSyncExternalStore } from "react";
+src/lib/theme-context.tsx:40:// useSyncExternalStore's referential-equality check fires correctly.
+src/lib/theme-context.tsx:103:  const theme = useSyncExternalStore(
+src/lib/use-reduced-motion.ts:12:        ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+src/lib/use-reduced-motion.ts:16:    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+src/lib/discovery-store.ts:1:import { useSyncExternalStore } from "react";
+src/lib/discovery-store.ts:82:  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+src/lib/highlight-store.ts:3:import { useSyncExternalStore } from "react";
+src/lib/highlight-store.ts:9: * anvil-inline-store.ts so project-card.tsx can subscribe with useSyncExternalStore.
+src/lib/highlight-store.ts:50:  return useSyncExternalStore(subscribe, getSnapshot, () => null);
+src/lib/voice-settings-context.tsx:3:import { useCallback, useSyncExternalStore } from "react";
+src/lib/voice-settings-context.tsx:162:// useSyncExternalStore's referential-equality check fires correctly.
+src/lib/voice-settings-context.tsx:218:  const settings = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+src/lib/use-mounted.ts:1:import { useSyncExternalStore } from "react";
+src/lib/use-mounted.ts:11:  return useSyncExternalStore(
+src/lib/scroll/scroll-flags.tsx:3:import { useSyncExternalStore, useEffect, Suspense, type ReactNode } from "react";
+src/lib/scroll/scroll-flags.tsx:10: * useSyncExternalStore pattern in view-context.tsx. Two independent flags (engine,
+src/lib/scroll/scroll-flags.tsx:32:// reference between changes — useSyncExternalStore compares snapshots by identity and
+src/lib/scroll/scroll-flags.tsx:128:  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot).engine;
+src/lib/scroll/scroll-flags.tsx:132:  return useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot).mode;
+
+apply patch
+patch: completed
+/Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/src/components/command-palette-content.tsx
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..dbf8e5cd7c4137d573049982baf12034375831cd
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,10 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={isPhone ? "Search commands…" : "Jump to a page, run an action, or switch view…"}
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +727,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+exec
+/bin/zsh -lc 'pnpm exec eslint src/components/command-palette-content.tsx; pnpm exec tsc --noEmit' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..dbf8e5cd7c4137d573049982baf12034375831cd
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,10 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={isPhone ? "Search commands…" : "Jump to a page, run an action, or switch view…"}
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +727,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+apply patch
+patch: completed
+/Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/e2e/command-palette-layout.spec.ts
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..c1fbbf8c81c0d24292ec963fb29845f494ea607d
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,58 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element) => {
++      const bounds = element.getBoundingClientRect();
++      return [element, ...element.querySelectorAll("[cmdk-list], [cmdk-item], [cmdk-item] span, input")]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    });
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..dbf8e5cd7c4137d573049982baf12034375831cd
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,10 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={isPhone ? "Search commands…" : "Jump to a page, run an action, or switch view…"}
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +727,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+exec
+/bin/zsh -lc 'pnpm exec playwright test e2e/command-palette-layout.spec.ts --project=chromium --reporter=line' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ exited 1 in 3645ms:
+[WebServer] (node:84088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+[WebServer] (node:84122) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] ⨯ Failed to start server
+
+
+[WebServer] Error: listen EADDRINUSE: address already in use :::3000
+[WebServer]     at <unknown> (Error: listen EADDRINUSE: address already in use :::3000)
+[WebServer]     at new Promise (<anonymous>) {
+[WebServer]   code: 'EADDRINUSE',
+[WebServer]   errno: -48,
+[WebServer]   syscall: 'listen',
+[WebServer]   address: '::',
+[WebServer]   port: 3000
+[WebServer] }
+Error: Process from config.webServer was not able to start. Exit code: 1
+
+
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..c1fbbf8c81c0d24292ec963fb29845f494ea607d
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,58 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element) => {
++      const bounds = element.getBoundingClientRect();
++      return [element, ...element.querySelectorAll("[cmdk-list], [cmdk-item], [cmdk-item] span, input")]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    });
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..dbf8e5cd7c4137d573049982baf12034375831cd
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,10 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={isPhone ? "Search commands…" : "Jump to a page, run an action, or switch view…"}
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +727,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+codex
+The fix now gives the palette 12px side margins on phones, places descriptions beneath their labels, and uses a short mobile search prompt. Desktop keeps the 512px panel and its horizontal rows.
+
+I’ve added browser checks for all three widths, including content overflow, scrolling, search, and navigation. Chromium is blocked by macOS sandbox permissions, and no existing browser connection is available, so I can’t yet provide verified screenshots. Lint and TypeScript checks are running.
+ succeeded in 47962ms:
+exec
+/bin/zsh -lc 'git diff --check; git diff --stat; pnpm exec eslint src/components/command-palette-content.tsx e2e/command-palette-layout.spec.ts' in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..c1fbbf8c81c0d24292ec963fb29845f494ea607d
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,58 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element) => {
++      const bounds = element.getBoundingClientRect();
++      return [element, ...element.querySelectorAll("[cmdk-list], [cmdk-item], [cmdk-item] span, input")]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    });
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..dbf8e5cd7c4137d573049982baf12034375831cd
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,10 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={isPhone ? "Search commands…" : "Jump to a page, run an action, or switch view…"}
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +727,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+ succeeded in 15336ms:
+apply patch
+patch: completed
+/Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/e2e/command-palette-layout.spec.ts
+/Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/src/components/command-palette-content.tsx
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5caa9147ff158d328bfb1c979a6083e8f3d61aa
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,61 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element, phone) => {
++      const bounds = element.getBoundingClientRect();
++      const selector = phone
++        ? "[cmdk-list], [cmdk-item], [cmdk-item] span, input"
++        : "[cmdk-list], [cmdk-item], input";
++      return [element, ...element.querySelectorAll(selector)]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    }, width < 640);
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..5c9cd252f45eccb5207b0aca3e799bb676c1ccfe
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,14 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={
++                isPhone
++                  ? "Search commands…"
++                  : "Jump to a page, run an action, or switch view…"
++              }
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +731,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+exec
+/bin/zsh -lc "git status --short; curl --max-time 15 -s -o /dev/null -w '%{http_code}\\n' http://localhost:3000" in /Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry
+ exited 52 in 316ms:
+000
+
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5caa9147ff158d328bfb1c979a6083e8f3d61aa
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,61 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element, phone) => {
++      const bounds = element.getBoundingClientRect();
++      const selector = phone
++        ? "[cmdk-list], [cmdk-item], [cmdk-item] span, input"
++        : "[cmdk-list], [cmdk-item], input";
++      return [element, ...element.querySelectorAll(selector)]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    }, width < 640);
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..5c9cd252f45eccb5207b0aca3e799bb676c1ccfe
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,14 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={
++                isPhone
++                  ? "Search commands…"
++                  : "Jump to a page, run an action, or switch view…"
++              }
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +731,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+codex
+Fixed the root cause in [command-palette-content.tsx](</Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/src/components/command-palette-content.tsx>):
+
+- Constrained `cmdk`’s previously unstyled wrapper.
+- Added 12px phone margins and wrapping descriptions beneath labels.
+- Added a shorter mobile search placeholder.
+- Preserved desktop sizing and row styles.
+
+ESLint and TypeScript passed. Added browser regression checks for 320px, 375px, and 1440px.
+
+**Browser verification remains incomplete:** macOS sandbox permissions prevented Chromium from launching. I couldn’t capture screenshots or confirm the rendered desktop appearance.
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f5caa9147ff158d328bfb1c979a6083e8f3d61aa
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,61 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element, phone) => {
++      const bounds = element.getBoundingClientRect();
++      const selector = phone
++        ? "[cmdk-list], [cmdk-item], [cmdk-item] span, input"
++        : "[cmdk-list], [cmdk-item], input";
++      return [element, ...element.querySelectorAll(selector)]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    }, width < 640);
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e83128aa08151b801fdbd8e9984103eae4d..5c9cd252f45eccb5207b0aca3e799bb676c1ccfe
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,14 @@
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={
++                isPhone
++                  ? "Search commands…"
++                  : "Jump to a page, run an action, or switch view…"
++              }
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +731,14 @@
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
+
+2026-09-23T18:01:18.099918Z ERROR codex_core::session: failed to record rollout items: thread 01a0cf6b-0d12-7f92-bfe5-054a154f3412 not found
+2026-09-23T18:01:18.100421Z ERROR codex_core::session: failed to record rollout items: thread 01a0cf6b-0d12-7f92-bfe5-054a154f3412 not found
+tokens used
+42,749
+Fixed the root cause in [command-palette-content.tsx](</Users/anu/Desktop/PersonalProjects/Alignerr/RL Multimodal instructions/workspaces/astra-anvilry/src/components/command-palette-content.tsx>):
+
+- Constrained `cmdk`’s previously unstyled wrapper.
+- Added 12px phone margins and wrapping descriptions beneath labels.
+- Added a shorter mobile search placeholder.
+- Preserved desktop sizing and row styles.
+
+ESLint and TypeScript passed. Added browser regression checks for 320px, 375px, and 1440px.
+
+**Browser verification remains incomplete:** macOS sandbox permissions prevented Chromium from launching. I couldn’t capture screenshots or confirm the rendered desktop appearance.

@@ -1,0 +1,157 @@
+{
+  "static": {
+    "320": {
+      "vw": 320,
+      "cardLeft": 12,
+      "cardRight": 308,
+      "cardWidth": 296,
+      "gapLeft": 12,
+      "gapRight": 12,
+      "pageScrollWidth": 320,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [],
+      "placeholder": "Search commands\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 56
+    },
+    "375": {
+      "vw": 375,
+      "cardLeft": 12,
+      "cardRight": 363,
+      "cardWidth": 351,
+      "gapLeft": 12,
+      "gapRight": 12,
+      "pageScrollWidth": 375,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [],
+      "placeholder": "Search commands\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 56
+    },
+    "768": {
+      "vw": 768,
+      "cardLeft": 128,
+      "cardRight": 640,
+      "cardWidth": 512,
+      "gapLeft": 128,
+      "gapRight": 128,
+      "pageScrollWidth": 768,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [
+        "Trelix",
+        "Offline code intelligence engine \u2014 Tree-sitter indexing, hybrid BM25+vector+graph search."
+      ],
+      "placeholder": "Jump to a page, run an action, or switch view\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 36
+    },
+    "1440": {
+      "vw": 1440,
+      "cardLeft": 464,
+      "cardRight": 976,
+      "cardWidth": 512,
+      "gapLeft": 464,
+      "gapRight": 464,
+      "pageScrollWidth": 1440,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [
+        "Trelix",
+        "Offline code intelligence engine \u2014 Tree-sitter indexing, hybrid BM25+vector+graph search."
+      ],
+      "placeholder": "Jump to a page, run an action, or switch view\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 36
+    }
+  },
+  "interaction": {
+    "cmdKOpens": true,
+    "inputFocused": true,
+    "arrowDownMovesSelection": true,
+    "selectionAfter3Down": "Chat viewask my portfolio",
+    "selectedRowInsideViewport": true,
+    "focusStaysInDialogAfter6Tabs": true,
+    "escapeCloses": true,
+    "afterResizeTo1440": {
+      "vw": 1440,
+      "cardLeft": 464,
+      "cardRight": 976,
+      "cardWidth": 512,
+      "gapLeft": 464,
+      "gapRight": 464,
+      "pageScrollWidth": 1440,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [
+        "Trelix",
+        "Offline code intelligence engine \u2014 Tree-sitter indexing, hybrid BM25+vector+graph search."
+      ],
+      "placeholder": "Jump to a page, run an action, or switch view\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 36
+    },
+    "afterResizeBackTo320": {
+      "vw": 320,
+      "cardLeft": 12,
+      "cardRight": 308,
+      "cardWidth": 296,
+      "gapLeft": 12,
+      "gapRight": 12,
+      "pageScrollWidth": 320,
+      "itemsOutsideViewport": 0,
+      "truncatedTexts": [],
+      "placeholder": "Search commands\u2026",
+      "placeholderFits": true,
+      "firstRowHeight": 56
+    },
+    "enterRunsCommand_urlAfter": "/about"
+  },
+  "desktop_vs_original": {
+    "original_1440": {
+      "truncated": [
+        "Offline code intelligence engine \u2014 Tree-"
+      ],
+      "rowHeights": [
+        36,
+        56
+      ]
+    },
+    "after_1440": {
+      "truncated": [
+        "Trelix",
+        "Offline code intelligence engine \u2014 Tree-"
+      ],
+      "rowHeights": [
+        36,
+        56
+      ]
+    },
+    "original_768": {
+      "truncated": [
+        "Offline code intelligence engine \u2014 Tree-"
+      ],
+      "rowHeights": [
+        36,
+        56
+      ]
+    },
+    "after_768": {
+      "truncated": [
+        "Trelix",
+        "Offline code intelligence engine \u2014 Tree-"
+      ],
+      "rowHeights": [
+        36,
+        56
+      ]
+    }
+  },
+  "placeholder_320": {
+    "original": {
+      "inputWidth": 460,
+      "placeholderTextWidth": 311
+    },
+    "after": {
+      "inputWidth": 244,
+      "placeholderTextWidth": 136
+    }
+  }
+}

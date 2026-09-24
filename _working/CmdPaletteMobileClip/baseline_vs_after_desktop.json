@@ -1,0 +1,72 @@
+{
+ "3100@768": {
+  "truncated": [
+   "Offline code intelligence engine — Tree-"
+  ],
+  "rowHeights": [
+   36,
+   56
+  ]
+ },
+ "3100@1440": {
+  "truncated": [
+   "Offline code intelligence engine — Tree-"
+  ],
+  "rowHeights": [
+   36,
+   56
+  ]
+ },
+ "3101@768": {
+  "truncated": [
+   "Trelix",
+   "Offline code intelligence engine — Tree-"
+  ],
+  "rowHeights": [
+   36,
+   56
+  ]
+ },
+ "3101@1440": {
+  "truncated": [
+   "Trelix",
+   "Offline code intelligence engine — Tree-"
+  ],
+  "rowHeights": [
+   36,
+   56
+  ]
+ },
+ "3102@768": {
+  "truncated": [
+   "Governance layer over three personal sub",
+   "Offline code intelligence engine — Tree-",
+   "Distributed, event-driven gRPC microserv"
+  ],
+  "rowHeights": [
+   36
+  ]
+ },
+ "3102@1440": {
+  "truncated": [
+   "Governance layer over three personal sub",
+   "Offline code intelligence engine — Tree-",
+   "Distributed, event-driven gRPC microserv"
+  ],
+  "rowHeights": [
+   36
+  ]
+ },
+ "3100@320 placeholder": {
+  "inputWidth": 460,
+  "placeholderTextWidth": 311
+ },
+ "3101@320 placeholder": {
+  "inputWidth": 244,
+  "placeholderTextWidth": 136
+ },
+ "3102@320 placeholder": {
+  "inputWidth": 236,
+  "placeholderTextWidth": 311
+ }
+}

@@ -1,0 +1,135 @@
+diff --git a/e2e/command-palette-layout.spec.ts b/e2e/command-palette-layout.spec.ts
+new file mode 100644
+index 0000000..f5caa91
+--- /dev/null
++++ b/e2e/command-palette-layout.spec.ts
+@@ -0,0 +1,61 @@
++import { expect, test } from "@playwright/test";
++
++for (const width of [320, 375, 1440]) {
++  test(`command palette fits and works at ${width}px`, async ({ page }, testInfo) => {
++    await page.setViewportSize({ width, height: width < 640 ? 640 : 900 });
++    await page.goto("/");
++    // Wait for hydration before using the global keyboard shortcut.
++    await page.getByRole("button", { name: "Open command palette", exact: true }).click();
++    const dialog = page.getByRole("dialog", { name: "Command palette", exact: true });
++    await expect(dialog).toBeVisible();
++    await page.keyboard.press("Escape");
++    await expect(dialog).toBeHidden();
++    await page.keyboard.press("Meta+k");
++    await expect(dialog).toBeVisible();
++    await page.evaluate(() => document.fonts.ready);
++
++    const panel = page.locator("[cmdk-root] > .relative");
++    const bounds = await panel.boundingBox();
++    expect(bounds).not.toBeNull();
++    expect(bounds!.width).toBe(width < 640 ? width - 24 : 512);
++    expect(bounds!.x).toBe((width - bounds!.width) / 2);
++
++    // Check intrinsic overflow as well as bounds: overflow:hidden alone must not pass.
++    const overflow = await panel.evaluate((element, phone) => {
++      const bounds = element.getBoundingClientRect();
++      const selector = phone
++        ? "[cmdk-list], [cmdk-item], [cmdk-item] span, input"
++        : "[cmdk-list], [cmdk-item], input";
++      return [element, ...element.querySelectorAll(selector)]
++        .filter((node) => {
++          const rect = node.getBoundingClientRect();
++          if (!rect.width || !rect.height) return false;
++          return node.scrollWidth > node.clientWidth + 1 ||
++            rect.left < bounds.left || rect.right > bounds.right;
++        })
++        .map((node) => node.textContent || node.tagName);
++    }, width < 640);
++    expect(overflow).toEqual([]);
++    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(width);
++
++    const search = page.getByRole("combobox", { name: "Search commands" });
++    await expect(search).toHaveAttribute("placeholder", width < 640
++      ? "Search commands…"
++      : "Jump to a page, run an action, or switch view…");
++    await testInfo.attach(`palette-${width}`, {
++      body: await page.screenshot(), contentType: "image/png",
++    });
++
++    // Verify lower results remain reachable through the vertical list.
++    const last = page.getByRole("option").last();
++    await last.scrollIntoViewIfNeeded();
++    await expect(last).toBeInViewport();
++    await search.fill("zzzz-no-such-command");
++    await expect(page.getByText("No results.", { exact: true })).toBeVisible();
++    await search.fill("About");
++    await page.keyboard.press("ArrowDown");
++    await page.getByRole("option", { name: /^About/ }).click();
++    await expect(dialog).toBeHidden();
++    await expect(page).toHaveURL(/\/about$/);
++  });
++}
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e8..5c9cd25 100644
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -56,6 +56,7 @@ import {
+ import { VoicePicker } from "@/components/chat/voice-picker";
+ import { VoiceSettingsDialog } from "@/components/chat/voice-settings-dialog";
+ import { Settings } from "lucide-react";
++import { useMediaQuery } from "@/lib/use-media-query";
+ 
+ type Action = {
+   id: string;
+@@ -104,6 +105,7 @@ export function CommandPaletteContent({
+   onOpenChange: setOpen,
+   triggerRef,
+ }: CommandPaletteContentProps) {
++  const isPhone = useMediaQuery("(width < 640px)");
+   const [search, setSearch] = useState("");
+   const [recent, setRecent] = useState<string[]>([]);
+   const [copied, setCopied] = useState(false);
+@@ -611,7 +613,10 @@ export function CommandPaletteContent({
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center px-3 pt-[14vh]"
++        // cmdk inserts this root between the flex container and the panel.
++        // Constrain the actual flex item so intrinsic content cannot widen it.
++        className="w-full min-w-0 max-w-lg"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -635,10 +640,14 @@ export function CommandPaletteContent({
+               value={search}
+               onValueChange={setSearch}
+               aria-label="Search commands"
+-              placeholder="Jump to a page, run an action, or switch view…"
++              placeholder={
++                isPhone
++                  ? "Search commands…"
++                  : "Jump to a page, run an action, or switch view…"
++              }
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring min-w-0 w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -722,14 +731,14 @@ function Group({
+             onRun?.(a.id);
+             a.run();
+           }}
+-          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
++          className="grid grid-cols-[auto_minmax(0,1fr)_auto] cursor-pointer items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg sm:flex sm:gap-3"
+         >
+           <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
++          <span className="min-w-0 flex-1 [overflow-wrap:anywhere] sm:[overflow-wrap:normal]">{a.label}</span>
+           {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
++            <span className="col-start-2 row-start-2 min-w-0 text-xs text-fg-subtle [overflow-wrap:anywhere] sm:truncate sm:[overflow-wrap:normal]">{a.hint}</span>
+           )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <ArrowUpRight size={13} className="col-start-3 row-start-1 text-fg-subtle" />
+         </Command.Item>
+       ))}
+     </Command.Group>
