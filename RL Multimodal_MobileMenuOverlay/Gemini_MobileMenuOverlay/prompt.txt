@@ -1,0 +1,10 @@
+Repo: https://github.com/junedpathan11/ember-and-oak
+Commit: c6830c3921151ada9b3922ea4bb605505369bdba (already checked out in this directory, deps installed, run with `npm run dev`)
+
+Attached screenshots (390px-wide phone, home page):
+1. before_390px_menu_closed.png - the page before tapping the hamburger
+2. before_390px_menu_open.png - right after tapping the hamburger
+
+The mobile menu is broken. Tapping the hamburger should open a full-screen menu with a solid background, the nav links, and the phone number at the bottom, like a normal overlay. Instead, as in screenshot 2, only the header strip changes: the links and the phone number show through on top of the hero image and text, where they're almost unreadable, and the WhatsApp button still floats on top of the menu.
+
+Please find the root cause and fix it properly, without changing how the header looks on mobile or desktop. The menu should still close with the X button, with Escape, and when a link is tapped. Then check it in a browser at 390px (menu open and closed) and at desktop width, and show me what you verified.

@@ -1,13 +1,14 @@
 # RL Multimodal: submissions tracker
 
-Limit: **2 tasks**. Used: **2 / 2**
+Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **3**
 
 | # | Task | Submitted | Repo @ commit | Labelbox | My verdict | Status |
 |---|---|---|---|---|---|---|
 | 1 | CmdPaletteMobileClip | 2026-09-24 | sairam0424/anvilry @ `51be61c` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz0197073875pfghqy) | Astra better (phone readability); Astra desktop regression noted | Submitted, awaiting review |
 | 2 | MdxListInlineCode | 2026-09-24 | sairam0424/anvilry @ `638b594` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz018j07381i5bjoxj) | Astra better (Gemini's patch makes all 99 bullet dots invisible) | Submitted, awaiting review |
+| 3 | MobileMenuOverlay | 2026-09-24 | junedpathan11/ember-and-oak @ `c6830c3` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz019j073868jbsmen) | Tie on all 10 UI dimensions (non-UI: Gemini killed the user's Chrome ×2, 17.6 vs 4.3 min) | Submitted, awaiting review (honest tie; rejection likely) |
 
-Status values: `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
+Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
 
 ---
 
@@ -39,6 +40,20 @@ Status values: `In progress` · `Submitted, awaiting review` · `Approved` · `R
 - **Decisive difference:** identical layout fix, but Gemini's template-string className drops Tailwind's `before:bg-accent`, so all 99 bullet dots render transparent (confirmed in fresh dev and production build)
 - **Known weakness:** Astra ran fewer automated checks; Gemini's wrapper approach is structurally fine
 - **Same repo as task 1, earlier commit** (allowed: each task just needs a public repo and a specific commit)
+
+### Reviewer response
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
+## 3. MobileMenuOverlay
+- **Task name:** Mobile menu opens as a thin strip and the WhatsApp button covers it
+- **Notes:** `_working/MobileMenuOverlay/TASK.md` (repro numbers, correct fix, traps, run commands)
+- **Status:** submitted 2026-09-24 as an honest tie at the user's request
+- **Files:** `RL Multimodal_MobileMenuOverlay.zip` + separate upload `outputs/MobileMenuOverlay/MobileMenuOverlay_Author_Notes_and_Overall_UI.txt` · form in `outputs/MobileMenuOverlay/labelbox_form.md`
+- **Risk:** the brief requires a significant Astra advantage, so this will likely be rejected
 
 ### Reviewer response
 - **Date:**

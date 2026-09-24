@@ -5,6 +5,8 @@ Project brief: `../RL Multimodal instructions/` (PDF + reviewer pointers in `tas
 ## Layout
 ```
 alignerr-rl-multimodal/
+├── cost_tracker.md                 ← money spent (AI Studio ₹, ChatGPT plan ₹), tokens per run, cost per task. Update
+│                                     after every model run. NOT zipped
 ├── submissions_tracker.md          ← every submitted task, Labelbox link, status, reviewer response. Update on
 │                                     each submission and whenever feedback arrives. NOT zipped
 ├── RL Multimodal_<Task>/          ← SUBMISSION (this folder is zipped and uploaded)

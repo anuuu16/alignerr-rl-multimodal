@@ -1,0 +1,80 @@
+diff --git a/components/blocks/Navbar.tsx b/components/blocks/Navbar.tsx
+index c1dc087..c1e0798 100644
+--- a/components/blocks/Navbar.tsx
++++ b/components/blocks/Navbar.tsx
+@@ -3,6 +3,7 @@
+ import Link from "next/link";
+ import { usePathname } from "next/navigation";
+ import { useEffect, useState } from "react";
++import { createPortal } from "react-dom";
+ import { Menu, X } from "lucide-react";
+ import site from "@/content/site";
+ 
+@@ -34,10 +35,17 @@ export default function Navbar() {
+       if (event.key === "Escape") setOpen(false);
+     }
+ 
++    const desktop = window.matchMedia("(min-width: 768px)");
++    function onBreakpointChange(event: MediaQueryListEvent) {
++      if (event.matches) setOpen(false);
++    }
++
+     window.addEventListener("keydown", onKeyDown);
++    desktop.addEventListener("change", onBreakpointChange);
+     return () => {
+       document.body.style.overflow = overflow;
+       window.removeEventListener("keydown", onKeyDown);
++      desktop.removeEventListener("change", onBreakpointChange);
+     };
+   }, [open]);
+ 
+@@ -88,16 +96,16 @@ export default function Navbar() {
+         </button>
+       </nav>
+ 
+-      {/* Full-screen overlay menu */}
+-      {open ? (
++      {/* Escape the header's backdrop-filter containing block and stacking context. */}
++      {open ? createPortal(
+         <div
+           id="mobile-menu"
+-          className="fixed inset-0 z-50 flex flex-col bg-bg md:hidden"
++          className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-bg md:hidden"
+           role="dialog"
+           aria-modal="true"
+           aria-label="Site menu"
+         >
+-          <div className="flex items-center justify-between border-b px-5 py-4">
++          <div className="flex shrink-0 items-center justify-between border-b px-5 py-4">
+             <span className="font-display text-[22px] italic leading-none tracking-[-0.02em]">
+               {site.business.name}
+             </span>
+@@ -117,6 +125,7 @@ export default function Navbar() {
+               <li key={link.href} className="border-b last:border-b-0">
+                 <Link
+                   href={link.href}
++                  onClick={() => setOpen(false)}
+                   aria-current={isActive(link.href) ? "page" : undefined}
+                   className={`label-caps block py-6 ${
+                     isActive(link.href) ? "text-primary" : "text-ink"
+@@ -128,16 +137,18 @@ export default function Navbar() {
+             ))}
+           </ul>
+ 
+-          <div className="border-t px-5 py-6">
++          <div className="shrink-0 border-t px-5 py-6">
+             <a
+               href={site.business.phoneHref}
++              onClick={() => setOpen(false)}
+               className="font-display text-2xl tracking-[-0.02em]"
+             >
+               {site.business.phone}
+             </a>
+             <p className="eyebrow mt-2">{site.business.demoLabel}</p>
+           </div>
+-        </div>
++        </div>,
++        document.body
+       ) : null}
+     </header>
+   );
