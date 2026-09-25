@@ -1,0 +1,17 @@
+Repo: https://github.com/sairam0424/anvilry
+Commit: 48f3a14aff09b7a8609f7d9634a5bd8a93d37b42 (already checked out in this directory, deps installed, run with `pnpm dev`). `.env.local` has NEXT_PUBLIC_DISCOVERY_BADGES=true, so the "★ N/5 discovered" badge shows once a visitor has explored (switching views, asking the chat a question, etc.). The screenshots were taken as a visitor who had already discovered 2 of 5.
+
+Attached screenshots:
+1. 1_chat_view_390px.png - the chat view (/?view=chat) on a 390px phone
+2. 2_about_page_390px.png - /about on a 390px phone
+3. 3_chat_view_640px.png - the chat view at 640px wide (small tablet)
+
+The floating buttons in the bottom-right corner are piling on top of each other and on top of the chat's own controls:
+
+- On phones, the "★ 2/5 discovered" badge ends up underneath the ⌘K command button, so its text is half hidden (screenshots 1 and 2).
+- In the chat view on a phone, the ⌘K button and the badge both sit on top of the message box's microphone and Send buttons (screenshot 1).
+- At tablet width the badge covers the Send button in the chat view (screenshot 3).
+
+All of these should be clearly readable and tappable at every width, on every page and view, with nothing covering the chat's microphone or Send button. Desktop already looks right and should stay the same.
+
+Please find the root cause and fix it properly, without changing anything else about how these pages look. Then check the result in a browser at 320px, 390px, 640px and desktop width (chat view, developer view and a normal page like /about) and show me what you verified, with measurements.

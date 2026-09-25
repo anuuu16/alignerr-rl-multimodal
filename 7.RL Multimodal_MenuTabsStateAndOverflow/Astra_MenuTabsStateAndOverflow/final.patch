@@ -1,0 +1,423 @@
+diff --git a/app/(pages)/menu/page.tsx b/app/(pages)/menu/page.tsx
+index c0bb957..f8760d8 100644
+--- a/app/(pages)/menu/page.tsx
++++ b/app/(pages)/menu/page.tsx
+@@ -1,4 +1,5 @@
+ import type { Metadata } from "next";
++import { Suspense } from "react";
+ import MenuTabs from "@/components/blocks/MenuTabs";
+ import Button from "@/components/ui/Button";
+ import FadeUp from "@/components/ui/FadeUp";
+@@ -36,7 +37,9 @@ export default function MenuPage() {
+ 
+       {/* Categories + rows */}
+       <section className="mx-auto max-w-shell px-5 py-12 sm:px-8 md:py-16">
+-        <MenuTabs />
++        <Suspense>
++          <MenuTabs />
++        </Suspense>
+ 
+         <p className="mt-10 border-t pt-6 text-[13px] leading-relaxed text-muted">
+           {menuPage.vegTag} denotes a vegetarian dish. All prices in ₹ and
+diff --git a/app/globals.css b/app/globals.css
+index 80b66f7..b87d93c 100644
+--- a/app/globals.css
++++ b/app/globals.css
+@@ -106,6 +106,34 @@
+   }
+ }
+ 
++/* Overflow cues occupy the tab row's existing gutters, without shifting content. */
++.menu-tabs-hint {
++  position: absolute;
++  top: 0;
++  bottom: 1px;
++  width: 20px;
++  display: none;
++  align-items: center;
++  justify-content: center;
++  pointer-events: none;
++  color: var(--color-muted);
++}
++
++.menu-tabs-hint-left {
++  left: 0;
++  background: linear-gradient(to right, var(--color-bg) 60%, transparent);
++}
++
++.menu-tabs-hint-right {
++  right: 0;
++  background: linear-gradient(to left, var(--color-bg) 60%, transparent);
++}
++
++.menu-tabs-overflow[data-scroll-left="true"] .menu-tabs-hint-left,
++.menu-tabs-overflow[data-scroll-right="true"] .menu-tabs-hint-right {
++  display: flex;
++}
++
+ /* ---------- Keyframes (the only motion defined in CSS) ---------- */
+ 
+ /* Hero: slow 12s zoom on load, once. */
+diff --git a/components/blocks/MenuTabs.tsx b/components/blocks/MenuTabs.tsx
+index f0f1bb2..da282ff 100644
+--- a/components/blocks/MenuTabs.tsx
++++ b/components/blocks/MenuTabs.tsx
+@@ -1,21 +1,78 @@
+ "use client";
+ 
+-import { useId, useState } from "react";
++import { useId, useLayoutEffect, useRef } from "react";
++import { useSearchParams } from "next/navigation";
+ import MenuRow from "@/components/ui/MenuRow";
+ import site from "@/content/site";
+ 
++function revealTab(tab: HTMLElement) {
++  const list = tab.parentElement!;
++  const bounds = list.getBoundingClientRect();
++  const selected = tab.getBoundingClientRect();
++  // Keep a gutter for the overflow hints and focus outline. Only scroll this row.
++  if (selected.left < bounds.left + 20) {
++    list.scrollLeft -= bounds.left + 20 - selected.left;
++  } else if (selected.right > bounds.right - 20) {
++    list.scrollLeft += selected.right - bounds.right + 20;
++  }
++}
++
+ /**
+  * Client-side category switcher. Tabs follow the ARIA tabs pattern with
+  * roving focus; the active tab is marked by an ink underline.
+  */
+ export default function MenuTabs() {
+-  const [active, setActive] = useState(site.menu[0].id);
++  const searchParams = useSearchParams();
++  const active =
++    site.menu.find((category) => category.id === searchParams.get("category"))?.id ??
++    site.menu[0].id;
++  const tabListRef = useRef<HTMLDivElement>(null);
+   const baseId = useId();
+ 
++  function setActive(category: string) {
++    const url = new URL(window.location.href);
++    url.searchParams.set("category", category);
++    // Update this menu entry without adding a history step or scrolling the page.
++    window.history.replaceState(null, "", url);
++  }
++
++  useLayoutEffect(() => {
++    const list = tabListRef.current;
++    if (!list) return;
++
++    function updateHints() {
++      if (!list) return;
++      list.parentElement!.dataset.scrollLeft = String(list.scrollLeft > 1);
++      list.parentElement!.dataset.scrollRight = String(
++        list.scrollLeft + list.clientWidth < list.scrollWidth - 1,
++      );
++    }
++
++    function revealSelected() {
++      if (!list) return;
++      const tab = list.querySelector<HTMLElement>('[aria-selected="true"]');
++      if (!tab) return;
++      revealTab(tab);
++      updateHints();
++    }
++
++    revealSelected();
++    const observer = new ResizeObserver(revealSelected);
++    observer.observe(list);
++    for (const tab of list.children) observer.observe(tab);
++    list.addEventListener("scroll", updateHints, { passive: true });
++    return () => {
++      observer.disconnect();
++      list.removeEventListener("scroll", updateHints);
++    };
++  }, [active]);
++
+   function activateTab(index: number) {
+     const next = site.menu[(index + site.menu.length) % site.menu.length];
+     setActive(next.id);
+-    document.getElementById(`${baseId}-tab-${next.id}`)?.focus();
++    document
++      .getElementById(`${baseId}-tab-${next.id}`)
++      ?.focus({ preventScroll: true });
+   }
+ 
+   function onKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+@@ -34,35 +91,47 @@ export default function MenuTabs() {
+   return (
+     <div>
+       {/* Tabs scroll horizontally on narrow screens rather than wrapping. */}
+-      <div
+-        role="tablist"
+-        aria-label="Menu categories"
+-        className="-mx-5 flex gap-7 overflow-x-auto border-b px-5 sm:mx-0 sm:px-0"
+-      >
+-        {site.menu.map((category, index) => {
+-          const selected = category.id === active;
+-
+-          return (
+-            <button
+-              key={category.id}
+-              id={`${baseId}-tab-${category.id}`}
+-              role="tab"
+-              type="button"
+-              aria-selected={selected}
+-              aria-controls={`${baseId}-panel-${category.id}`}
+-              tabIndex={selected ? 0 : -1}
+-              onClick={() => setActive(category.id)}
+-              onKeyDown={(event) => onKeyDown(event, index)}
+-              className={`label-caps -mb-px min-h-11 shrink-0 border-b-2 py-4 transition-colors duration-300 ${
+-                selected
+-                  ? "border-ink text-ink"
+-                  : "border-transparent text-muted hover:text-ink"
+-              }`}
+-            >
+-              {category.label}
+-            </button>
+-          );
+-        })}
++      <div className="menu-tabs-overflow relative -mx-5 sm:mx-0">
++        <div
++          ref={tabListRef}
++          role="tablist"
++          aria-label="Menu categories"
++          className="flex gap-7 overflow-x-auto border-b px-5 sm:px-0"
++        >
++          {site.menu.map((category, index) => {
++            const selected = category.id === active;
++
++            return (
++              <button
++                key={category.id}
++                id={`${baseId}-tab-${category.id}`}
++                role="tab"
++                type="button"
++                aria-selected={selected}
++                aria-controls={`${baseId}-panel-${category.id}`}
++                tabIndex={selected ? 0 : -1}
++                onClick={(event) => {
++                  setActive(category.id);
++                  revealTab(event.currentTarget);
++                }}
++                onKeyDown={(event) => onKeyDown(event, index)}
++                className={`label-caps -mb-px min-h-11 shrink-0 border-b-2 py-4 transition-colors duration-300 ${
++                  selected
++                    ? "border-ink text-ink"
++                    : "border-transparent text-muted hover:text-ink"
++                }`}
++              >
++                {category.label}
++              </button>
++            );
++          })}
++        </div>
++        <span aria-hidden="true" className="menu-tabs-hint menu-tabs-hint-left">
++          ‹
++        </span>
++        <span aria-hidden="true" className="menu-tabs-hint menu-tabs-hint-right">
++          ›
++        </span>
+       </div>
+ 
+       {site.menu.map((category) => {
+diff --git a/tests/README.md b/tests/README.md
+new file mode 100644
+index 0000000..486da91
+--- /dev/null
++++ b/tests/README.md
+@@ -0,0 +1,16 @@
++Menu browser regression check
++
++Run against a running production server (`npm run build`, then
++`npm run start -- --port 3101`). The check uses headless Google Chrome and
++Playwright, with no changes to the app's dependencies:
++
++```sh
++npm install --prefix /tmp/ember-menu-tests playwright
++NODE_PATH=/tmp/ember-menu-tests/node_modules node tests/menu-navigation.mjs
++```
++
++Set `BASE_URL` to test another server. Screenshots and console results cover
++320px, 390px and 1440px viewports: selected-tab visibility, overflow cues,
++keyboard navigation and focus, category URLs, invalid-category fallback,
++reservation dish prefill, Back/Forward scroll restoration, reload and resize.
++Screenshots are written to `artifacts/menu-check/`.
+diff --git a/tests/menu-navigation.mjs b/tests/menu-navigation.mjs
+new file mode 100644
+index 0000000..b53b2f6
+--- /dev/null
++++ b/tests/menu-navigation.mjs
+@@ -0,0 +1,172 @@
++import { createRequire } from "node:module";
++const { chromium } = createRequire(import.meta.url)("playwright");
++import assert from "node:assert/strict";
++import { mkdirSync } from "node:fs";
++const baseUrl = process.env.BASE_URL || "http://localhost:3101";
++
++(async () => {
++  const browser = await chromium.launch({ headless: true, channel: "chrome" });
++  const root = process.cwd() + "/artifacts/menu-check";
++  mkdirSync(root, { recursive: true });
++  for (const width of [320, 390, 1440]) {
++    const page = await browser.newPage({
++      viewport: { width, height: width === 320 ? 640 : 844 },
++      deviceScaleFactor: 1,
++    });
++    const errors = [];
++    page.on("pageerror", (e) => errors.push(e.message));
++    await page.goto(`${baseUrl}/menu`);
++    await page.getByRole("tab", { name: "Starters", exact: true }).waitFor();
++    await page.waitForTimeout(600);
++    async function check(name) {
++      const tab = page.getByRole("tab", { name, exact: true });
++      assert.equal(await tab.getAttribute("aria-selected"), "true");
++      assert.equal(await page.locator("[role=tabpanel]:visible").count(), 1);
++      const box = await tab.boundingBox();
++      const list = await page.getByRole("tablist").boundingBox();
++      assert(
++        box.x >= list.x - 1 && box.x + box.width <= list.x + list.width + 1,
++        `${name} clipped at ${width}: ${JSON.stringify(box)}`,
++      );
++      assert(
++        await page.evaluate(
++          () => document.documentElement.scrollWidth <= innerWidth,
++        ),
++        "page overflow",
++      );
++    }
++    await page.getByRole("tab", { name: "Drinks", exact: true }).click();
++    await page.waitForTimeout(350);
++    await check("Drinks");
++    assert.equal(
++      await page.locator(".menu-tabs-hint-left").isVisible(),
++      width === 320,
++    );
++    assert.equal(
++      await page.locator(".menu-tabs-hint-right").isVisible(),
++      false,
++    );
++    await page
++      .getByRole("tablist")
++      .evaluate((el) =>
++        window.scrollTo(0, el.getBoundingClientRect().top + scrollY - 100),
++      );
++    await page
++      .locator("[role=tabpanel]:visible img")
++      .evaluateAll((imgs) =>
++        Promise.all(imgs.map((img) => img.decode().catch(() => {}))),
++      );
++    await page.screenshot({ path: `${root}/${width}-drinks.png` });
++    const keys = [
++      ["Home", "Starters"],
++      ["ArrowLeft", "Drinks"],
++      ["ArrowRight", "Starters"],
++      ["End", "Drinks"],
++      ["ArrowLeft", "Desserts"],
++    ];
++    for (const [key, name] of keys) {
++      const y = await page.evaluate(() => scrollY);
++      await page.keyboard.press(key);
++      await page.waitForTimeout(350);
++      await check(name);
++      assert.equal(
++        await page
++          .getByRole("tab", { name, exact: true })
++          .evaluate((el) => el === document.activeElement),
++        true,
++      );
++      assert.equal(
++        await page.evaluate(() => scrollY),
++        y,
++        `keyboard scrolled page at ${width}`,
++      );
++    }
++    const reserve = page
++      .getByRole("tabpanel")
++      .filter({ visible: true })
++      .getByRole("link", { name: /Reserve a table/ })
++      .nth(2);
++    await reserve.scrollIntoViewIfNeeded();
++    await page.waitForTimeout(500);
++    const before = await page.evaluate(() => scrollY);
++    await page
++      .locator("[role=tabpanel]:visible img")
++      .evaluateAll((imgs) =>
++        Promise.all(imgs.map((img) => img.decode().catch(() => {}))),
++      );
++    await page.screenshot({ path: `${root}/${width}-before-reserve.png` });
++    const href = await reserve.getAttribute("href");
++    await reserve.click();
++    await page.waitForURL("**/reserve?dish=*");
++    assert.equal(
++      new URL(page.url()).searchParams.get("dish"),
++      new URL(href, baseUrl).searchParams.get("dish"),
++    );
++    assert.equal(
++      await page
++        .locator("[name=dish_of_interest] option:checked")
++        .textContent(),
++      new URL(page.url()).searchParams.get("dish"),
++    );
++    await page.goBack();
++    await page.waitForURL("**/menu?category=desserts");
++    await page.waitForTimeout(600);
++    await check("Desserts");
++    const after = await page.evaluate(() => scrollY);
++    assert(
++      Math.abs(before - after) <= 2,
++      `Back scroll ${width}: ${before} -> ${after}`,
++    );
++    await page
++      .locator("[role=tabpanel]:visible img")
++      .evaluateAll((imgs) =>
++        Promise.all(imgs.map((img) => img.decode().catch(() => {}))),
++      );
++    await page.screenshot({ path: `${root}/${width}-after-back.png` });
++    await page.goForward();
++    await page.waitForURL("**/reserve?dish=*");
++    await page.goBack();
++    await page.waitForTimeout(300);
++    await check("Desserts");
++    await page.reload();
++    await page.waitForTimeout(500);
++    await check("Desserts");
++    for (const category of [
++      "drinks",
++      "mains",
++      "desserts",
++      "starters",
++      "unknown",
++      "",
++    ]) {
++      await page.goto(`${baseUrl}/menu?source=test&category=${category}#main`);
++      await page.waitForTimeout(200);
++      await check(
++        category && category !== "unknown"
++          ? category[0].toUpperCase() + category.slice(1)
++          : "Starters",
++      );
++    }
++    await page.getByRole("tab", { name: "Drinks", exact: true }).click();
++    await page.waitForTimeout(350);
++    assert.equal(new URL(page.url()).searchParams.get("source"), "test");
++    assert.equal(new URL(page.url()).hash, "#main");
++    await page.setViewportSize({ width: 280, height: 700 });
++    await page.waitForTimeout(200);
++    await check("Drinks");
++    assert.deepEqual(errors, []);
++    console.log(
++      JSON.stringify({
++        width,
++        backScroll: { before, after },
++        checks:
++          "click, keyboard, wrapping, focus, deep links, reload, Back/Forward, resize, URL preservation, no page overflow/errors: PASS",
++      }),
++    );
++    await page.close();
++  }
++  await browser.close();
++})().catch((error) => {
++  console.error(error);
++  process.exit(1);
++});

@@ -1,0 +1,53 @@
+Task: Menu category tabs cut off on small phones, and the selected category is lost after going back from a reservation
+Repo: https://github.com/junedpathan11/ember-and-oak
+Commit: c979d4f8bd52d8f657971763cb7f6c1fd08eb320
+Models: ChatGPT Astra (gpt-6-astra, reasoning medium, Codex CLI) vs Gemini 3.8 Flash (google/gemini-3.8-flash, OpenCode)
+Conditions: same prompt, same four screenshots, single turn, no follow-ups, full shell and browser access for both.
+
+
+==============================
+OVERALL UI COMPARISON
+==============================
+
+Both models fixed the two reported problems equally well from a visitor's point of view:
+- the selected tab is fully visible at 320px, including with the keyboard
+- Back from the reserve page returns to the category and scroll position the visitor left
+- category links work
+- the 390 and 1440 layouts are unchanged
+
+Each introduced one regression the other avoided:
+- Astra's menu is missing from the server-rendered HTML (empty for no-JS visitors, crawlers and before hydration).
+- Gemini's Back button steps back through every tab clicked, and /menu is no longer statically prerendered.
+
+Astra is better on interaction/state and Gemini is better on accessibility/usability; everything else is a tie.
+
+This comparison does not show a significant, verifiable Astra advantage on the main requirement.
+
+
+==============================
+AUTHOR NOTES
+==============================
+
+Required:
+- at 320px the selected tab must always be fully visible, with a scroll hint, including via the keyboard
+- Back from the reserve page must restore the category, and links to a specific category must work
+- nothing else may change visually, the keyboard behavior must keep working, and the production build must still work
+
+Both met the core requirements:
+- End key at 320 → Drinks at x 243→300 in both (original 283→340)
+- Back → Desserts at the same scroll position at 320, 390 and 1440
+- ?category=desserts works, and invalid values fall back to Starters
+- tab strip positions at 390 and 1440 identical to the original
+- no page jump, keyboard intact, no console errors, and both production builds pass
+
+Differences:
+- Astra's prerendered /menu has 0 tabs and 0 dish names in its HTML (original: 4 tabs, 9 dish names), because of <Suspense> with no fallback (after_390_menu_without_javascript.png, measurements.json).
+- Gemini's /menu becomes dynamic (ƒ) instead of static (build route table in measurements.json).
+- Gemini's tab clicks push history entries, so Back stays on the menu after three tab clicks, while Astra leaves the page (recordings/back_after_three_tab_clicks_1440.webm).
+- Astra adds edge-fade scroll cues. Gemini also supports #desserts links.
+
+Conclusion: a mixed result. Each model introduced one regression, so there's no significant Astra advantage.
+
+Non-UI note: Astra took about 8.0 minutes and Gemini about 16.6. This isn't used as UI evidence.
+
+All "after" evidence was captured from both final patches as production builds (next build + next start), with the same steps, at the same viewports.

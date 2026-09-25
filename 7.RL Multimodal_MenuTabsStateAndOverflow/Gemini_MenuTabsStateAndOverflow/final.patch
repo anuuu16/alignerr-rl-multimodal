@@ -1,0 +1,235 @@
+diff --git a/app/(pages)/menu/page.tsx b/app/(pages)/menu/page.tsx
+index c0bb957..e0b0608 100644
+--- a/app/(pages)/menu/page.tsx
++++ b/app/(pages)/menu/page.tsx
+@@ -4,6 +4,7 @@ import Button from "@/components/ui/Button";
+ import FadeUp from "@/components/ui/FadeUp";
+ import JsonLd from "@/components/ui/JsonLd";
+ import site from "@/content/site";
++import { getValidCategoryId } from "@/lib/menu";
+ import { breadcrumbJsonLd, buildMetadata, menuJsonLd } from "@/lib/seo";
+ 
+ export const metadata: Metadata = buildMetadata({
+@@ -13,8 +14,17 @@ export const metadata: Metadata = buildMetadata({
+   path: "/menu",
+ });
+ 
+-export default function MenuPage() {
++interface MenuPageProps {
++  searchParams: Promise<{ category?: string | string[]; tab?: string | string[] }>;
++}
++
++export default async function MenuPage({ searchParams }: MenuPageProps) {
+   const { menuPage, business } = site;
++  const { category, tab } = await searchParams;
++  const rawParam =
++    (Array.isArray(category) ? category[0] : category) ??
++    (Array.isArray(tab) ? tab[0] : tab);
++  const initialCategory = getValidCategoryId(rawParam) ?? site.menu[0].id;
+ 
+   return (
+     <>
+@@ -36,7 +46,7 @@ export default function MenuPage() {
+ 
+       {/* Categories + rows */}
+       <section className="mx-auto max-w-shell px-5 py-12 sm:px-8 md:py-16">
+-        <MenuTabs />
++        <MenuTabs key={initialCategory} initialCategory={initialCategory} />
+ 
+         <p className="mt-10 border-t pt-6 text-[13px] leading-relaxed text-muted">
+           {menuPage.vegTag} denotes a vegetarian dish. All prices in ₹ and
+diff --git a/components/blocks/MenuTabs.tsx b/components/blocks/MenuTabs.tsx
+index f0f1bb2..4e0d62d 100644
+--- a/components/blocks/MenuTabs.tsx
++++ b/components/blocks/MenuTabs.tsx
+@@ -1,21 +1,94 @@
+ "use client";
+ 
+-import { useId, useState } from "react";
++import { useCallback, useEffect, useId, useRef, useState } from "react";
+ import MenuRow from "@/components/ui/MenuRow";
+ import site from "@/content/site";
++import { getValidCategoryId } from "@/lib/menu";
++
++interface MenuTabsProps {
++  initialCategory?: string;
++}
+ 
+ /**
+  * Client-side category switcher. Tabs follow the ARIA tabs pattern with
+  * roving focus; the active tab is marked by an ink underline.
+  */
+-export default function MenuTabs() {
+-  const [active, setActive] = useState(site.menu[0].id);
++export default function MenuTabs({ initialCategory }: MenuTabsProps = {}) {
++  const defaultCategory =
++    getValidCategoryId(initialCategory) ?? site.menu[0].id;
++  const [active, setActive] = useState(defaultCategory);
+   const baseId = useId();
++  const tablistRef = useRef<HTMLDivElement>(null);
++
++  const scrollTabIntoView = useCallback(
++    (tabId: string, behavior: ScrollBehavior = "smooth") => {
++      const container = tablistRef.current;
++      if (!container) return;
++      const tab = document.getElementById(`${baseId}-tab-${tabId}`);
++      if (!tab) return;
++
++      const containerRect = container.getBoundingClientRect();
++      const tabRect = tab.getBoundingClientRect();
++      const style = window.getComputedStyle(container);
++      const paddingLeft = parseFloat(style.paddingLeft) || 0;
++      const paddingRight = parseFloat(style.paddingRight) || 0;
++
++      const prefersReducedMotion = window.matchMedia(
++        "(prefers-reduced-motion: reduce)",
++      ).matches;
++      const effectiveBehavior = prefersReducedMotion ? "auto" : behavior;
++
++      if (tabRect.right > containerRect.right - paddingRight) {
++        const diff = tabRect.right - (containerRect.right - paddingRight);
++        container.scrollTo({
++          left: container.scrollLeft + diff,
++          behavior: effectiveBehavior,
++        });
++      } else if (tabRect.left < containerRect.left + paddingLeft) {
++        const diff = containerRect.left + paddingLeft - tabRect.left;
++        container.scrollTo({
++          left: container.scrollLeft - diff,
++          behavior: effectiveBehavior,
++        });
++      }
++    },
++    [baseId],
++  );
++
++  function updateUrl(categoryId: string, method: "push" | "replace" = "push") {
++    if (typeof window === "undefined") return;
++    const url = new URL(window.location.href);
++    url.searchParams.set("category", categoryId);
++    url.searchParams.delete("tab");
++    if (url.hash) {
++      url.hash = "";
++    }
++    const newUrl = url.pathname + (url.search ? url.search : "");
++    if (window.location.pathname + window.location.search !== newUrl) {
++      if (method === "push") {
++        window.history.pushState({ category: categoryId }, "", newUrl);
++      } else {
++        window.history.replaceState({ category: categoryId }, "", newUrl);
++      }
++    }
++  }
++
++  function selectCategory(
++    id: string,
++    method: "push" | "replace" = "push",
++    behavior: ScrollBehavior = "smooth",
++  ) {
++    if (id !== active) {
++      setActive(id);
++      updateUrl(id, method);
++    }
++    scrollTabIntoView(id, behavior);
++  }
+ 
+   function activateTab(index: number) {
+     const next = site.menu[(index + site.menu.length) % site.menu.length];
+-    setActive(next.id);
+-    document.getElementById(`${baseId}-tab-${next.id}`)?.focus();
++    selectCategory(next.id, "replace", "smooth");
++    document.getElementById(`${baseId}-tab-${next.id}`)?.focus({ preventScroll: true });
+   }
+ 
+   function onKeyDown(event: React.KeyboardEvent<HTMLButtonElement>, index: number) {
+@@ -31,10 +104,64 @@ export default function MenuTabs() {
+     activateTab(nextIndex);
+   }
+ 
++  // Handle browser Back / Forward (popstate) and hash changes
++  useEffect(() => {
++    function handleLocationChange(event?: Event) {
++      const params = new URLSearchParams(window.location.search);
++      const hash = window.location.hash.replace("#", "");
++      const catParam =
++        event?.type === "hashchange" && hash
++          ? hash
++          : params.get("category") || params.get("tab") || hash;
++      const validId = getValidCategoryId(catParam) ?? defaultCategory;
++      setActive(validId);
++      requestAnimationFrame(() => {
++        scrollTabIntoView(validId, "auto");
++      });
++    }
++
++    window.addEventListener("popstate", handleLocationChange);
++    window.addEventListener("hashchange", handleLocationChange);
++    return () => {
++      window.removeEventListener("popstate", handleLocationChange);
++      window.removeEventListener("hashchange", handleLocationChange);
++    };
++  }, [defaultCategory, scrollTabIntoView]);
++
++  // On mount: check current URL (search params and hash) and scroll into view
++  useEffect(() => {
++    const params = new URLSearchParams(window.location.search);
++    const catParam =
++      params.get("category") ||
++      params.get("tab") ||
++      window.location.hash.replace("#", "");
++    const targetId = getValidCategoryId(catParam);
++    if (targetId) {
++      requestAnimationFrame(() => {
++        setActive(targetId);
++        scrollTabIntoView(targetId, "auto");
++      });
++    } else {
++      requestAnimationFrame(() => {
++        scrollTabIntoView(defaultCategory, "auto");
++      });
++    }
++  }, [defaultCategory, scrollTabIntoView]);
++
++  // Keep selected tab visible on window resize
++  useEffect(() => {
++    function handleResize() {
++      scrollTabIntoView(active, "auto");
++    }
++    window.addEventListener("resize", handleResize);
++    return () => window.removeEventListener("resize", handleResize);
++  }, [active, scrollTabIntoView]);
++
+   return (
+     <div>
+       {/* Tabs scroll horizontally on narrow screens rather than wrapping. */}
+       <div
++        ref={tablistRef}
+         role="tablist"
+         aria-label="Menu categories"
+         className="-mx-5 flex gap-7 overflow-x-auto border-b px-5 sm:mx-0 sm:px-0"
+@@ -51,7 +178,7 @@ export default function MenuTabs() {
+               aria-selected={selected}
+               aria-controls={`${baseId}-panel-${category.id}`}
+               tabIndex={selected ? 0 : -1}
+-              onClick={() => setActive(category.id)}
++              onClick={() => selectCategory(category.id, "push", "smooth")}
+               onKeyDown={(event) => onKeyDown(event, index)}
+               className={`label-caps -mb-px min-h-11 shrink-0 border-b-2 py-4 transition-colors duration-300 ${
+                 selected
+diff --git a/lib/menu.ts b/lib/menu.ts
+new file mode 100644
+index 0000000..a3573d5
+--- /dev/null
++++ b/lib/menu.ts
+@@ -0,0 +1,11 @@
++import site from "@/content/site";
++
++export function getValidCategoryId(raw?: string | null): string | null {
++  if (!raw) return null;
++  const cleaned = raw.trim().toLowerCase().replace(/^#/, "");
++  const found = site.menu.find(
++    (cat) =>
++      cat.id.toLowerCase() === cleaned || cat.label.toLowerCase() === cleaned,
++  );
++  return found ? found.id : null;
++}

@@ -1,0 +1,365 @@
+{
+  "original": {
+    "320 tap Drinks": {
+      "label": "Drinks",
+      "left": 263,
+      "right": 320,
+      "vw": 320,
+      "fullyVisible": true,
+      "url": "/menu",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "320 End key": {
+      "label": "Drinks",
+      "left": 283,
+      "right": 340,
+      "vw": 320,
+      "fullyVisible": false,
+      "url": "/menu",
+      "scrollY": 0
+    },
+    "320 Home key": "Starters",
+    "320 ArrowRight": "Mains",
+    "320 focusedIsSelected": true,
+    "360 tap Drinks": {
+      "label": "Drinks",
+      "left": 303,
+      "right": 360,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "360 End key": {
+      "label": "Drinks",
+      "left": 303,
+      "right": 360,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu",
+      "scrollY": 0
+    },
+    "360 Home key": "Starters",
+    "360 ArrowRight": "Mains",
+    "360 focusedIsSelected": true,
+    "390 tab rects": [
+      [
+        "Starters",
+        20,
+        75
+      ],
+      [
+        "Mains",
+        123,
+        48
+      ],
+      [
+        "Desserts",
+        199,
+        76
+      ],
+      [
+        "Drinks",
+        303,
+        56
+      ]
+    ],
+    "1440 tab rects": [
+      [
+        "Starters",
+        112,
+        75
+      ],
+      [
+        "Mains",
+        215,
+        48
+      ],
+      [
+        "Desserts",
+        291,
+        76
+      ],
+      [
+        "Drinks",
+        395,
+        56
+      ]
+    ],
+    "390 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "390 back": {
+      "selected": "Starters",
+      "url": "/menu",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "1440 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "1440 back": {
+      "selected": "Starters",
+      "url": "/menu",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "320 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "320 back": {
+      "selected": "Starters",
+      "url": "/menu",
+      "scrollBefore": 522,
+      "scrollAfter": 522
+    },
+    "history: after 3 tab clicks, Back once lands on": "/ | selected=-",
+    "deep link ?category=desserts": "Starters",
+    "deep link ?category=nonsense": "Starters",
+    "deep link #desserts": "Starters",
+    "no-JS render": {
+      "tabs": 4,
+      "reserveLinks": 17,
+      "visibleDishes": 8
+    },
+    "consoleErrors": []
+  },
+  "Astra": {
+    "320 tap Drinks": {
+      "label": "Drinks",
+      "left": 243,
+      "right": 300,
+      "vw": 320,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "320 End key": {
+      "label": "Drinks",
+      "left": 243,
+      "right": 300,
+      "vw": 320,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0
+    },
+    "320 Home key": "Starters",
+    "320 ArrowRight": "Mains",
+    "320 focusedIsSelected": true,
+    "360 tap Drinks": {
+      "label": "Drinks",
+      "left": 283,
+      "right": 340,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "360 End key": {
+      "label": "Drinks",
+      "left": 283,
+      "right": 340,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0
+    },
+    "360 Home key": "Starters",
+    "360 ArrowRight": "Mains",
+    "360 focusedIsSelected": true,
+    "390 tab rects": [
+      [
+        "Starters",
+        20,
+        75
+      ],
+      [
+        "Mains",
+        123,
+        48
+      ],
+      [
+        "Desserts",
+        199,
+        76
+      ],
+      [
+        "Drinks",
+        303,
+        56
+      ]
+    ],
+    "1440 tab rects": [
+      [
+        "Starters",
+        112,
+        75
+      ],
+      [
+        "Mains",
+        215,
+        48
+      ],
+      [
+        "Desserts",
+        291,
+        76
+      ],
+      [
+        "Drinks",
+        395,
+        56
+      ]
+    ],
+    "390 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "390 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "1440 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "1440 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "320 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "320 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 522,
+      "scrollAfter": 522
+    },
+    "history: after 3 tab clicks, Back once lands on": "/ | selected=-",
+    "deep link ?category=desserts": "Desserts",
+    "deep link ?category=nonsense": "Starters",
+    "deep link #desserts": "Starters",
+    "no-JS render": {
+      "tabs": 0,
+      "reserveLinks": 1,
+      "visibleDishes": 0
+    },
+    "consoleErrors": []
+  },
+  "Gemini": {
+    "320 tap Drinks": {
+      "label": "Drinks",
+      "left": 243,
+      "right": 300,
+      "vw": 320,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "320 End key": {
+      "label": "Drinks",
+      "left": 243,
+      "right": 300,
+      "vw": 320,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0
+    },
+    "320 Home key": "Starters",
+    "320 ArrowRight": "Mains",
+    "320 focusedIsSelected": true,
+    "360 tap Drinks": {
+      "label": "Drinks",
+      "left": 283,
+      "right": 340,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0,
+      "pageJumpPx": 0
+    },
+    "360 End key": {
+      "label": "Drinks",
+      "left": 283,
+      "right": 340,
+      "vw": 360,
+      "fullyVisible": true,
+      "url": "/menu?category=drinks",
+      "scrollY": 0
+    },
+    "360 Home key": "Starters",
+    "360 ArrowRight": "Mains",
+    "360 focusedIsSelected": true,
+    "390 tab rects": [
+      [
+        "Starters",
+        20,
+        75
+      ],
+      [
+        "Mains",
+        123,
+        48
+      ],
+      [
+        "Desserts",
+        199,
+        76
+      ],
+      [
+        "Drinks",
+        303,
+        56
+      ]
+    ],
+    "1440 tab rects": [
+      [
+        "Starters",
+        112,
+        75
+      ],
+      [
+        "Mains",
+        215,
+        48
+      ],
+      [
+        "Desserts",
+        291,
+        76
+      ],
+      [
+        "Drinks",
+        395,
+        56
+      ]
+    ],
+    "390 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "390 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "1440 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "1440 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 0,
+      "scrollAfter": 0
+    },
+    "320 reserve url": "/reserve?dish=Gulab%20Jamun%20Br%C3%BBl%C3%A9e",
+    "320 back": {
+      "selected": "Desserts",
+      "url": "/menu?category=desserts",
+      "scrollBefore": 522,
+      "scrollAfter": 522
+    },
+    "history: after 3 tab clicks, Back once lands on": "/menu?category=desserts | selected=Desserts",
+    "deep link ?category=desserts": "Desserts",
+    "deep link ?category=nonsense": "Starters",
+    "deep link #desserts": "Desserts",
+    "no-JS render": {
+      "tabs": 4,
+      "reserveLinks": 17,
+      "visibleDishes": 8
+    },
+    "consoleErrors": []
+  }
+}

@@ -1,6 +1,6 @@
 # RL Multimodal: submissions tracker
 
-Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **6**
+Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **7**
 
 | #   | Task                 | Submitted  | Repo @ commit                           | Labelbox                                                                                                    | My verdict                                                                                      | Status                                                    |
 | --- | -------------------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
@@ -10,7 +10,8 @@ Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **6**
 | 4 | MobileAuditFixes | 2026-09-25 | sairam0424/anvilry @ `1beefe1` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01k40738mxgupy2x) | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Submitted, awaiting review |
 | 5 | ScrollbarAndResumeSeam | 2026-09-25 | sairam0424/anvilry @ `af3ee40` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q) | Astra better: Gemini's overflow:hidden makes the 320×568 chat input unreachable and changes the /?view=resume background | Submitted, awaiting review |
 | 6 | ViewHintAndVisitorBadge | 2026-09-25 | sairam0424/anvilry @ `14fb806` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o60738h6eo6954) | Astra better (narrow): only the hung-request state differs (Gemini's skeleton is stuck, Astra times out after 10s); all else equal | Submitted, awaiting review |
-| 7 | MenuTabsStateAndOverflow | — | junedpathan11/ember-and-oak @ `c979d4f` | — | — | Prepared: models not run |
+| 7 | MenuTabsStateAndOverflow | 2026-09-25 | junedpathan11/ember-and-oak @ `c979d4f` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01nt0738cs9vzt24) | Mixed/tie: Astra better on history (7), Gemini better on SSR (8); Astra's menu is missing from the HTML, Gemini's /menu is dynamic + history flooding | Submitted, awaiting review (honest mixed; rejection likely) |
+| 8 | FloatingBadgeOverlap | — | sairam0424/anvilry @ `48f3a14` | — | — | Prepared: models not run |
 
 Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
 
@@ -119,10 +120,25 @@ Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `A
 ---
 
 ## 7. MenuTabsStateAndOverflow
+- **Files:** `RL Multimodal_MenuTabsStateAndOverflow.zip` (58 files) + separate upload `outputs/MenuTabsStateAndOverflow/MenuTabsStateAndOverflow_Author_Notes_and_Overall_UI.txt` · form in `outputs/MenuTabsStateAndOverflow/labelbox_form.md`
+- **Ratings:** Astra better on 7 · Gemini better on 8 · Tie on 1–6, 9, 10 (mixed; no significant Astra advantage)
 - **Task name:** Menu category tabs cut off on small phones, and the selected category is lost after going back from a reservation
 - **Notes:** `_working/MenuTabsStateAndOverflow/TASK.md` (repro, correct fix, traps, checklist, run commands)
 - **Form (name + description ready):** `outputs/MenuTabsStateAndOverflow/labelbox_form.md`
 - **Design rationale:** a small-screen visual bug (the tempting fix is hard-coding the tabs to fit) plus a state bug whose tempting fix (`useSearchParams` without `<Suspense>`) can break `next build`; the prompt asks to confirm the production build. Not from an upstream PR: I found and reproduced the bugs on the latest commit.
+
+### Reviewer response
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
+## 8. FloatingBadgeOverlap
+- **Task name:** Floating ⌘K button and "discovered" badge overlap each other and the chat's Send button on phones and tablets
+- **Notes:** `_working/FloatingBadgeOverlap/TASK.md` (collision table for 4 widths × 3 views, correct fix, traps, run commands)
+- **Form (name + description ready):** `outputs/FloatingBadgeOverlap/labelbox_form.md`
+- **Design rationale:** three fixed elements collide at different breakpoints; the upstream PR #212 fix is only partial, so a complete fix needs precise multi-breakpoint measurement
 
 ### Reviewer response
 - **Date:**

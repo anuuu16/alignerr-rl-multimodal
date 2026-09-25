@@ -31,7 +31,8 @@ The ChatGPT plan is a flat fee, so its split is only indicative: the same ₹1,9
 | T4 (MobileAuditFixes) | `rollout-2026-09-25T11-10-57-01a0d714…` | 1,581,363 | 1,521,920 | 8,753 | 1,706 | 1,590,116 |
 | T5 (ScrollbarAndResumeSeam) | `rollout-2026-09-25T19-19-06-01a0d8d3…` | 1,089,489 | 1,029,120 | 6,297 | 477 | 1,095,786 |
 | T6 (ViewHintAndVisitorBadge) | `rollout-2026-09-25T20-14-15-01a0d906…` | 1,129,880 | 1,051,776 | 6,785 | 1,057 | 1,136,665 |
-| **Total** | | **6,256,317** | **5,862,784** | **38,145** | **4,703** | **6,294,462** |
+| T7 (MenuTabsStateAndOverflow) | `rollout-2026-09-25T21-34-26-01a0d94f…` | 1,326,526 | 1,276,288 | 9,722 | 1,957 | 1,336,248 |
+| **Total** | | **7,582,843** | **7,139,072** | **47,867** | **6,660** | **7,630,710** |
 
 ## Tokens: Gemini (gemini-3.8-flash, OpenCode)
 The metered cost ($) is OpenCode's estimate. The actual bill of ₹301.04 for $3.1847 of usage works out to about ₹94.5 per $, including tax and currency conversion.
@@ -48,6 +49,7 @@ The metered cost ($) is OpenCode's estimate. The actual bill of ₹301.04 for $3
 | T4 (MobileAuditFixes) | `ses_f28c78291ffeYn4hoQB7kELFER` | 524,330 | 13,365,240 | 17,187 | 66,924 | 1.7111 | ≈161.75 (est.) |
 | T5 (ScrollbarAndResumeSeam) | `ses_f27261929ffe6EstkBKcqBnQw2` | — | — | — | — | 1.8088 | ≈170.99 (est.) |
 | T6 (ViewHintAndVisitorBadge) | `ses_f26f3d515ffecZ6ncHahffoQJZ` | — | — | — | — | 0.9163 | ≈86.62 (est.) |
+| T7 (MenuTabsStateAndOverflow) | `ses_f26a6b6dcffebPKMRhykp6kXpG` | — | — | — | — | 1.4163 | ≈133.88 (est.) |
 
 ## Wasted spend (failed or discarded runs)
 - Task 3 (MobileMenuOverlay): both runs, a tie (submitted anyway as an honest tie). Gemini ≈ ₹72.27 (estimate, not yet in the bill) and 756,498 Astra tokens.

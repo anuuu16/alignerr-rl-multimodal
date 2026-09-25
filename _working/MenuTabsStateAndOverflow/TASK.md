@@ -74,3 +74,14 @@ opencode run --auto -m google/gemini-3.8-flash \
   -f "$P/Prompt_Screenshots/3_reserve_page_prefilled_390px.png" -f "$P/Prompt_Screenshots/4_menu_after_back_390px.png" \
   -- "$(cat "$P/prompt.txt")"
 ```
+
+## Run log (in progress)
+- Astra: `rollout-2026-09-25T21-34-26-01a0d94f-950b-7411-8e12-e603718de20d.jsonl`, 8.0 min, 1,336,248 tokens. It uses `useSearchParams` for `?category=` and wraps `<MenuTabs/>` in `<Suspense>` **with no fallback**, plus scroll-into-view and edge-fade cues.
+  - `next build` passes and /menu is still ○ static, BUT the prerendered `menu.html` visible markup has **0 dish names, 0 role=tab, and 1 "Reserve a table" (the header's)**, vs the original's 9 dishes, 4 tabs and 33 links (57 KB → 10 KB visible HTML). The menu content is client-only, so the menu area is blank before hydration and there are no dishes for crawlers or no-JS visitors. **This is a regression to weigh.**
+- Gemini: `opencode run --auto`, started 21:45.
+- Gemini: `ses_f26a6b6dcffebPKMRhykp6kXpG`, 16.6 min, 84 msgs, $1.4163 ≈ ₹134. Page reads `searchParams` (so /menu becomes ƒ dynamic), pushState per tab click, `lib/menu.ts` helper, supports `#hash`. Its only rm/kill: its own /tmp test scripts and next dev.
+- Verdict (production builds): **mixed. Astra better on 7 (history), Gemini better on 8 (menu in the HTML), Tie on the other 8.** No significant Astra advantage. Packaged honestly at the user's request.
+  - Both: End key at 320 gives Drinks 243→300 (orig 283→340); Back restores Desserts and the scroll position at 320, 390, 1440; ?category works; tab strip at 390/1440 identical; no page jump; keyboard intact.
+  - Astra regression: prerendered /menu has 0 tabs and 0 dishes (Suspense with no fallback).
+  - Gemini regressions: /menu is dynamic; after 3 tab clicks, Back stays on the menu.
+- Scripts: `compare.mjs` (uses waitUntil 'load' because Astra's page never hit networkidle), `record.mjs`. Data: `comparison.json`. Build logs were in the scratchpad; the route tables are copied into `measurements.json`.
