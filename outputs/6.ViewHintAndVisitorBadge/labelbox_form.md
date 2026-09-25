@@ -1,7 +1,7 @@
 # ViewHintAndVisitorBadge: Labelbox form answers
 
-**Status:** Ready to submit (not yet submitted)
-**Labelbox data row:** _(add after submitting)_
+**Status:** Submitted (2026-09-25)
+**Labelbox data row:** https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o60738h6eo6954
 
 ## Task Name
 "Try a different view" hint covers content on inner pages, and the footer visitor counter is stuck loading

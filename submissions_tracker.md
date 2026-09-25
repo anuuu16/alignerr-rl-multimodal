@@ -1,6 +1,6 @@
 # RL Multimodal: submissions tracker
 
-Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **5**
+Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **6**
 
 | #   | Task                 | Submitted  | Repo @ commit                           | Labelbox                                                                                                    | My verdict                                                                                      | Status                                                    |
 | --- | -------------------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
@@ -9,7 +9,7 @@ Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **5**
 | 3   | MobileMenuOverlay    | 2026-09-24 | junedpathan11/ember-and-oak @ `c6830c3` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz019j073868jbsmen) | Tie on all 10 UI dimensions (non-UI: Gemini killed the user's Chrome ×2, 17.6 vs 4.3 min)       | Submitted, awaiting review (honest tie; rejection likely) |
 | 4 | MobileAuditFixes | 2026-09-25 | sairam0424/anvilry @ `1beefe1` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01k40738mxgupy2x) | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Submitted, awaiting review |
 | 5 | ScrollbarAndResumeSeam | 2026-09-25 | sairam0424/anvilry @ `af3ee40` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q) | Astra better: Gemini's overflow:hidden makes the 320×568 chat input unreachable and changes the /?view=resume background | Submitted, awaiting review |
-| 6 | ViewHintAndVisitorBadge | — | sairam0424/anvilry @ `14fb806` | — | Astra better (narrow): only the hung-request state differs (Gemini's skeleton is stuck, Astra times out after 10s); all else equal | Ready to submit |
+| 6 | ViewHintAndVisitorBadge | 2026-09-25 | sairam0424/anvilry @ `14fb806` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o60738h6eo6954) | Astra better (narrow): only the hung-request state differs (Gemini's skeleton is stuck, Astra times out after 10s); all else equal | Submitted, awaiting review |
 | 7 | MenuTabsStateAndOverflow | — | junedpathan11/ember-and-oak @ `c979d4f` | — | — | Prepared: models not run |
 
 Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
