@@ -1,7 +1,7 @@
 # MobileAuditFixes: Labelbox form answers
 
 **Status:** Submitted (2026-09-25)
-**Labelbox data row:** https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q
+**Labelbox data row:** https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01k40738mxgupy2x
 
 ## Task Name
 Floating buttons cover content, mobile menu backdrop missing, and chat header row clipped on phones

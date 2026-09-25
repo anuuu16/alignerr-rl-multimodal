@@ -1,0 +1,16 @@
+Repo: https://github.com/junedpathan11/ember-and-oak
+Commit: c979d4f8bd52d8f657971763cb7f6c1fd08eb320 (already checked out in this directory, deps installed, run with `npm run dev`)
+
+Attached screenshots (the /menu page):
+1. 1_menu_drinks_tab_selected_320px.png - 320px phone, after tapping the "Drinks" category tab
+2. 2_menu_desserts_before_reserve_390px.png - 390px phone, Desserts tab selected and scrolled down to a dessert
+3. 3_reserve_page_prefilled_390px.png - after tapping that dessert's "Reserve a table" link
+4. 4_menu_after_back_390px.png - after pressing the browser's Back button from the reserve page
+
+Two problems on the menu page:
+
+1. On small phones the category tabs don't fit. The last tab ("Drinks") is cut off at the right edge, and even when it's the selected tab it stays half off-screen (screenshot 1), so you can't see which category you're on. There's also no hint that the row can be scrolled. The selected tab should always be fully visible, on any phone width, including when tabs are changed with the keyboard.
+
+2. If I pick a category other than Starters (say Desserts), tap "Reserve a table" on a dish, and then press Back, the menu forgets where I was: it jumps back to Starters at the top of the page (screenshot 4) instead of showing Desserts where I left off. Going back should return me to the category I was browsing, and a link to the menu with a specific category open should also work.
+
+Please find the root causes and fix them properly, without changing anything else about how the menu looks. The existing tab keyboard behaviour (arrow keys, Home, End) must keep working. Then check the result in a browser at 320px, 390px and desktop width, make sure the site still builds for production, and show me what you verified.

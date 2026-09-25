@@ -1,0 +1,15 @@
+Repo: https://github.com/sairam0424/anvilry
+Commit: 14fb8065c67f51803683f14ccbd29946a103eafc (already checked out in this directory, deps installed, run with `pnpm dev`). `.env.local` has NEXT_PUBLIC_VISITOR_COUNTER=true so the footer visitor counter is on. There is no Redis configured locally, so /api/visit returns {"total":0,"today":0}, which is what happens in production when Redis is down.
+
+Attached screenshots:
+1. 1_work_page_390px.png - /work on a 390px phone, a few seconds after load
+2. 2_projects_page_1440px.png - /projects on desktop, a few seconds after load
+3. 3_footer_first_visit_after_15s_1440px.png - the footer of /about in a fresh browser (first visit), 15 seconds after load
+
+Two problems:
+
+1. The "Try a different view" hint pops up on content pages like /work, /projects, /articles and the individual work pages, where it covers real content: the page heading on phones (screenshot 1) and project cards on desktop (screenshot 2). That hint is only meant for the home page.
+
+2. In the footer, the visitor counter's grey loading placeholder never goes away for a first-time visitor when the count isn't available (screenshot 3). It should never be stuck loading. When there's no real count to show, it should show nothing, not a fake number. Returning visitors should keep seeing the last count they saw, and when the API does return a real count it should still show and be remembered, exactly as it works today.
+
+Please find the root causes and fix them properly, without changing anything else about how these pages look. Then check the result in a browser at 390px and desktop width, including the different visitor-counter cases, and show me what you verified.

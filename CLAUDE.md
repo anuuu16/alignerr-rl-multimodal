@@ -43,3 +43,16 @@ Each of `Astra_<Task>/` and `Gemini_<Task>/` contains only:
 - If Astra has no clear, verifiable advantage on the main requirement, don't submit. Pick another task.
 - Before zipping, list every file in the submission folder and confirm each one is on the allowed list above.
   Zip with `zip -r -X` (no `.DS_Store`, no `__MACOSX`).
+
+## Workspaces (disk space)
+- Model workspaces are deleted after a task is packaged. Each model's final code is saved as `final.patch` in its submission folder (checked to match before deletion on 2026-09-25).
+- Kept permanently: `RL Multimodal instructions/workspaces/repro-anvilry`. It's the evaluator runner (its Playwright/Chromium works), so run compare/record scripts from there.
+- Rebuilding a model's workspace for rework:
+  ```bash
+  mkdir X && cd X && git init -q && git remote add origin <repo> && git fetch -q --depth 1 origin <base-sha> \
+    && git checkout -q FETCH_HEAD && cp .env.example .env.local   # task 5: also add NEXT_PUBLIC_OPEN_TO_WORK=true
+  pnpm install --frozen-lockfile        # ember-and-oak uses npm ci
+  git apply "<N>.RL Multimodal_<Task>/<Model>_<Task>/final.patch"
+  ```
+  Base commits: T1 51be61c3a82e…, T2 638b5941f35b…, T3 c6830c3921151ada… (ember-and-oak), T4 1beefe1303e9…, T5 af3ee40dd68f… (full SHAs are in each `_working/<Task>/TASK.md` or `prompt.txt`).
+- The user prefixed older submission folders and zips with `1.`–`5.`. Don't rename them; new tasks use the plain `RL Multimodal_<Task>` structure.

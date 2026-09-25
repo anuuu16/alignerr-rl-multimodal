@@ -1,0 +1,230 @@
+{
+  "hint_after_8s": {
+    "390 /work": false,
+    "390 /projects": false,
+    "390 /articles": false,
+    "390 /work/pensieve": false,
+    "390 /": true,
+    "390 dismiss works": true,
+    "1440 /work": false,
+    "1440 /projects": false,
+    "1440 /articles": false,
+    "1440 /work/pensieve": false,
+    "1440 /": true,
+    "1440 dismiss works": true
+  },
+  "badge": {
+    "390 A first visit, API total 0": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 202
+    },
+    "390 B cached 1234, API total 0": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 226
+    },
+    "390 C first visit, API 500": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 202
+    },
+    "390 C2 first visit, network error": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 202
+    },
+    "390 D first visit, API 4321": {
+      "skeleton": false,
+      "text": "\u2191 4,321 engineers visited",
+      "cache": "4321",
+      "footerRowH": 226
+    },
+    "390 E first visit, API hangs": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 202
+    },
+    "390 E2 cached 1234, API hangs": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 226
+    },
+    "390 F cached 1234, API 500": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 226
+    },
+    "1440 A first visit, API total 0": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 130
+    },
+    "1440 B cached 1234, API total 0": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 152
+    },
+    "1440 C first visit, API 500": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 130
+    },
+    "1440 C2 first visit, network error": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 130
+    },
+    "1440 D first visit, API 4321": {
+      "skeleton": false,
+      "text": "\u2191 4,321 engineers visited",
+      "cache": "4321",
+      "footerRowH": 152
+    },
+    "1440 E first visit, API hangs": {
+      "skeleton": false,
+      "text": null,
+      "cache": null,
+      "footerRowH": 130
+    },
+    "1440 E2 cached 1234, API hangs": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 152
+    },
+    "1440 F cached 1234, API 500": {
+      "skeleton": false,
+      "text": "\u2191 1,234 engineers visited",
+      "cache": "1234",
+      "footerRowH": 152
+    }
+  },
+  "consoleErrors": [],
+  "original_for_reference": {
+    "hint": {
+      "390 /work": true,
+      "390 /projects": true,
+      "390 /articles": true,
+      "390 /work/pensieve": true,
+      "390 /": true,
+      "390 dismiss works": true,
+      "1440 /work": true,
+      "1440 /projects": true,
+      "1440 /articles": true,
+      "1440 /work/pensieve": true,
+      "1440 /": true,
+      "1440 dismiss works": true
+    },
+    "badge": {
+      "390 A first visit, API total 0": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 226
+      },
+      "390 B cached 1234, API total 0": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 226
+      },
+      "390 C first visit, API 500": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 226
+      },
+      "390 C2 first visit, network error": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 226
+      },
+      "390 D first visit, API 4321": {
+        "skeleton": false,
+        "text": "\u2191 4,321 engineers visited",
+        "cache": "4321",
+        "footerRowH": 226
+      },
+      "390 E first visit, API hangs": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 226
+      },
+      "390 E2 cached 1234, API hangs": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 226
+      },
+      "390 F cached 1234, API 500": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 226
+      },
+      "1440 A first visit, API total 0": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 152
+      },
+      "1440 B cached 1234, API total 0": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 152
+      },
+      "1440 C first visit, API 500": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 152
+      },
+      "1440 C2 first visit, network error": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 152
+      },
+      "1440 D first visit, API 4321": {
+        "skeleton": false,
+        "text": "\u2191 4,321 engineers visited",
+        "cache": "4321",
+        "footerRowH": 152
+      },
+      "1440 E first visit, API hangs": {
+        "skeleton": true,
+        "text": null,
+        "cache": null,
+        "footerRowH": 152
+      },
+      "1440 E2 cached 1234, API hangs": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 152
+      },
+      "1440 F cached 1234, API 500": {
+        "skeleton": false,
+        "text": "\u2191 1,234 engineers visited",
+        "cache": "1234",
+        "footerRowH": 152
+      }
+    }
+  },
+  "notes": "Each badge state uses a fresh browser context; /api/visit is intercepted (A/B use the real local API which returns total 0). skeleton=true means the grey loading placeholder is still present at the check time (4s, or 15s for the hang states E/E2). cache = localStorage[\"anvilry:visits:total\"]. footerRowH = height of the footer first block (px)."
+}

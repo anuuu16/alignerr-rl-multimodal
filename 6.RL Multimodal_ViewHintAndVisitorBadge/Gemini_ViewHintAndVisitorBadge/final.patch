@@ -1,0 +1,328 @@
+diff --git a/src/components/site-footer.dom.test.tsx b/src/components/site-footer.dom.test.tsx
+index cd2779b..25d9ed9 100644
+--- a/src/components/site-footer.dom.test.tsx
++++ b/src/components/site-footer.dom.test.tsx
+@@ -72,11 +72,26 @@ describe("VisitorBadge localStorage cache", () => {
+       vi.fn(async () => ({ ok: true, json: async () => ({ total: 0, today: 0 }) })),
+     );
+ 
+-    render(<SiteFooter />);
++    const { container } = render(<SiteFooter />);
++
++    // Wait for fetch to complete — badge should not render a number, and skeleton should disappear
++    await waitFor(() => {
++      expect(screen.queryByText(/engineers visited/)).toBeNull();
++      expect(container.querySelector(".animate-pulse")).toBeNull();
++    });
++  });
++
++  it("shows nothing (skeleton then no count) when fetch throws and no cache exists", async () => {
++    vi.stubGlobal(
++      "fetch",
++      vi.fn(async () => { throw new Error("network error"); }),
++    );
++
++    const { container } = render(<SiteFooter />);
+ 
+-    // Wait for fetch to complete — badge should not render a number
+     await waitFor(() => {
+       expect(screen.queryByText(/engineers visited/)).toBeNull();
++      expect(container.querySelector(".animate-pulse")).toBeNull();
+     });
+   });
+ 
+diff --git a/src/components/site-footer.tsx b/src/components/site-footer.tsx
+index ed1c542..c43a382 100644
+--- a/src/components/site-footer.tsx
++++ b/src/components/site-footer.tsx
+@@ -26,6 +26,8 @@ function VisitorBadge() {
+   const [total, setTotal] = useState<number | null>(null);
+ 
+   useEffect(() => {
++    let cancelled = false;
++    let cachedCount: number | null = null;
+     // Seed from localStorage cache so repeat visitors see the last-known count
+     // before the API call resolves. This setState call is intentional and safe:
+     // it runs once on mount (client-only) and does not depend on any external
+@@ -33,7 +35,13 @@ function VisitorBadge() {
+     // a documented exception to the set-state-in-effect heuristic.
+     try {
+       const cached = localStorage.getItem(VISIT_CACHE_KEY);
+-      if (cached !== null) setTotal(Number(cached)); // eslint-disable-line react-hooks/set-state-in-effect -- intentional: one-time localStorage seed on mount, no subscription
++      if (cached !== null) {
++        const parsed = Number(cached);
++        if (Number.isFinite(parsed) && parsed > 0) {
++          cachedCount = parsed;
++          setTotal(parsed); // eslint-disable-line react-hooks/set-state-in-effect -- intentional: one-time localStorage seed on mount, no subscription
++        }
++      }
+     } catch {
+       // localStorage unavailable — stay on null (skeleton shown)
+     }
+@@ -41,6 +49,7 @@ function VisitorBadge() {
+     fetch("/api/visit", { method: "POST" })
+       .then((r) => (r.ok ? r.json() : null))
+       .then((data: { total: number; today: number } | null) => {
++        if (cancelled) return;
+         if (data?.total != null && data.total > 0) {
+           setTotal(data.total);
+           try {
+@@ -48,28 +57,42 @@ function VisitorBadge() {
+           } catch {
+             // localStorage blocked (private browsing / storage full) — ignore
+           }
++        } else if (cachedCount === null) {
++          // If total === 0 (or response not ok) and there was no cache, hide the badge entirely
++          setTotal(0);
+         }
+-        // If total === 0: Redis was unavailable. Keep the cached value (don't call setTotal).
+       })
+       .catch(() => {
+-        // Network error — cached value (already in state) stays visible
++        if (cancelled) return;
++        // Network error — if no cached count, hide the badge; otherwise cached value stays visible
++        if (cachedCount === null) {
++          setTotal(0);
++        }
+       });
++
++    return () => {
++      cancelled = true;
++    };
+   }, []);
+ 
+   if (total === null) {
+     return (
+-      <span
+-        className="inline-block h-3 w-28 animate-pulse rounded bg-fg-subtle/20"
+-        aria-hidden="true"
+-      />
++      <p className="mt-2">
++        <span
++          className="inline-block h-3 w-28 animate-pulse rounded bg-fg-subtle/20"
++          aria-hidden="true"
++        />
++      </p>
+     );
+   }
+   if (total === 0) return null; // No cache, no real count — hide the badge entirely
+ 
+   return (
+-    <span className="font-mono text-xs text-fg-subtle">
+-      ↑ {total.toLocaleString()} engineers visited
+-    </span>
++    <p className="mt-2">
++      <span className="font-mono text-xs text-fg-subtle">
++        ↑ {total.toLocaleString()} engineers visited
++      </span>
++    </p>
+   );
+ }
+ 
+@@ -105,11 +128,7 @@ export function SiteFooter() {
+           <p className="mt-1 text-xs text-fg-subtle">
+             {profile.role} · {profile.location}
+           </p>
+-          {showVisitorCounter && (
+-            <p className="mt-2">
+-              <VisitorBadge />
+-            </p>
+-          )}
++          {showVisitorCounter && <VisitorBadge />}
+         </div>
+ 
+         <div className="flex flex-col items-start gap-4 sm:items-end">
+diff --git a/src/components/view-hint.dom.test.tsx b/src/components/view-hint.dom.test.tsx
+new file mode 100644
+index 0000000..5569a1e
+--- /dev/null
++++ b/src/components/view-hint.dom.test.tsx
+@@ -0,0 +1,149 @@
++import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
++import { render, screen, fireEvent, act, cleanup } from "@testing-library/react";
++import { ViewHint } from "./view-hint";
++
++let mockPathname = "/";
++let mockView = "classic";
++
++vi.mock("next/navigation", () => ({
++  usePathname: () => mockPathname,
++  useSearchParams: () => new URLSearchParams(),
++}));
++
++vi.mock("@/components/view-context", () => ({
++  useView: () => ({ view: mockView }),
++}));
++
++describe("ViewHint component", () => {
++  beforeEach(() => {
++    vi.useFakeTimers();
++    mockPathname = "/";
++    mockView = "classic";
++    localStorage.clear();
++  });
++
++  afterEach(() => {
++    act(() => {
++      vi.runOnlyPendingTimers();
++    });
++    vi.useRealTimers();
++    cleanup();
++    localStorage.clear();
++  });
++
++  it("does not render before the 7-second dwell delay on home page", () => {
++    render(<ViewHint />);
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++
++    act(() => {
++      vi.advanceTimersByTime(6999);
++    });
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("renders on the home page ('/') after the 7-second dwell delay", () => {
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(7000);
++    });
++
++    expect(screen.getByText(/Try a different view/)).toBeTruthy();
++  });
++
++  it("does NOT render on /work even after 7 seconds", () => {
++    mockPathname = "/work";
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("does NOT render on /projects even after 7 seconds", () => {
++    mockPathname = "/projects";
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("does NOT render on /articles or sub-routes even after 7 seconds", () => {
++    mockPathname = "/articles";
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++
++    cleanup();
++    mockPathname = "/work/pensieve";
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("does NOT render when view is not classic", () => {
++    mockView = "chat";
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("dismisses on close button click and saves dismissal to localStorage", () => {
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(7000);
++    });
++
++    const dismissBtn = screen.getByRole("button", { name: /Dismiss hint/i });
++    act(() => {
++      fireEvent.click(dismissBtn);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++    expect(localStorage.getItem("anvilry-hint-seen")).toBeTruthy();
++  });
++
++  it("does NOT render if previously dismissed within 24h", () => {
++    localStorage.setItem("anvilry-hint-seen", String(Date.now()));
++    render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(10000);
++    });
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++
++  it("hides when navigating away from the home page", () => {
++    const { rerender } = render(<ViewHint />);
++
++    act(() => {
++      vi.advanceTimersByTime(7000);
++    });
++
++    expect(screen.getByText(/Try a different view/)).toBeTruthy();
++
++    mockPathname = "/work";
++    rerender(<ViewHint />);
++
++    expect(screen.queryByText(/Try a different view/)).toBeNull();
++  });
++});
+diff --git a/src/components/view-hint.tsx b/src/components/view-hint.tsx
+index fed9f8a..d301ba9 100644
+--- a/src/components/view-hint.tsx
++++ b/src/components/view-hint.tsx
+@@ -1,6 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useState, useSyncExternalStore } from "react";
++import { usePathname } from "next/navigation";
+ import { X, Sparkles } from "lucide-react";
+ import { useView } from "@/components/view-context";
+ 
+@@ -54,9 +55,10 @@ function useHintDismissed(): boolean {
+ 
+ /**
+  * One-time, non-blocking hint nudging first-time visitors toward the Play / Chat
+- * views. Dismissible, never covers content, and shown ONLY in the classic view
+- * (don't nag someone who already switched). The seen-flag is a UI flag in
+- * localStorage, not the view state (which is intentionally never persisted).
++ * views. Dismissible, never covers content, and shown ONLY on the home page in
++ * the classic view (never nag on content pages or someone who already switched).
++ * The seen-flag is a UI flag in localStorage, not the view state (which is
++ * intentionally never persisted).
+  *
+  * Timing: gated behind a dwell timer (SHOW_DELAY_MS) so it never appears the
+  * instant the page loads. Positioning: anchored to the TOP of the viewport on
+@@ -65,6 +67,12 @@ function useHintDismissed(): boolean {
+  * original bottom-right placement, which never had the overlap problem.
+  */
+ export function ViewHint() {
++  const pathname = usePathname();
++  if (pathname !== "/") return null;
++  return <HomeViewHint />;
++}
++
++function HomeViewHint() {
+   const { view } = useView();
+   const dismissed = useHintDismissed();
+   const [dwelled, setDwelled] = useState(false);

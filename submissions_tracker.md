@@ -1,14 +1,16 @@
 # RL Multimodal: submissions tracker
 
-Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **4**
+Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **5**
 
 | #   | Task                 | Submitted  | Repo @ commit                           | Labelbox                                                                                                    | My verdict                                                                                      | Status                                                    |
 | --- | -------------------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | 1   | CmdPaletteMobileClip | 2026-09-24 | sairam0424/anvilry @ `51be61c`          | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz0197073875pfghqy) | Astra better (phone readability); Astra desktop regression noted                                | Submitted, awaiting review                                |
 | 2   | MdxListInlineCode    | 2026-09-24 | sairam0424/anvilry @ `638b594`          | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz018j07381i5bjoxj) | Astra better (Gemini's patch makes all 99 bullet dots invisible)                                | Submitted, awaiting review                                |
 | 3   | MobileMenuOverlay    | 2026-09-24 | junedpathan11/ember-and-oak @ `c6830c3` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz019j073868jbsmen) | Tie on all 10 UI dimensions (non-UI: Gemini killed the user's Chrome ×2, 17.6 vs 4.3 min)       | Submitted, awaiting review (honest tie; rejection likely) |
-| 4 | MobileAuditFixes | 2026-09-25 | sairam0424/anvilry @ `1beefe1` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q) | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Submitted, awaiting review |
-| 5 | ScrollbarAndResumeSeam | — | sairam0424/anvilry @ `af3ee40` | — | Astra better: Gemini's overflow:hidden makes the 320×568 chat input unreachable and changes the /?view=resume background | Ready to submit |
+| 4 | MobileAuditFixes | 2026-09-25 | sairam0424/anvilry @ `1beefe1` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01k40738mxgupy2x) | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Submitted, awaiting review |
+| 5 | ScrollbarAndResumeSeam | 2026-09-25 | sairam0424/anvilry @ `af3ee40` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q) | Astra better: Gemini's overflow:hidden makes the 320×568 chat input unreachable and changes the /?view=resume background | Submitted, awaiting review |
+| 6 | ViewHintAndVisitorBadge | — | sairam0424/anvilry @ `14fb806` | — | Astra better (narrow): only the hung-request state differs (Gemini's skeleton is stuck, Astra times out after 10s); all else equal | Ready to submit |
+| 7 | MenuTabsStateAndOverflow | — | junedpathan11/ember-and-oak @ `c979d4f` | — | — | Prepared: models not run |
 
 Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
 
@@ -93,6 +95,34 @@ Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `A
 - **Ratings:** Astra better on 2, 4, 6, 9 · Tie on 1, 3, 7, 8, 10 · N/A on 5
 - **Rework context:** `_working/ScrollbarAndResumeSeam/TASK.md` (run log, verdict, scripts)
 - **Design rationale:** hidden second cause (a 1px header border on top of the banner height) rewards exact measurement; the prompt asks for exact measurements
+
+### Reviewer response
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
+## 6. ViewHintAndVisitorBadge
+- **Task name:** "Try a different view" hint covers content on inner pages, and the footer visitor counter is stuck loading
+- **Notes:** `_working/ViewHintAndVisitorBadge/TASK.md` (repro, visitor states A–E, correct fix, traps, run commands)
+- **Files:** `RL Multimodal_ViewHintAndVisitorBadge.zip` (64 files) + separate upload `outputs/ViewHintAndVisitorBadge/ViewHintAndVisitorBadge_Author_Notes_and_Overall_UI.txt` · form in `outputs/ViewHintAndVisitorBadge/labelbox_form.md`
+- **Ratings:** Astra better on 7, 9 · Tie on 1, 2, 3, 4, 6, 8, 10 · N/A on 5
+- **Risk:** the advantage is narrow (one failure mode: a hung request)
+- **Design rationale:** scoping bug plus a state bug where 2 of 4 states must stay exactly as they are (tests interactions/state and regression avoidance)
+
+### Reviewer response
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
+## 7. MenuTabsStateAndOverflow
+- **Task name:** Menu category tabs cut off on small phones, and the selected category is lost after going back from a reservation
+- **Notes:** `_working/MenuTabsStateAndOverflow/TASK.md` (repro, correct fix, traps, checklist, run commands)
+- **Form (name + description ready):** `outputs/MenuTabsStateAndOverflow/labelbox_form.md`
+- **Design rationale:** a small-screen visual bug (the tempting fix is hard-coding the tabs to fit) plus a state bug whose tempting fix (`useSearchParams` without `<Suspense>`) can break `next build`; the prompt asks to confirm the production build. Not from an upstream PR: I found and reproduced the bugs on the latest commit.
 
 ### Reviewer response
 - **Date:**

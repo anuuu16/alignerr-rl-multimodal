@@ -1,7 +1,7 @@
 # ScrollbarAndResumeSeam: Labelbox form answers
 
-**Status:** Ready to submit (not yet submitted)
-**Labelbox data row:** _(add after submitting)_
+**Status:** Submitted (2026-09-25)
+**Labelbox data row:** https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q
 
 ## Task Name
 Chat and developer views scroll when they shouldn't, and the /resume Web tab has a background seam

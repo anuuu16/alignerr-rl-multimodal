@@ -1,0 +1,249 @@
+diff --git a/e2e/view-hint-visitor.spec.ts b/e2e/view-hint-visitor.spec.ts
+new file mode 100644
+index 0000000..6ef6107
+--- /dev/null
++++ b/e2e/view-hint-visitor.spec.ts
+@@ -0,0 +1,82 @@
++import { test, expect } from "@playwright/test";
++
++const cacheKey = "anvilry:visits:total";
++
++for (const width of [390, 1440]) {
++  test.describe(`${width}px`, () => {
++    test.use({ viewport: { width, height: width === 390 ? 844 : 900 } });
++
++    test("hint is home-only, including client navigation and dismissal", async ({ page }, testInfo) => {
++      test.setTimeout(120_000);
++      for (const route of ["/work", "/projects", "/articles", "/work/pensieve", "/about"]) {
++        await page.goto(route);
++        await expect(page.locator("main").first()).toBeVisible();
++        await page.waitForTimeout(8000);
++        await expect(page.getByText("Try a different view", { exact: true })).toHaveCount(0);
++        if (route === "/work" || route === "/projects") {
++          await page.screenshot({ path: testInfo.outputPath(`${route.slice(1)}.png`) });
++        }
++      }
++      await page.goto("/");
++      const hint = page.getByText("Try a different view", { exact: true });
++      await expect(hint).toBeVisible({ timeout: 12_000 });
++      await page.locator('a[href="/work"]').filter({ visible: true }).first().click();
++      await expect(page).toHaveURL(/\/work$/);
++      // Cache Components retains the previous page in a hidden Activity tree.
++      await expect(hint).toBeHidden();
++      await page.locator('a[href="/"]').filter({ visible: true }).first().click();
++      await expect(page).toHaveURL(/\/$/);
++      await expect(hint).toBeVisible({ timeout: 12_000 });
++      await page.getByRole("button", { name: "Dismiss hint" }).click();
++      await page.reload();
++      await page.waitForTimeout(8000);
++      await expect(hint).toHaveCount(0);
++    });
++
++    for (const scenario of ["zero", "error", "network", "malformed", "timeout", "success"] as const) {
++      for (const cached of [false, true]) {
++        test(`counter ${scenario}, ${cached ? "returning" : "first"} visitor`, async ({ page }, testInfo) => {
++          if (cached) await page.addInitScript(([key]) => {
++            if (localStorage.getItem(key) === null) localStorage.setItem(key, "1500");
++          }, [cacheKey]);
++          await page.route("**/api/visit", async (route) => {
++            if (scenario === "timeout") return;
++            if (scenario === "network") return route.abort();
++            if (scenario === "error") return route.fulfill({ status: 503, body: "Unavailable" });
++            if (scenario === "malformed") return route.fulfill({ contentType: "application/json", body: "{" });
++            return route.fulfill({ json: { total: scenario === "success" ? 2042 : 0, today: 0 } });
++          });
++          await page.goto("/about");
++          const footer = page.locator("footer");
++          await footer.scrollIntoViewIfNeeded();
++          await expect(footer.locator(".animate-pulse")).toHaveCount(0, { timeout: 15_000 });
++          // Allow the request to settle even when the cached number hides the skeleton immediately.
++          if (cached) await page.waitForTimeout(scenario === "timeout" ? 11_000 : 500);
++          const expected = scenario === "success" ? "2042" : cached ? "1500" : null;
++          if (expected) await expect(footer).toContainText(`${Number(expected).toLocaleString("en-US")} engineers visited`);
++          else await expect(footer.getByText(/engineers visited/)).toHaveCount(0);
++          await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), cacheKey)).toBe(expected);
++          if (!cached && ["zero", "success"].includes(scenario)) {
++            await page.screenshot({ path: testInfo.outputPath(`footer-${scenario}.png`) });
++          }
++          if (scenario === "success") {
++            await page.route("**/api/visit", (route) => route.fulfill({ json: { total: 0, today: 0 } }));
++            await page.reload();
++            await expect(footer).toContainText("2,042 engineers visited");
++            await expect(footer.locator(".animate-pulse")).toHaveCount(0);
++            expect(await page.evaluate((key) => localStorage.getItem(key), cacheKey)).toBe("2042");
++          }
++        });
++      }
++    }
++
++    test("unmocked Redis-down response has no placeholder after 15 seconds", async ({ page }, testInfo) => {
++      await page.goto("/about");
++      await page.locator("footer").scrollIntoViewIfNeeded();
++      await page.waitForTimeout(15_000);
++      await expect(page.locator("footer .animate-pulse")).toHaveCount(0);
++      await expect(page.locator("footer").getByText(/engineers visited/)).toHaveCount(0);
++      await page.screenshot({ path: testInfo.outputPath("footer-real-api.png") });
++    });
++  });
++}
+diff --git a/src/app/layout.tsx b/src/app/layout.tsx
+index 1b41964..d0f55f3 100644
+--- a/src/app/layout.tsx
++++ b/src/app/layout.tsx
+@@ -10,7 +10,6 @@ import { TalkModeMount } from "@/components/chat/talk-mode-mount";
+ import { AnvilInlinePanel } from "@/components/chat/anvil-inline-panel";
+ import { AnvilCoreSurface } from "@/components/chat/anvil-core-surface";
+ import { WakeWordController } from "@/components/chat/wake-word-controller";
+-import { ViewHint } from "@/components/view-hint";
+ import { EasterEggs } from "@/components/game/easter-eggs";
+ import { PersonJsonLd, WebSiteJsonLd, FaqJsonLd } from "@/components/json-ld";
+ import { Analytics } from "@vercel/analytics/next";
+@@ -132,7 +131,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
+           {/* Opt-in wake word (off by default). Renders its persistent "Listening"
+               banner + kill switch only while active, and only on the voice views. */}
+           <WakeWordController />
+-          <ViewHint />
+           {/* Global "subtle delight" — console greeting + Konami reveal, every view. */}
+           <EasterEggs />
+         </Providers>
+diff --git a/src/app/page.tsx b/src/app/page.tsx
+index f069a93..d202822 100644
+--- a/src/app/page.tsx
++++ b/src/app/page.tsx
+@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/home/testimonials";
+ import { Contact } from "@/components/home/contact";
+ import { ViewRouter } from "@/components/view-router";
+ import { WritingPreview } from "@/components/home/writing-preview";
++import { ViewHint } from "@/components/view-hint";
+ 
+ // Explicit query-stripped canonical (resolved absolute via layout's metadataBase).
+ // `/` is the only route that carries ?view=, and a literal self-canonical would
+@@ -21,16 +22,19 @@ export default function Home() {
+   // to ViewRouter as the always-present baseline. ViewRouter swaps in the Chat /
+   // Gamified client views only when the visitor toggles, without a navigation.
+   return (
+-    <ViewRouter>
+-      <main className="flex-1">
+-        <Hero />
+-        <FeaturedWork />
+-        <FeaturedProjects />
+-        <Achievements />
+-        <WritingPreview />
+-        <Testimonials />
+-        <Contact />
+-      </main>
+-    </ViewRouter>
++    <>
++      <ViewRouter>
++        <main className="flex-1">
++          <Hero />
++          <FeaturedWork />
++          <FeaturedProjects />
++          <Achievements />
++          <WritingPreview />
++          <Testimonials />
++          <Contact />
++        </main>
++      </ViewRouter>
++      <ViewHint />
++    </>
+   );
+ }
+diff --git a/src/components/site-footer.dom.test.tsx b/src/components/site-footer.dom.test.tsx
+index cd2779b..54cfce4 100644
+--- a/src/components/site-footer.dom.test.tsx
++++ b/src/components/site-footer.dom.test.tsx
+@@ -72,10 +72,11 @@ describe("VisitorBadge localStorage cache", () => {
+       vi.fn(async () => ({ ok: true, json: async () => ({ total: 0, today: 0 }) })),
+     );
+ 
+-    render(<SiteFooter />);
++    const { container } = render(<SiteFooter />);
+ 
+-    // Wait for fetch to complete — badge should not render a number
++    // Check loading completes as well as the absence of a fabricated count.
+     await waitFor(() => {
++      expect(container.querySelector(".animate-pulse")).toBeNull();
+       expect(screen.queryByText(/engineers visited/)).toBeNull();
+     });
+   });
+diff --git a/src/components/site-footer.tsx b/src/components/site-footer.tsx
+index ed1c542..faedc68 100644
+--- a/src/components/site-footer.tsx
++++ b/src/components/site-footer.tsx
+@@ -8,6 +8,11 @@ import { profile } from "@/lib/profile";
+ import { useView } from "@/components/view-context";
+ 
+ const VISIT_CACHE_KEY = "anvilry:visits:total";
++const VISIT_TIMEOUT_MS = 10_000;
++
++function isRealCount(value: unknown): value is number {
++  return typeof value === "number" && Number.isSafeInteger(value) && value > 0;
++}
+ 
+ /**
+  * Fire-and-forget visitor counter. POSTs to /api/visit on mount (once per page load),
+@@ -24,6 +29,7 @@ function VisitorBadge() {
+   // renders null→skeleton while the client renders cached count→real badge.
+   // Seed from localStorage in useEffect (client-only, post-hydration) instead.
+   const [total, setTotal] = useState<number | null>(null);
++  const [loading, setLoading] = useState(true);
+ 
+   useEffect(() => {
+     // Seed from localStorage cache so repeat visitors see the last-known count
+@@ -33,15 +39,22 @@ function VisitorBadge() {
+     // a documented exception to the set-state-in-effect heuristic.
+     try {
+       const cached = localStorage.getItem(VISIT_CACHE_KEY);
+-      if (cached !== null) setTotal(Number(cached)); // eslint-disable-line react-hooks/set-state-in-effect -- intentional: one-time localStorage seed on mount, no subscription
++      if (cached !== null && isRealCount(Number(cached))) setTotal(Number(cached)); // eslint-disable-line react-hooks/set-state-in-effect -- intentional: one-time localStorage seed on mount, no subscription
+     } catch {
+       // localStorage unavailable — stay on null (skeleton shown)
+     }
+ 
+-    fetch("/api/visit", { method: "POST" })
++    const controller = new AbortController();
++    const timer = setTimeout(() => {
++      controller.abort();
++      setLoading(false);
++    }, VISIT_TIMEOUT_MS);
++
++    fetch("/api/visit", { method: "POST", signal: controller.signal })
+       .then((r) => (r.ok ? r.json() : null))
+       .then((data: { total: number; today: number } | null) => {
+-        if (data?.total != null && data.total > 0) {
++        if (controller.signal.aborted) return;
++        if (isRealCount(data?.total)) {
+           setTotal(data.total);
+           try {
+             localStorage.setItem(VISIT_CACHE_KEY, String(data.total));
+@@ -53,10 +66,19 @@ function VisitorBadge() {
+       })
+       .catch(() => {
+         // Network error — cached value (already in state) stays visible
++      })
++      .finally(() => {
++        clearTimeout(timer);
++        if (!controller.signal.aborted) setLoading(false);
+       });
++
++    return () => {
++      clearTimeout(timer);
++      controller.abort();
++    };
+   }, []);
+ 
+-  if (total === null) {
++  if (total === null && loading) {
+     return (
+       <span
+         className="inline-block h-3 w-28 animate-pulse rounded bg-fg-subtle/20"
+@@ -64,7 +86,7 @@ function VisitorBadge() {
+       />
+     );
+   }
+-  if (total === 0) return null; // No cache, no real count — hide the badge entirely
++  if (total === null) return null; // No cache, no real count — hide the badge entirely
+ 
+   return (
+     <span className="font-mono text-xs text-fg-subtle">

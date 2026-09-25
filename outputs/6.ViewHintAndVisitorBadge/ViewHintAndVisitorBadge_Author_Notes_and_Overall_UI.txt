@@ -1,0 +1,40 @@
+Task: "Try a different view" hint covers content on inner pages, and the footer visitor counter is stuck loading
+Repo: https://github.com/sairam0424/anvilry
+Commit: 14fb8065c67f51803683f14ccbd29946a103eafc (run with NEXT_PUBLIC_VISITOR_COUNTER=true for both models)
+Models: ChatGPT Astra (gpt-6-astra, reasoning medium, Codex CLI) vs Gemini 3.8 Flash (google/gemini-3.8-flash, OpenCode)
+Conditions: same prompt, same three screenshots, single turn, no follow-ups, full shell and browser access for both.
+
+
+==============================
+OVERALL UI COMPARISON
+==============================
+
+Both models fixed the two reported problems correctly in the cases shown in the prompt:
+- the "Try a different view" hint now appears only on the home page, and no longer covers content on /work, /projects, /articles or the work pages
+- a first-time visitor whose count comes back as 0 or as an error no longer sees a stuck placeholder
+- cached counts and real counts behave exactly as before
+
+The difference is one counter state. When the counter request never completes, Gemini's placeholder still pulses indefinitely (still visible at 15 seconds), while Astra's 10-second timeout hides it. The prompt explicitly says the counter should "never be stuck loading", so only Astra fully meets that requirement. It's a narrow advantage, limited to one realistic failure mode. The hint fix and every other counter state are equivalent.
+
+
+==============================
+AUTHOR NOTES
+==============================
+
+Required: the hint only on the home page; the counter never stuck loading; nothing shown when there's no real count; cached and real counts unchanged.
+
+Both hint fixes work: Astra moved <ViewHint /> into the home page, and Gemini added a pathname check. After 8 seconds the hint is absent on 4 content routes at 390 and 1440, present on /, and dismissal persists (measurements.json → hint).
+
+For the counter, both handle a 0 response, a 500 and a network error for first-time visitors (hidden), and keep cached and real counts (8 states tested per width, fresh browser each).
+
+The difference is a request that never completes. Astra aborts after 10 seconds and hides the placeholder. Gemini has no timeout, so the placeholder is still pulsing at 15 seconds (after_1440_footer_E_first_visit_API_hangs.png, recordings/footer_first_visit_api_hangs_14s.webm).
+
+Why it matters: the prompt says the counter should never be stuck loading, and an unreachable Redis can hang the request.
+
+Astra limitations: when hidden, the footer keeps an empty mt-2 paragraph (8px more space at 390 than Gemini's version). The 10-second wait is still long before the placeholder clears.
+
+Gemini strengths: an equally correct hint fix, correct handling of every non-hanging counter case, tighter markup when hidden, and more unit tests plus a production build.
+
+Non-UI note: Astra took about 5.6 minutes and Gemini about 13.9. This isn't used as UI evidence.
+
+All "after" evidence was captured from both final patches on freshly started dev servers (build caches cleared), with the same steps, at the same viewports.
