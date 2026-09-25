@@ -1,0 +1,200 @@
+diff --git a/e2e/viewport-layout.spec.ts b/e2e/viewport-layout.spec.ts
+new file mode 100644
+index 0000000..eefbfc7
+--- /dev/null
++++ b/e2e/viewport-layout.spec.ts
+@@ -0,0 +1,48 @@
++import { test, expect } from "@playwright/test";
++
++for (const viewport of [{ width: 1440, height: 900 }, { width: 390, height: 844 }]) {
++  for (const view of ["chat", "developer"]) {
++    test(`${view} contains scrolling at ${viewport.width}px`, async ({ page }) => {
++      await page.setViewportSize(viewport);
++      await page.goto(`/?view=${view}`);
++      const input = page.getByLabel(view === "chat" ? "Ask a question about Sairam" : "Terminal command input");
++      await expect(input).toBeVisible();
++      const measure = () => page.evaluate(() => ({
++        height: document.documentElement.scrollHeight,
++        width: document.documentElement.scrollWidth,
++        y: window.scrollY,
++        navTop: document.querySelector("body > header")!.getBoundingClientRect().top,
++      }));
++      const expected = { height: viewport.height, width: viewport.width, y: 0, navTop: 0 };
++      await expect.poll(measure).toEqual(expected);
++      await page.mouse.move(5, 400);
++      await page.mouse.wheel(0, 1200);
++      await expect.poll(measure).toEqual(expected);
++
++      if (view === "chat") {
++        // Deterministic overflow without relying on credentials or a live LLM.
++        await page.route("**/api/chat", route => route.fulfill({
++          contentType: "text/plain",
++          body: "A long answer exercising transcript overflow.\n\n".repeat(120),
++        }));
++        await input.fill("Check transcript scrolling");
++        await page.getByRole("button", { name: "Send", exact: true }).click();
++      } else {
++        for (let i = 0; i < 5; i++) await page.getByRole("button", { name: "ls work", exact: true }).click();
++      }
++      const log = page.locator(view === "chat" ? '[tabindex="-1"][aria-live="polite"]' : '[role="log"]');
++      await expect.poll(() => log.evaluate(el => el.scrollHeight > el.clientHeight && el.clientHeight > 0)).toBe(true);
++      await log.evaluate(el => { el.scrollTop = 0; });
++      await log.hover();
++      await page.mouse.wheel(0, 300);
++      await expect.poll(() => log.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
++      await expect.poll(measure).toEqual(expected);
++      await expect(input).toBeInViewport();
++
++      // View-scoped sizing must be removed when returning to the document view.
++      await page.getByRole("button", { name: "Back to Classic" }).click();
++      await expect(page.locator("[data-viewport-view]")).toHaveCount(0);
++      await expect.poll(() => page.evaluate(() => document.documentElement.scrollHeight)).toBeGreaterThan(viewport.height);
++    });
++  }
++}
+diff --git a/src/app/globals.css b/src/app/globals.css
+index e36bb20..359a4f5 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -395,3 +395,29 @@ body {
+   }
+ }
+ 
++
++/* Console views share the remaining viewport after the actual site chrome.
++   The hiring banner wraps on phones; no fixed nav/banner subtraction is safe.
++   Scope to the mounted home router so other routes retain document scrolling. */
++body:has([data-viewport-view]) {
++  height: 100dvh;
++  min-height: 0;
++}
++body:has([data-viewport-view]) > * {
++  flex-shrink: 0;
++}
++body:has([data-viewport-view]) #main-content {
++  min-height: 0;
++  flex: 1;
++}
++[data-viewport-view] {
++  display: flex;
++  flex-direction: column;
++  flex: 1;
++  min-height: 0;
++}
++[data-viewport-view] > [role="status"] {
++  height: auto;
++  min-height: 0;
++  flex: 1;
++}
+diff --git a/src/components/chat/chat-view.tsx b/src/components/chat/chat-view.tsx
+index 0af39e0..c5e7cec 100644
+--- a/src/components/chat/chat-view.tsx
++++ b/src/components/chat/chat-view.tsx
+@@ -40,13 +40,9 @@ export function ChatView() {
+   };
+ 
+   return (
+-    // Fixed height (not min-h): the console must be a BOUNDED flex container so the
+-    // transcript scrolls INTERNALLY. With only min-height the element is content-sized
+-    // and unbounded, so a tall conversation grows the document and the inner
+-    // overflow-y-auto never engages (the autoscroll snap then no-ops). `dvh` (not vh)
+-    // keeps the composer clear of iOS Safari's address bar.
+-    <main className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-3xl flex-col px-6 py-6">
+-      <div className="flex items-center justify-between gap-3">
++    // The shared viewport shell bounds this flex child below the nav and banner.
++    <main className="mx-auto flex min-h-0 flex-1 w-full max-w-3xl flex-col px-6 py-6">
++      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
+         <ViewEscapeHatch />
+         <div className="flex items-center gap-3">
+           {/* Hands-free voice conversation (modal surface; null on the 5th-view surface
+@@ -145,7 +141,7 @@ export function ChatView() {
+           onChange={(e) => setInput(e.target.value)}
+           placeholder="Ask about my work, projects, or what I'm looking for…"
+           aria-label="Ask a question about Sairam"
+-          className="flex-1 rounded-xl border border-border bg-bg-base px-4 py-3 text-sm outline-none placeholder:text-fg-muted focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-bg-base"
++          className="min-w-0 flex-1 rounded-xl border border-border bg-bg-base px-4 py-3 text-sm outline-none placeholder:text-fg-muted focus:border-accent focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-bg-base"
+         />
+         {/* Push-to-talk mic — renders only where Web Speech is supported (else nothing,
+             the text input is untouched). Transcripts fill the input for review. */}
+diff --git a/src/components/game/developer-view.tsx b/src/components/game/developer-view.tsx
+index c4ee572..6952011 100644
+--- a/src/components/game/developer-view.tsx
++++ b/src/components/game/developer-view.tsx
+@@ -24,13 +24,9 @@ export function DeveloperView() {
+   const maximizeRef = useRef<HTMLButtonElement>(null);
+ 
+   return (
+-    // Fixed height on lg+ (not just min-h): the terminal can only scroll INTERNALLY if
+-    // an ancestor is height-BOUNDED — with only min-height the chain grows past the
+-    // viewport and the document scrolls instead (same trap fixed on the chat view).
+-    // Mobile keeps min-h so a short terminal doesn't get awkwardly capped. dvh avoids
+-    // the iOS Safari address-bar jump.
+-    <main className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-6xl flex-col px-6 py-6 lg:h-[calc(100dvh-3.5rem)] lg:min-h-0">
+-      <div className="flex items-center justify-between gap-3">
++    // Fill the shared viewport shell on desktop and mobile; scroll inside the terminal.
++    <main className="mx-auto flex min-h-0 flex-1 w-full max-w-6xl flex-col px-6 py-6">
++      <div className="flex shrink-0 flex-wrap items-center justify-between gap-3">
+         <ViewEscapeHatch />
+         <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent">
+           <TerminalSquare size={13} aria-hidden="true" /> Developer Mode
+@@ -38,7 +34,7 @@ export function DeveloperView() {
+       </div>
+ 
+       {/* One concise heading (demoted) — the boot banner prints identity, so don't repeat. */}
+-      <header className="mt-6">
++      <header className="mt-6 shrink-0">
+         <h1 className="text-base font-semibold tracking-tight">Query my work via the CLI</h1>
+         <p className="mt-1 max-w-2xl text-sm text-fg-muted">
+           A keyboard-native terminal over the same verified projects and systems. Type{" "}
+@@ -71,11 +67,8 @@ export function DeveloperView() {
+           terminal card is translucent). minmax(0,1fr) makes the row shrinkable — mirroring
+           why the COLUMNS already use minmax(0,1fr) — so the terminal scrolls internally. */}
+       <div className="mt-6 flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:grid-rows-[minmax(0,1fr)] lg:gap-6 lg:items-stretch">
+-        {/* Terminal cell — fills the available column height (real-tool feel). The
+-            min-h-[24rem] floor keeps it usable on a short SINGLE-COLUMN (mobile) layout;
+-            dropped at lg, where the shrinkable grid row governs height instead (keeping the
+-            floor there would re-trigger the overflow on short laptop viewports). */}
+-        <div className="flex min-h-[24rem] flex-1 flex-col lg:min-h-0">
++        {/* No content-height floor: scrollback owns overflow at every breakpoint. */}
++        <div className="flex min-h-0 flex-1 flex-col">
+           <Terminal fill onMaximize={() => setTermMax(true)} maximizeRef={maximizeRef} />
+         </div>
+ 
+diff --git a/src/components/home/resume-view.tsx b/src/components/home/resume-view.tsx
+index 0afb270..9d73893 100644
+--- a/src/components/home/resume-view.tsx
++++ b/src/components/home/resume-view.tsx
+@@ -35,7 +35,7 @@ import {
+ } from "@/lib/profile";
+ 
+ const WRAPPER_CLASS =
+-  "bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px-8";
++  "px-4 py-10 text-fg print:bg-white print:text-black sm:px-8";
+ 
+ function ResumeContent() {
+   // Read flag inside function body — module-scope const breaks vi.stubEnv in tests.
+@@ -244,7 +244,7 @@ function ResumeContent() {
+ /** Full-page view — used by view-router.tsx for the ?view=resume route. */
+ export function ResumeView() {
+   return (
+-    <main className={`min-h-screen ${WRAPPER_CLASS}`}>
++    <main className={`min-h-screen bg-bg-base ${WRAPPER_CLASS}`}>
+       <ResumeContent />
+     </main>
+   );
+diff --git a/src/components/view-router.tsx b/src/components/view-router.tsx
+index ee02023..5889432 100644
+--- a/src/components/view-router.tsx
++++ b/src/components/view-router.tsx
+@@ -53,7 +53,10 @@ export function ViewRouter({ children }: { children: ReactNode }) {
+   const { view, setView } = useView();
+ 
+   return (
+-    <div style={{ viewTransitionName: "view-body" }}>
++    <div
++      data-viewport-view={view === "chat" || view === "developer" ? "" : undefined}
++      style={{ viewTransitionName: "view-body" }}
++    >
+       {/* Classic — always mounted; the SSG default. Hidden (not unmounted) when inactive. */}
+       <div hidden={view !== "classic"} aria-hidden={view !== "classic"}>
+         {children}

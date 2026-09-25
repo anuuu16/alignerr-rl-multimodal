@@ -1,0 +1,143 @@
+diff --git a/src/app/globals.css b/src/app/globals.css
+index e36bb20..02dce37 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -71,6 +71,17 @@ html {
+   overflow-x: hidden;
+ }
+ 
++/* Full-height views (chat and developer) fit exactly in the viewport without page scroll */
++html[data-full-height="true"],
++html[data-full-height="true"] body {
++  height: 100dvh;
++  overflow: hidden;
++}
++
++html[data-full-height="true"] #main-content {
++  min-height: 0;
++}
++
+ @media (prefers-reduced-motion: reduce) {
+   html { scroll-behavior: auto; }
+ }
+diff --git a/src/components/chat/chat-view.tsx b/src/components/chat/chat-view.tsx
+index 0af39e0..00f62d2 100644
+--- a/src/components/chat/chat-view.tsx
++++ b/src/components/chat/chat-view.tsx
+@@ -40,12 +40,9 @@ export function ChatView() {
+   };
+ 
+   return (
+-    // Fixed height (not min-h): the console must be a BOUNDED flex container so the
+-    // transcript scrolls INTERNALLY. With only min-height the element is content-sized
+-    // and unbounded, so a tall conversation grows the document and the inner
+-    // overflow-y-auto never engages (the autoscroll snap then no-ops). `dvh` (not vh)
+-    // keeps the composer clear of iOS Safari's address bar.
+-    <main className="mx-auto flex h-[calc(100dvh-3.5rem)] w-full max-w-3xl flex-col px-6 py-6">
++    // Bounded flex container (flex-1 min-h-0): takes exact remaining viewport space
++    // below the site nav and banner so the transcript scrolls INTERNALLY without page scroll.
++    <main className="mx-auto flex flex-1 min-h-0 w-full max-w-3xl flex-col px-6 py-6">
+       <div className="flex items-center justify-between gap-3">
+         <ViewEscapeHatch />
+         <div className="flex items-center gap-3">
+diff --git a/src/components/game/developer-view.tsx b/src/components/game/developer-view.tsx
+index c4ee572..9c7c125 100644
+--- a/src/components/game/developer-view.tsx
++++ b/src/components/game/developer-view.tsx
+@@ -24,12 +24,9 @@ export function DeveloperView() {
+   const maximizeRef = useRef<HTMLButtonElement>(null);
+ 
+   return (
+-    // Fixed height on lg+ (not just min-h): the terminal can only scroll INTERNALLY if
+-    // an ancestor is height-BOUNDED — with only min-height the chain grows past the
+-    // viewport and the document scrolls instead (same trap fixed on the chat view).
+-    // Mobile keeps min-h so a short terminal doesn't get awkwardly capped. dvh avoids
+-    // the iOS Safari address-bar jump.
+-    <main className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-6xl flex-col px-6 py-6 lg:h-[calc(100dvh-3.5rem)] lg:min-h-0">
++    // Bounded flex container (flex-1 min-h-0): fills the exact available height below
++    // the nav and banner so the terminal scrolls internally with no page-level scrollbar.
++    <main className="mx-auto flex flex-1 min-h-0 w-full max-w-6xl flex-col px-6 py-6">
+       <div className="flex items-center justify-between gap-3">
+         <ViewEscapeHatch />
+         <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent">
+@@ -71,11 +68,8 @@ export function DeveloperView() {
+           terminal card is translucent). minmax(0,1fr) makes the row shrinkable — mirroring
+           why the COLUMNS already use minmax(0,1fr) — so the terminal scrolls internally. */}
+       <div className="mt-6 flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_19rem] lg:grid-rows-[minmax(0,1fr)] lg:gap-6 lg:items-stretch">
+-        {/* Terminal cell — fills the available column height (real-tool feel). The
+-            min-h-[24rem] floor keeps it usable on a short SINGLE-COLUMN (mobile) layout;
+-            dropped at lg, where the shrinkable grid row governs height instead (keeping the
+-            floor there would re-trigger the overflow on short laptop viewports). */}
+-        <div className="flex min-h-[24rem] flex-1 flex-col lg:min-h-0">
++        {/* Terminal cell — fills the available column height and scrolls internally. */}
++        <div className="flex min-h-0 flex-1 flex-col">
+           <Terminal fill onMaximize={() => setTermMax(true)} maximizeRef={maximizeRef} />
+         </div>
+ 
+diff --git a/src/components/home/resume-view.tsx b/src/components/home/resume-view.tsx
+index 0afb270..5307b6d 100644
+--- a/src/components/home/resume-view.tsx
++++ b/src/components/home/resume-view.tsx
+@@ -35,7 +35,7 @@ import {
+ } from "@/lib/profile";
+ 
+ const WRAPPER_CLASS =
+-  "bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px-8";
++  "px-4 py-10 text-fg print:bg-white print:text-black sm:px-8";
+ 
+ function ResumeContent() {
+   // Read flag inside function body — module-scope const breaks vi.stubEnv in tests.
+diff --git a/src/components/ui/skeleton.tsx b/src/components/ui/skeleton.tsx
+index a8737f7..34ec21b 100644
+--- a/src/components/ui/skeleton.tsx
++++ b/src/components/ui/skeleton.tsx
+@@ -103,7 +103,7 @@ export function SkeletonViewTransition({ label }: { label?: string }) {
+   const reduced = useReducedMotion();
+   return (
+     <div
+-      className="flex h-[calc(100dvh-3.5rem)] flex-col items-center justify-center gap-6"
++      className="flex flex-1 min-h-0 flex-col items-center justify-center gap-6"
+       role="status"
+       aria-label={label ?? "Loading..."}
+     >
+diff --git a/src/components/view-router.tsx b/src/components/view-router.tsx
+index ee02023..00ef54c 100644
+--- a/src/components/view-router.tsx
++++ b/src/components/view-router.tsx
+@@ -1,10 +1,11 @@
+ "use client";
+ 
+ import dynamic from "next/dynamic";
+-import type { ReactNode } from "react";
++import { useEffect, type ReactNode } from "react";
+ import { useView } from "@/components/view-context";
+ import { isViewEnabled } from "@/lib/enabled-views";
+ import { SkeletonViewTransition } from "@/components/ui/skeleton";
++import { cn } from "@/lib/utils";
+ 
+ /**
+  * Swaps the top-level experience based on the active view.
+@@ -52,8 +53,22 @@ const ResumeView = dynamic(
+ export function ViewRouter({ children }: { children: ReactNode }) {
+   const { view, setView } = useView();
+ 
++  const isFullHeight = view === "chat" || view === "developer";
++
++  useEffect(() => {
++    if (isFullHeight) {
++      document.documentElement.dataset.fullHeight = "true";
++      return () => {
++        delete document.documentElement.dataset.fullHeight;
++      };
++    }
++  }, [isFullHeight]);
++
+   return (
+-    <div style={{ viewTransitionName: "view-body" }}>
++    <div
++      style={{ viewTransitionName: "view-body" }}
++      className={cn("flex flex-1 flex-col", isFullHeight && "min-h-0")}
++    >
+       {/* Classic — always mounted; the SSG default. Hidden (not unmounted) when inactive. */}
+       <div hidden={view !== "classic"} aria-hidden={view !== "classic"}>
+         {children}

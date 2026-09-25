@@ -1,0 +1,16 @@
+Repo: https://github.com/sairam0424/anvilry
+Commit: af3ee40dd68f633f772bba14e2c991cfaaed9578 (already checked out in this directory, deps installed, run with `pnpm dev`). `.env.local` has NEXT_PUBLIC_OPEN_TO_WORK=true, which is how production runs (it shows the "Open to Backend, GenAI & Full-Stack roles" banner under the nav).
+
+Attached screenshots:
+1. 1_resume_web_tab_1440px.png - /resume with the "Web" tab selected, desktop
+2. 2_chat_view_after_scroll_1440px.png - the chat view (/?view=chat) after scrolling the page with the mouse wheel, desktop
+3. 3_developer_view_after_scroll_1440px.png - the developer view (/?view=developer) after scrolling, desktop
+4. 4_chat_view_after_scroll_390px.png - the chat view after scrolling, on a 390px phone
+
+Two problems:
+
+1. On /resume's Web tab, the site's grid background stops partway down, leaving a hard seam: the header area has the grid, and everything below it is a flat solid block (screenshot 1). The PDF tab doesn't have this. The Web tab should show the same background as the rest of the site all the way down.
+
+2. The chat and developer views are meant to fit exactly in the window, with only the transcript or terminal scrolling inside them. Instead the whole page has a scrollbar, and scrolling pushes the top nav partly out of view (screenshots 2-4). There should be no page-level scroll at all in these two views, on desktop or on phones.
+
+Please find the root causes and fix them properly, without changing anything else about how these pages look. Then check the result in a browser (desktop and 390px) and show me what you verified, including exact measurements for problem 2.

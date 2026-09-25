@@ -1,0 +1,53 @@
+diff --git a/src/components/command-palette-content.tsx b/src/components/command-palette-content.tsx
+index c7bf3e8..555df31 100644
+--- a/src/components/command-palette-content.tsx
++++ b/src/components/command-palette-content.tsx
+@@ -611,7 +611,8 @@ export function CommandPaletteContent({
+         open={open}
+         onOpenChange={setOpen}
+         label="Command palette"
+-        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh]"
++        contentClassName="fixed inset-0 z-50 flex items-start justify-center pt-[14vh] px-4"
++        className="w-full max-w-lg min-w-0"
+       >
+         {/* Accessible name + description for the underlying Radix DialogContent
+             (visually hidden). Resolves the "DialogContent requires DialogTitle" a11y
+@@ -629,7 +630,7 @@ export function CommandPaletteContent({
+               focus-within) — cleaner than the glaring global :focus-visible box that
+               would otherwise ring the autofocused input inside the modal. */}
+           <div className="flex items-center gap-2 border-b border-border px-4 transition-colors focus-within:border-accent">
+-            <span className="font-mono text-accent">{">"}</span>
++            <span className="font-mono text-accent shrink-0">{">"}</span>
+             <Command.Input
+               autoFocus
+               value={search}
+@@ -638,7 +639,7 @@ export function CommandPaletteContent({
+               placeholder="Jump to a page, run an action, or switch view…"
+               spellCheck={false}
+               autoComplete="off"
+-              className="no-focus-ring w-full bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
++              className="no-focus-ring w-full min-w-0 bg-transparent py-3.5 text-sm text-fg outline-none placeholder:text-fg-muted"
+             />
+           </div>
+           {/* Status messages (WCAG 2.2 SC 4.1.3): the copy-email confirmation flips a
+@@ -724,12 +725,14 @@ function Group({
+           }}
+           className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-fg-muted data-[selected=true]:bg-bg-elevated data-[selected=true]:text-fg"
+         >
+-          <span className="text-accent">{a.icon}</span>
+-          <span className="flex-1">{a.label}</span>
+-          {a.hint && (
+-            <span className="truncate text-xs text-fg-subtle">{a.hint}</span>
+-          )}
+-          <ArrowUpRight size={13} className="text-fg-subtle" />
++          <span className="shrink-0 text-accent">{a.icon}</span>
++          <span className="shrink-0 max-w-[60%] sm:max-w-none truncate">{a.label}</span>
++          <span className="ml-auto flex min-w-0 items-center gap-3">
++            {a.hint && (
++              <span className="min-w-0 truncate text-xs text-fg-subtle">{a.hint}</span>
++            )}
++            <ArrowUpRight size={13} className="shrink-0 text-fg-subtle" />
++          </span>
+         </Command.Item>
+       ))}
+     </Command.Group>

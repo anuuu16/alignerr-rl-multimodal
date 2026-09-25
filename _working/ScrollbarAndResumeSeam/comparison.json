@@ -1,0 +1,500 @@
+{
+  "original": {
+    "1440x900 chat": {
+      "vh": 900,
+      "docScrollH": 938,
+      "overflowPx": 38,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 865,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 38,
+      "navTopAfterWheel": -38
+    },
+    "1440x900 developer": {
+      "vh": 900,
+      "docScrollH": 938,
+      "overflowPx": 38,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 905,
+      "inputVisible": false,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 38,
+      "navTopAfterWheel": -38,
+      "afterCommands": {
+        "docOverflow": 38,
+        "logScroll": [
+          2532,
+          500
+        ],
+        "inputVisible": true
+      }
+    },
+    "1024x768 chat": {
+      "vh": 768,
+      "docScrollH": 806,
+      "overflowPx": 38,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 733,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 38,
+      "navTopAfterWheel": -38
+    },
+    "1024x768 developer": {
+      "vh": 768,
+      "docScrollH": 806,
+      "overflowPx": 38,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 773,
+      "inputVisible": false,
+      "controlsBelowFold": 1,
+      "scrollYAfterWheel": 38,
+      "navTopAfterWheel": -38,
+      "afterCommands": {
+        "docOverflow": 38,
+        "logScroll": [
+          2596,
+          368
+        ],
+        "inputVisible": true
+      }
+    },
+    "390x844 chat": {
+      "vh": 844,
+      "docScrollH": 924,
+      "overflowPx": 80,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 855,
+      "inputVisible": false,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "390x844 developer": {
+      "vh": 844,
+      "docScrollH": 924,
+      "overflowPx": 80,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 845,
+      "inputVisible": false,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 80,
+      "navTopAfterWheel": -80,
+      "afterCommands": {
+        "docOverflow": 3994,
+        "logScroll": [
+          4260,
+          4260
+        ],
+        "inputVisible": false
+      }
+    },
+    "320x568 chat": {
+      "vh": 568,
+      "docScrollH": 648,
+      "overflowPx": 80,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 617,
+      "inputVisible": false,
+      "controlsBelowFold": 3,
+      "scrollYAfterWheel": 80,
+      "navTopAfterWheel": -80
+    },
+    "320x568 developer": {
+      "vh": 568,
+      "docScrollH": 962,
+      "overflowPx": 394,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 929,
+      "inputVisible": false,
+      "controlsBelowFold": 6,
+      "scrollYAfterWheel": 394,
+      "navTopAfterWheel": -394,
+      "afterCommands": {
+        "docOverflow": 4674,
+        "logScroll": [
+          4628,
+          4628
+        ],
+        "inputVisible": false
+      }
+    },
+    "1440 resume web": {
+      "opaqueLargeBlocks": [
+        {
+          "cls": "bg-bg-base px-4 py-10 text-fg print:bg-white print",
+          "bg": "rgb(7, 8, 13)",
+          "h": 2492
+        }
+      ],
+      "docH": 3102
+    },
+    "1440 ?view=resume": {
+      "cls": "min-h-screen bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px",
+      "bg": "rgb(7, 8, 13)"
+    },
+    "390 resume web": {
+      "opaqueLargeBlocks": [
+        {
+          "cls": "bg-bg-base px-4 py-10 text-fg print:bg-white print",
+          "bg": "rgb(7, 8, 13)",
+          "h": 3028
+        }
+      ],
+      "docH": 3773
+    },
+    "390 ?view=resume": {
+      "cls": "min-h-screen bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px",
+      "bg": "rgb(7, 8, 13)"
+    }
+  },
+  "Astra": {
+    "1440x900 chat": {
+      "vh": 900,
+      "docScrollH": 900,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 827,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "1440x900 developer": {
+      "vh": 900,
+      "docScrollH": 900,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 867,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          2532,
+          462
+        ],
+        "inputVisible": true
+      }
+    },
+    "1024x768 chat": {
+      "vh": 768,
+      "docScrollH": 768,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 695,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "1024x768 developer": {
+      "vh": 768,
+      "docScrollH": 768,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 34,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 735,
+      "inputVisible": true,
+      "controlsBelowFold": 1,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          2596,
+          330
+        ],
+        "inputVisible": true
+      }
+    },
+    "390x844 chat": {
+      "vh": 844,
+      "docScrollH": 844,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 775,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "390x844 developer": {
+      "vh": 844,
+      "docScrollH": 844,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 811,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          4260,
+          254
+        ],
+        "inputVisible": true
+      }
+    },
+    "320x568 chat": {
+      "vh": 568,
+      "docScrollH": 568,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 100,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 643,
+      "inputVisible": false,
+      "controlsBelowFold": 3,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "320x568 developer": {
+      "vh": 568,
+      "docScrollH": 568,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "auto",
+      "bodyOverflow": "auto",
+      "navTop": 0,
+      "inputBottom": 617,
+      "inputVisible": false,
+      "controlsBelowFold": 1,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          4628,
+          24
+        ],
+        "inputVisible": true
+      }
+    },
+    "1440 resume web": {
+      "opaqueLargeBlocks": [],
+      "docH": 3102
+    },
+    "1440 ?view=resume": {
+      "cls": "min-h-screen bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px",
+      "bg": "rgb(7, 8, 13)"
+    },
+    "390 resume web": {
+      "opaqueLargeBlocks": [],
+      "docH": 3773
+    },
+    "390 ?view=resume": {
+      "cls": "min-h-screen bg-bg-base px-4 py-10 text-fg print:bg-white print:text-black sm:px",
+      "bg": "rgb(7, 8, 13)"
+    }
+  },
+  "Gemini": {
+    "1440x900 chat": {
+      "vh": 900,
+      "docScrollH": 900,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 827,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "1440x900 developer": {
+      "vh": 900,
+      "docScrollH": 900,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 867,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          2532,
+          462
+        ],
+        "inputVisible": true
+      }
+    },
+    "1024x768 chat": {
+      "vh": 768,
+      "docScrollH": 768,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 695,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "1024x768 developer": {
+      "vh": 768,
+      "docScrollH": 768,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 34,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 735,
+      "inputVisible": true,
+      "controlsBelowFold": 1,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          2596,
+          330
+        ],
+        "inputVisible": true
+      }
+    },
+    "390x844 chat": {
+      "vh": 844,
+      "docScrollH": 844,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 775,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "390x844 developer": {
+      "vh": 844,
+      "docScrollH": 844,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 811,
+      "inputVisible": true,
+      "controlsBelowFold": 0,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          4260,
+          266
+        ],
+        "inputVisible": true
+      }
+    },
+    "320x568 chat": {
+      "vh": 568,
+      "docScrollH": 568,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 74,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 617,
+      "inputVisible": false,
+      "controlsBelowFold": 3,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0
+    },
+    "320x568 developer": {
+      "vh": 568,
+      "docScrollH": 568,
+      "overflowPx": 0,
+      "bodyScrollMinusClient": 0,
+      "htmlOverflow": "hidden",
+      "bodyOverflow": "hidden",
+      "navTop": 0,
+      "inputBottom": 605,
+      "inputVisible": false,
+      "controlsBelowFold": 1,
+      "scrollYAfterWheel": 0,
+      "navTopAfterWheel": 0,
+      "afterCommands": {
+        "docOverflow": 0,
+        "logScroll": [
+          4628,
+          24
+        ],
+        "inputVisible": true
+      }
+    },
+    "1440 resume web": {
+      "opaqueLargeBlocks": [],
+      "docH": 3102
+    },
+    "1440 ?view=resume": {
+      "cls": "min-h-screen px-4 py-10 text-fg print:bg-white print:text-black sm:px-8",
+      "bg": "rgba(0, 0, 0, 0)"
+    },
+    "390 resume web": {
+      "opaqueLargeBlocks": [],
+      "docH": 3773
+    },
+    "390 ?view=resume": {
+      "cls": "min-h-screen px-4 py-10 text-fg print:bg-white print:text-black sm:px-8",
+      "bg": "rgba(0, 0, 0, 0)"
+    }
+  }
+}

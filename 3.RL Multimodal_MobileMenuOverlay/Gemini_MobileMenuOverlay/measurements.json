@@ -1,0 +1,704 @@
+{
+  "model": {
+    "390x844": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": true,
+        "overlay": {
+          "top": 0,
+          "h": 844,
+          "w": 390,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 844,
+          "parent": "BODY"
+        },
+        "items": [
+          {
+            "t": "Ember & Oak",
+            "top": 27,
+            "bottom": 49,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 238,
+            "bottom": 298,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Menu",
+            "top": 299,
+            "bottom": 359,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Private Dining",
+            "top": 360,
+            "bottom": 420,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Reserve",
+            "top": 421,
+            "bottom": 481,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 764,
+            "bottom": 792,
+            "inViewport": true,
+            "inOverlay": true
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true,
+        "tabSequence": [
+          "IN-MENU:Home",
+          "IN-MENU:Menu",
+          "IN-MENU:Private Dining",
+          "IN-MENU:Reserve",
+          "IN-MENU:+91 63523 69937",
+          "OUTSIDE:Reserve a Table",
+          "OUTSIDE:See the full menu",
+          "OUTSIDE:See the full menu"
+        ],
+        "afterEscape": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        },
+        "afterX": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        },
+        "afterHomeTapOnHome": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        },
+        "afterMenuLink": {
+          "url": "/menu",
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        }
+      },
+      "consoleErrors": []
+    },
+    "320x568": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": true,
+        "overlay": {
+          "top": 0,
+          "h": 568,
+          "w": 320,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 568,
+          "parent": "BODY"
+        },
+        "items": [
+          {
+            "t": "Ember & Oak",
+            "top": 27,
+            "bottom": 49,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 100,
+            "bottom": 160,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Menu",
+            "top": 161,
+            "bottom": 221,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Private Dining",
+            "top": 222,
+            "bottom": 282,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Reserve",
+            "top": 283,
+            "bottom": 343,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 488,
+            "bottom": 516,
+            "inViewport": true,
+            "inOverlay": true
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true
+      },
+      "consoleErrors": []
+    },
+    "390x480": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": true,
+        "overlay": {
+          "top": 0,
+          "h": 480,
+          "w": 390,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 523,
+          "parent": "BODY"
+        },
+        "items": [
+          {
+            "t": "Ember & Oak",
+            "top": 27,
+            "bottom": 49,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 77,
+            "bottom": 137,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Menu",
+            "top": 138,
+            "bottom": 198,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Private Dining",
+            "top": 199,
+            "bottom": 259,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Reserve",
+            "top": 260,
+            "bottom": 320,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 443,
+            "bottom": 471,
+            "inViewport": true,
+            "inOverlay": true
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true
+      },
+      "consoleErrors": []
+    },
+    "desktop": {
+      "header": {
+        "h": 70,
+        "backdrop": "blur(2px)",
+        "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+        "pos": "sticky",
+        "z": "30"
+      },
+      "bodyOverflow": "",
+      "fabCovered": null,
+      "hamburgerVisible": false
+    },
+    "resizeOpenTo1024": {
+      "menuStillInDom": false,
+      "bodyOverflow": ""
+    }
+  },
+  "original_for_reference": {
+    "390x844": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": false,
+        "overlay": {
+          "top": 0,
+          "h": 76,
+          "w": 390,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 523,
+          "parent": "HEADER"
+        },
+        "items": [
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 77,
+            "bottom": 137,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Menu",
+            "top": 138,
+            "bottom": 198,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Private Dining",
+            "top": 199,
+            "bottom": 259,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Reserve",
+            "top": 260,
+            "bottom": 320,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 443,
+            "bottom": 471,
+            "inViewport": true,
+            "inOverlay": false
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true,
+        "tabSequence": [
+          "IN-MENU:Home",
+          "IN-MENU:Menu",
+          "IN-MENU:Private Dining",
+          "IN-MENU:Reserve",
+          "IN-MENU:+91 63523 69937",
+          "OUTSIDE:Reserve a Table",
+          "OUTSIDE:See the full menu",
+          "OUTSIDE:See the full menu"
+        ],
+        "afterEscape": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        },
+        "afterX": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        },
+        "afterHomeTapOnHome": {
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "hidden",
+          "fabCovered": false,
+          "overlay": {
+            "top": 0,
+            "h": 76,
+            "w": 390,
+            "bg": "rgb(250, 247, 242)",
+            "overflowY": "visible",
+            "scrollH": 523,
+            "parent": "HEADER"
+          },
+          "items": [
+            {
+              "t": "Close navigation men",
+              "top": 16,
+              "bottom": 60,
+              "inViewport": true,
+              "inOverlay": true
+            },
+            {
+              "t": "Home",
+              "top": 77,
+              "bottom": 137,
+              "inViewport": true,
+              "inOverlay": false
+            },
+            {
+              "t": "Menu",
+              "top": 138,
+              "bottom": 198,
+              "inViewport": true,
+              "inOverlay": false
+            },
+            {
+              "t": "Private Dining",
+              "top": 199,
+              "bottom": 259,
+              "inViewport": true,
+              "inOverlay": false
+            },
+            {
+              "t": "Reserve",
+              "top": 260,
+              "bottom": 320,
+              "inViewport": true,
+              "inOverlay": false
+            },
+            {
+              "t": "+91 63523 69937",
+              "top": 443,
+              "bottom": 471,
+              "inViewport": true,
+              "inOverlay": false
+            }
+          ],
+          "focused": "A"
+        },
+        "afterMenuLink": {
+          "url": "/menu",
+          "header": {
+            "h": 77,
+            "backdrop": "blur(2px)",
+            "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+            "pos": "sticky",
+            "z": "30"
+          },
+          "bodyOverflow": "",
+          "fabCovered": null
+        }
+      },
+      "consoleErrors": []
+    },
+    "320x568": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": false,
+        "overlay": {
+          "top": 0,
+          "h": 76,
+          "w": 320,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 523,
+          "parent": "HEADER"
+        },
+        "items": [
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 77,
+            "bottom": 137,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Menu",
+            "top": 138,
+            "bottom": 198,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Private Dining",
+            "top": 199,
+            "bottom": 259,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Reserve",
+            "top": 260,
+            "bottom": 320,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 443,
+            "bottom": 471,
+            "inViewport": true,
+            "inOverlay": false
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true
+      },
+      "consoleErrors": []
+    },
+    "390x480": {
+      "closed": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "",
+        "fabCovered": null
+      },
+      "opened": {
+        "header": {
+          "h": 77,
+          "backdrop": "blur(2px)",
+          "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+          "pos": "sticky",
+          "z": "30"
+        },
+        "bodyOverflow": "hidden",
+        "fabCovered": false,
+        "overlay": {
+          "top": 0,
+          "h": 76,
+          "w": 390,
+          "bg": "rgb(250, 247, 242)",
+          "overflowY": "visible",
+          "scrollH": 523,
+          "parent": "HEADER"
+        },
+        "items": [
+          {
+            "t": "Close navigation men",
+            "top": 16,
+            "bottom": 60,
+            "inViewport": true,
+            "inOverlay": true
+          },
+          {
+            "t": "Home",
+            "top": 77,
+            "bottom": 137,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Menu",
+            "top": 138,
+            "bottom": 198,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Private Dining",
+            "top": 199,
+            "bottom": 259,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "Reserve",
+            "top": 260,
+            "bottom": 320,
+            "inViewport": true,
+            "inOverlay": false
+          },
+          {
+            "t": "+91 63523 69937",
+            "top": 443,
+            "bottom": 471,
+            "inViewport": true,
+            "inOverlay": false
+          }
+        ],
+        "focused": "Close navigation menu",
+        "phoneReachable": true
+      },
+      "consoleErrors": []
+    },
+    "desktop": {
+      "header": {
+        "h": 70,
+        "backdrop": "blur(2px)",
+        "bg": "oklab(0.977055 0.00123239 0.00728935 / 0.95)",
+        "pos": "sticky",
+        "z": "30"
+      },
+      "bodyOverflow": "",
+      "fabCovered": null,
+      "hamburgerVisible": false
+    },
+    "resizeOpenTo1024": {
+      "menuStillInDom": true,
+      "bodyOverflow": "hidden"
+    }
+  },
+  "note": "Captured on fresh dev servers (.next deleted) with the same script for both. \"items outside viewport\" empty = all menu links/phone visible; fabCovered = elementFromPoint at the WhatsApp button centre hits the overlay."
+}

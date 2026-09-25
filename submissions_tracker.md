@@ -1,13 +1,14 @@
 # RL Multimodal: submissions tracker
 
-Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **3**
+Limit: none. The 2-task cap was removed on 2026-09-24. Submitted: **4**
 
 | #   | Task                 | Submitted  | Repo @ commit                           | Labelbox                                                                                                    | My verdict                                                                                      | Status                                                    |
 | --- | -------------------- | ---------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | 1   | CmdPaletteMobileClip | 2026-09-24 | sairam0424/anvilry @ `51be61c`          | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz0197073875pfghqy) | Astra better (phone readability); Astra desktop regression noted                                | Submitted, awaiting review                                |
 | 2   | MdxListInlineCode    | 2026-09-24 | sairam0424/anvilry @ `638b594`          | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz018j07381i5bjoxj) | Astra better (Gemini's patch makes all 99 bullet dots invisible)                                | Submitted, awaiting review                                |
 | 3   | MobileMenuOverlay    | 2026-09-24 | junedpathan11/ember-and-oak @ `c6830c3` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxmz019j073868jbsmen) | Tie on all 10 UI dimensions (non-UI: Gemini killed the user's Chrome ×2, 17.6 vs 4.3 min)       | Submitted, awaiting review (honest tie; rejection likely) |
-| 4   | MobileAuditFixes     | —          | sairam0424/anvilry @ `1beefe1`          | —                                                                                                           | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Ready to submit                                           |
+| 4 | MobileAuditFixes | 2026-09-25 | sairam0424/anvilry @ `1beefe1` | [data row](https://app.labelbox.com/projects/cmu1pcwk402vo07zn6dy3cvpo/data-rows/cmu34rxum01o80738mnt1wt6q) | Astra better (narrow): 320px chat Send button cut off in Gemini, fixed in Astra; all else equal | Submitted, awaiting review |
+| 5 | ScrollbarAndResumeSeam | — | sairam0424/anvilry @ `af3ee40` | — | Astra better: Gemini's overflow:hidden makes the 320×568 chat input unreachable and changes the /?view=resume background | Ready to submit |
 
 Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `Approved` · `Rework requested` · `Rejected`
 
@@ -79,6 +80,21 @@ Status values: `Prepared` · `In progress` · `Submitted, awaiting review` · `A
 
 ### Reviewer response
 
+- **Date:**
+- **Outcome:**
+- **Feedback (verbatim):**
+
+---
+
+## 5. ScrollbarAndResumeSeam
+- **Task name:** Chat and developer views scroll when they shouldn't (banner on), and a background seam on /resume's Web tab
+- **Notes:** `_working/ScrollbarAndResumeSeam/TASK.md` (repro, correct fix, traps, checklist, run commands)
+- **Files:** `RL Multimodal_ScrollbarAndResumeSeam.zip` (79 files) + separate upload `outputs/ScrollbarAndResumeSeam/ScrollbarAndResumeSeam_Author_Notes_and_Overall_UI.txt` · form in `outputs/ScrollbarAndResumeSeam/labelbox_form.md`
+- **Ratings:** Astra better on 2, 4, 6, 9 · Tie on 1, 3, 7, 8, 10 · N/A on 5
+- **Rework context:** `_working/ScrollbarAndResumeSeam/TASK.md` (run log, verdict, scripts)
+- **Design rationale:** hidden second cause (a 1px header border on top of the banner height) rewards exact measurement; the prompt asks for exact measurements
+
+### Reviewer response
 - **Date:**
 - **Outcome:**
 - **Feedback (verbatim):**

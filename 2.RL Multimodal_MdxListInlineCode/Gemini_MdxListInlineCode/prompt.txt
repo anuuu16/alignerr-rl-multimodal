@@ -1,0 +1,10 @@
+Repo: https://github.com/sairam0424/anvilry
+Commit: 638b5941f35b5a605a7f72e8ea6222511af8accf (already checked out in this directory, deps installed, run with `pnpm dev`)
+
+Attached screenshots (both from /projects/trelix):
+1. before_1440px_list_with_inline_code.png - a bullet list on desktop, 1440px wide
+2. before_390px_list_with_inline_code.png - the same list on a 390px phone
+
+The bullet lists on the project pages are broken. Each bullet's text should read as one normal wrapped sentence next to its dot, but instead it's split into separate side-by-side columns, and inline code like `.trelix/index.db` turns into a tall box with the rest of the sentence squeezed beside it. On the phone it gets much worse and some bullets are several times taller than they should be.
+
+Please find the root cause and fix it properly for every list that renders this way, not just this page, without changing how the bullets otherwise look. Then check the result in a browser at 390px and 1440px on this page and at least one other affected page, and show me what you verified.

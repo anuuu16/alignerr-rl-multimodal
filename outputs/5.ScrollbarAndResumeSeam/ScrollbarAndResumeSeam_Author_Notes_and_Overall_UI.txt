@@ -1,0 +1,47 @@
+Task: Chat and developer views scroll when they shouldn't, and the /resume Web tab has a background seam
+Repo: https://github.com/sairam0424/anvilry
+Commit: af3ee40dd68f633f772bba14e2c991cfaaed9578 (run with NEXT_PUBLIC_OPEN_TO_WORK=true for both models)
+Models: ChatGPT Astra (gpt-6-astra, reasoning medium, Codex CLI) vs Gemini 3.8 Flash (google/gemini-3.8-flash, OpenCode)
+Conditions: same prompt, same four screenshots, single turn, no follow-ups, full shell and browser access for both.
+
+
+==============================
+OVERALL UI COMPARISON
+==============================
+
+Both models found the real causes and reach the key measurable target: 0px page overflow in the chat and developer views at 1440, 1024 and 390 with the banner on, the nav no longer pushed off-screen, and the résumé Web-tab seam gone.
+
+The difference is in regressions. Gemini's fix changes two things the prompt said to leave alone:
+- The standalone résumé page (/?view=resume) loses its solid background.
+- Forcing overflow: hidden on the page makes the chat input and Send button unreachable on a 320×568 phone (571→617 on a 568px screen; wheel and touch scrolling do nothing).
+
+Astra restored the standalone résumé background and fixed the heights with a flex layout, so nothing becomes unreachable. At 320×568 it leaves a small 100px inner scroll instead of zero scroll.
+
+This is a verifiable Astra advantage on regression avoidance and on small-phone usability, with equal results on the two headline measurements.
+
+
+==============================
+AUTHOR NOTES
+==============================
+
+Required: remove the Web-tab seam on /resume, and make the chat and developer views fit the window with no page scroll (banner on), without changing anything else, verified at desktop and 390px.
+
+Both reached 0px page overflow at 1440, 1024 and 390, and both removed the seam (measurements.json, after_*_after_wheel.png, after_*_resume_web_tab.png).
+
+Astra removed bg-bg-base from the shared résumé wrapper and restored it on the standalone ResumeView. It used a flex layout, scoped with a data-viewport-view attribute, to fill the remaining height after the nav, banner and border.
+
+Gemini removed bg-bg-base from the shared wrapper only, and forced overflow: hidden on html and body in these views.
+
+Result:
+- /?view=resume keeps its solid rgb(7, 8, 13) background in Astra and becomes transparent in Gemini (after_1440x900_view_resume_standalone.png).
+- At 320×568 the chat input is reachable by scrolling in Astra (497→543) and unreachable in Gemini (571→617; after_320x568_chat_after_user_scroll.png, recordings/chat_320x568_try_to_reach_input.webm).
+
+Why it matters: the prompt said not to change anything else, and on small phones Gemini's version leaves users unable to type a question.
+
+Astra limitations: at 320×568 a 100px inner body scroll remains, and it didn't report checking 320px or the standalone résumé page.
+
+Gemini strengths: the same correct diagnosis (including the 1px border and the phone banner wrap), exact and accurate measurements at 1440 and 390, and broader test runs.
+
+Non-UI note: Astra took about 5.4 minutes and Gemini about 18.9. This isn't used as UI evidence.
+
+All "after" evidence was captured from both final patches on freshly started dev servers (build caches cleared), with the same steps, at the same viewports.

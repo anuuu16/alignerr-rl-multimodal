@@ -1,0 +1,10 @@
+Repo: https://github.com/sairam0424/anvilry
+Commit: 51be61c3a82eb1c3472460dabf2418bf7f893998 (already checked out in this directory, deps installed, run with `pnpm dev`)
+
+Attached screenshots:
+1. before_320px_palette_open.png  - home page at 320px wide with the command palette (Cmd+K) open
+2. before_1440px_palette_open.png - the same palette on a 1440px desktop
+
+On a 320px-wide phone the command palette is broken, as in screenshot 1: the search placeholder and every result row are cut off on both the left and the right edge, so the view names and descriptions can't be read. The palette should fit inside the screen with a small side margin at phone widths, with nothing clipped and no horizontal scrolling. On desktop it should keep looking exactly like screenshot 2.
+
+Please find the root cause and fix it properly (not just hide the overflow), then check the result in a browser at 320px, 375px and 1440px and show me what you verified.
