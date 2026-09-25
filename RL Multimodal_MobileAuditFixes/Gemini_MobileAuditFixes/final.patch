@@ -1,0 +1,406 @@
+diff --git a/src/components/chat/chat-view.tsx b/src/components/chat/chat-view.tsx
+index 620d4e6..dbaa3e7 100644
+--- a/src/components/chat/chat-view.tsx
++++ b/src/components/chat/chat-view.tsx
+@@ -59,19 +59,19 @@ export function ChatView() {
+     // OPEN_TO_WORK_BANNER_HEIGHT_REM in writing-flags.ts for where 2.3125rem comes from.
+     <main
+       className={cn(
+-        "mx-auto flex w-full max-w-3xl flex-col px-6 py-6",
++        "mx-auto flex w-full max-w-3xl flex-col px-6 pt-6 pb-20 sm:pb-6",
+         OPEN_TO_WORK
+           ? "h-[calc(100dvh-3.5rem-2.3125rem)]"
+           : "h-[calc(100dvh-3.5rem)]",
+       )}
+     >
+-      <div className="flex items-center justify-between gap-3">
++      <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-3">
+         <ViewEscapeHatch />
+-        <div className="flex items-center gap-3">
++        <div className="flex items-center gap-3 ml-auto sm:ml-0">
+           {/* Hands-free voice conversation (modal surface; null on the 5th-view surface
+               or unsupported browsers). */}
+           <TalkLaunchButton />
+-          <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent">
++          <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent shrink-0">
+             <Sparkles size={13} aria-hidden="true" /> AI Concierge
+           </p>
+         </div>
+@@ -120,7 +120,7 @@ export function ChatView() {
+ 
+         {/* Persistent recruiter chip-rail — one-tap strongest-work / impact paths.
+           shrink-0: never let a short viewport compress the chips into the transcript. */}
+-        <div className="mt-4 shrink-0">
++        <div className="mt-4 shrink-0 max-h-28 sm:max-h-none overflow-y-auto">
+           <div
+             className="flex flex-wrap gap-2"
+             role="group"
+diff --git a/src/components/game/developer-view.tsx b/src/components/game/developer-view.tsx
+index ac952f3..bcae183 100644
+--- a/src/components/game/developer-view.tsx
++++ b/src/components/game/developer-view.tsx
+@@ -35,15 +35,15 @@ export function DeveloperView() {
+     // must be literal Tailwind class strings, not built via template interpolation).
+     <main
+       className={cn(
+-        "mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-6xl flex-col px-6 py-6 lg:min-h-0",
++        "mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-6xl flex-col px-6 pt-6 pb-24 sm:pb-6 lg:min-h-0",
+         OPEN_TO_WORK
+           ? "lg:h-[calc(100dvh-3.5rem-2.3125rem)]"
+           : "lg:h-[calc(100dvh-3.5rem)]",
+       )}
+     >
+-      <div className="flex items-center justify-between gap-3">
++      <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-3">
+         <ViewEscapeHatch />
+-        <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent">
++        <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent shrink-0 ml-auto sm:ml-0">
+           <TerminalSquare size={13} aria-hidden="true" /> Developer Mode
+         </p>
+       </div>
+diff --git a/src/components/game/game-view.tsx b/src/components/game/game-view.tsx
+index a959ab2..ee4bf14 100644
+--- a/src/components/game/game-view.tsx
++++ b/src/components/game/game-view.tsx
+@@ -28,9 +28,9 @@ const SkillTree = dynamic(
+ export function GameView() {
+   return (
+     <main className="mx-auto flex min-h-[calc(100vh-3.5rem)] w-full max-w-5xl flex-col px-6 py-6">
+-      <div className="flex items-center justify-between gap-3">
++      <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-3">
+         <ViewEscapeHatch />
+-        <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent">
++        <p className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-widest text-accent shrink-0 ml-auto sm:ml-0">
+           <Gamepad2 size={13} aria-hidden="true" /> Build Graph
+         </p>
+       </div>
+diff --git a/src/components/mobile-nav.dom.test.tsx b/src/components/mobile-nav.dom.test.tsx
+new file mode 100644
+index 0000000..ac22f4d
+--- /dev/null
++++ b/src/components/mobile-nav.dom.test.tsx
+@@ -0,0 +1,88 @@
++import { describe, it, expect, vi, afterEach } from "vitest";
++import { render, screen, fireEvent, cleanup } from "@testing-library/react";
++import { MobileNav } from "./mobile-nav";
++import { ViewProvider } from "@/components/view-context";
++import { TooltipProvider } from "@/components/ui/tooltip";
++
++vi.mock("next/navigation", () => ({
++  useSearchParams: () => new URLSearchParams(),
++  useRouter: () => ({ push: vi.fn() }),
++  usePathname: () => "/",
++}));
++
++afterEach(() => {
++  cleanup();
++  vi.unstubAllGlobals();
++});
++
++const sampleLinks = [
++  { href: "/work", label: "Work" },
++  { href: "/about", label: "About" },
++];
++
++function renderNav() {
++  return render(
++    <TooltipProvider>
++      <ViewProvider>
++        <MobileNav links={sampleLinks} />
++      </ViewProvider>
++    </TooltipProvider>,
++  );
++}
++
++describe("MobileNav drawer & backdrop", () => {
++  it("opens menu on trigger click and portals backdrop and panel into body", () => {
++    renderNav();
++
++    const trigger = screen.getByRole("button", { name: "Open menu" });
++    expect(trigger).toBeTruthy();
++    expect(document.getElementById("mobile-nav-panel")).toBeNull();
++
++    fireEvent.click(trigger);
++
++    const panel = document.getElementById("mobile-nav-panel");
++    expect(panel).toBeTruthy();
++    expect(panel?.parentElement).toBe(document.body);
++
++    const backdrop = document.querySelector('div[aria-hidden="true"].backdrop-blur-sm');
++    expect(backdrop).toBeTruthy();
++    expect(backdrop?.parentElement).toBe(document.body);
++  });
++
++  it("closes menu when backdrop is clicked (tap outside)", () => {
++    renderNav();
++
++    const trigger = screen.getByRole("button", { name: "Open menu" });
++    fireEvent.click(trigger);
++    expect(document.getElementById("mobile-nav-panel")).toBeTruthy();
++
++    const backdrop = document.querySelector('div[aria-hidden="true"].backdrop-blur-sm');
++    expect(backdrop).toBeTruthy();
++    fireEvent.click(backdrop!);
++
++    expect(document.getElementById("mobile-nav-panel")).toBeNull();
++  });
++
++  it("closes menu when Escape key is pressed", () => {
++    renderNav();
++
++    const trigger = screen.getByRole("button", { name: "Open menu" });
++    fireEvent.click(trigger);
++    expect(document.getElementById("mobile-nav-panel")).toBeTruthy();
++
++    fireEvent.keyDown(document, { key: "Escape" });
++    expect(document.getElementById("mobile-nav-panel")).toBeNull();
++  });
++
++  it("closes menu when a nav link is clicked", () => {
++    renderNav();
++
++    const trigger = screen.getByRole("button", { name: "Open menu" });
++    fireEvent.click(trigger);
++
++    const aboutLink = screen.getByRole("link", { name: "About" });
++    fireEvent.click(aboutLink);
++
++    expect(document.getElementById("mobile-nav-panel")).toBeNull();
++  });
++});
+diff --git a/src/components/mobile-nav.tsx b/src/components/mobile-nav.tsx
+index d5779ea..35f6092 100644
+--- a/src/components/mobile-nav.tsx
++++ b/src/components/mobile-nav.tsx
+@@ -1,6 +1,7 @@
+ "use client";
+ 
+ import { useEffect, useRef, useState } from "react";
++import { createPortal } from "react-dom";
+ import Link from "next/link";
+ import { Menu, X } from "lucide-react";
+ import { Github, Linkedin } from "@/components/icons";
+@@ -8,6 +9,7 @@ import { profile } from "@/lib/profile";
+ import { Tooltip } from "@/components/ui/tooltip";
+ import { ThemeToggle } from "@/components/theme-toggle";
+ import { ViewSwitcher } from "@/components/view-switcher";
++import { useView } from "@/components/view-context";
+ 
+ type NavLink = { href: string; label: string };
+ 
+@@ -17,11 +19,44 @@ type NavLink = { href: string; label: string };
+  * page with no reachable nav. WCAG: focus trap while open, Escape to close, focus
+  * restored to the trigger on close, aria-expanded/aria-controls wired, backdrop
+  * click + link click both dismiss.
++ *
++ * Portal-mounted to document.body so the header's backdrop-filter and view-transition
++ * styles don't trap the fixed backdrop inside the 3.5rem header height.
+  */
+ export function MobileNav({ links }: { links: NavLink[] }) {
+   const [open, setOpen] = useState(false);
+   const triggerRef = useRef<HTMLButtonElement>(null);
+   const panelRef = useRef<HTMLDivElement>(null);
++  const { view } = useView();
++  const prevView = useRef(view);
++
++  // Close the drawer if the view changes (e.g. via ViewSwitcher in the drawer).
++  useEffect(() => {
++    if (prevView.current !== view) {
++      setOpen(false);
++      prevView.current = view;
++    }
++  }, [view]);
++
++  // Lock background scroll while the drawer is open.
++  useEffect(() => {
++    if (!open) return;
++    const prevOverflow = document.body.style.overflow;
++    document.body.style.overflow = "hidden";
++    return () => {
++      document.body.style.overflow = prevOverflow;
++    };
++  }, [open]);
++
++  // Dismiss if viewport expands to desktop.
++  useEffect(() => {
++    if (!open) return;
++    const onResize = () => {
++      if (window.innerWidth >= 1024) setOpen(false);
++    };
++    window.addEventListener("resize", onResize);
++    return () => window.removeEventListener("resize", onResize);
++  }, [open]);
+ 
+   // Close on Escape and trap focus within the panel while open.
+   useEffect(() => {
+@@ -75,74 +110,77 @@ export function MobileNav({ links }: { links: NavLink[] }) {
+         </button>
+       </Tooltip>
+ 
+-      {open && (
+-        <>
+-          <div
+-            className="fixed inset-0 top-14 z-40 bg-bg-base/70 backdrop-blur-sm"
+-            onClick={() => setOpen(false)}
+-            aria-hidden="true"
+-          />
+-          <div
+-            ref={panelRef}
+-            id="mobile-nav-panel"
+-            role="dialog"
+-            aria-modal="true"
+-            aria-label="Site navigation"
+-            className="fixed inset-x-0 top-14 z-50 border-b border-border-strong bg-bg-surface px-6 py-4 shadow-2xl"
+-          >
+-            {/* View switcher — only below `sm`. At `sm` and up the top nav row already
+-                shows the compact pill (see site-nav.tsx); duplicating it here would be
+-                redundant, so it's scoped to the narrow phones that hid it up there.
+-                scope="drawer" gives this instance its own layoutId — the top-row
+-                compact pill is unconditionally mounted (CSS-only visibility) and this
+-                drawer only mounts when open, so both can be in the DOM together
+-                whenever the drawer is opened in the sm-lg range; without a distinct
+-                scope they'd collide on the same layoutId (see view-switcher.tsx). */}
+-            <div className="mb-3 border-b border-border pb-3 sm:hidden">
+-              <ViewSwitcher compact scope="drawer" />
+-            </div>
+-            <nav className="flex flex-col gap-1">
+-              {links.map((l) => (
+-                <Link
+-                  key={l.href}
+-                  href={l.href}
+-                  onClick={() => setOpen(false)}
+-                  className="rounded-lg px-3 py-2.5 text-base text-fg-muted transition-colors hover:bg-bg-elevated hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+-                >
+-                  {l.label}
+-                </Link>
+-              ))}
+-            </nav>
+-            <div className="mt-3 flex items-center gap-4 border-t border-border pt-3">
+-              <Tooltip content="GitHub">
+-                <a
+-                  href={profile.links.github}
+-                  target="_blank"
+-                  rel="noopener noreferrer"
+-                  aria-label="GitHub"
+-                  onClick={() => setOpen(false)}
+-                  className="rounded text-fg-muted transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+-                >
+-                  <Github size={20} />
+-                </a>
+-              </Tooltip>
+-              <Tooltip content="LinkedIn">
+-                <a
+-                  href={profile.links.linkedin}
+-                  target="_blank"
+-                  rel="noopener noreferrer"
+-                  aria-label="LinkedIn"
+-                  onClick={() => setOpen(false)}
+-                  className="rounded text-fg-muted transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+-                >
+-                  <Linkedin size={20} />
+-                </a>
+-              </Tooltip>
+-              <ThemeToggle size={20} />
++      {open &&
++        typeof document !== "undefined" &&
++        createPortal(
++          <>
++            <div
++              className="fixed inset-0 top-14 z-40 bg-bg-base/80 backdrop-blur-sm cursor-pointer lg:hidden"
++              onClick={() => setOpen(false)}
++              aria-hidden="true"
++            />
++            <div
++              ref={panelRef}
++              id="mobile-nav-panel"
++              role="dialog"
++              aria-modal="true"
++              aria-label="Site navigation"
++              className="fixed inset-x-0 top-14 z-50 border-b border-border-strong bg-bg-surface px-6 py-4 shadow-2xl lg:hidden"
++            >
++              {/* View switcher — only below `sm`. At `sm` and up the top nav row already
++                  shows the compact pill (see site-nav.tsx); duplicating it here would be
++                  redundant, so it's scoped to the narrow phones that hid it up there.
++                  scope="drawer" gives this instance its own layoutId — the top-row
++                  compact pill is unconditionally mounted (CSS-only visibility) and this
++                  drawer only mounts when open, so both can be in the DOM together
++                  whenever the drawer is opened in the sm-lg range; without a distinct
++                  scope they'd collide on the same layoutId (see view-switcher.tsx). */}
++              <div className="mb-3 border-b border-border pb-3 sm:hidden">
++                <ViewSwitcher compact scope="drawer" />
++              </div>
++              <nav className="flex flex-col gap-1">
++                {links.map((l) => (
++                  <Link
++                    key={l.href}
++                    href={l.href}
++                    onClick={() => setOpen(false)}
++                    className="rounded-lg px-3 py-2.5 text-base text-fg-muted transition-colors hover:bg-bg-elevated hover:text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
++                  >
++                    {l.label}
++                  </Link>
++                ))}
++              </nav>
++              <div className="mt-3 flex items-center gap-4 border-t border-border pt-3">
++                <Tooltip content="GitHub">
++                  <a
++                    href={profile.links.github}
++                    target="_blank"
++                    rel="noopener noreferrer"
++                    aria-label="GitHub"
++                    onClick={() => setOpen(false)}
++                    className="rounded text-fg-muted transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
++                  >
++                    <Github size={20} />
++                  </a>
++                </Tooltip>
++                <Tooltip content="LinkedIn">
++                  <a
++                    href={profile.links.linkedin}
++                    target="_blank"
++                    rel="noopener noreferrer"
++                    aria-label="LinkedIn"
++                    onClick={() => setOpen(false)}
++                    className="rounded text-fg-muted transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
++                  >
++                    <Linkedin size={20} />
++                  </a>
++                </Tooltip>
++                <ThemeToggle size={20} />
++              </div>
+             </div>
+-          </div>
+-        </>
+-      )}
++          </>,
++          document.body,
++        )}
+     </div>
+   );
+ }
+diff --git a/src/components/site-footer.tsx b/src/components/site-footer.tsx
+index c0e0da7..575088c 100644
+--- a/src/components/site-footer.tsx
++++ b/src/components/site-footer.tsx
+@@ -178,7 +178,7 @@ export function SiteFooter() {
+       </div>
+ 
+       {/* Copyright + RSS + newsletter — full-width bottom strip */}
+-      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 border-t border-border/40 px-6 pb-6 pt-4 font-mono text-[11px] text-fg-subtle">
++      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 border-t border-border/40 px-6 pb-24 sm:pb-6 pt-4 font-mono text-[11px] text-fg-subtle">
+         {/* Build-time year, not a render-time `new Date()`. Under cacheComponents an in-render
+             new Date() fails the prerender as an "unstable value" (and this footer is on nearly
+             every route, so it broke /, /articles and /resume). NEXT_PUBLIC_BUILD_YEAR is computed
+diff --git a/src/components/view-escape-hatch.tsx b/src/components/view-escape-hatch.tsx
+index 014f07c..ac2d444 100644
+--- a/src/components/view-escape-hatch.tsx
++++ b/src/components/view-escape-hatch.tsx
+@@ -13,7 +13,7 @@ import { useView } from "@/components/view-context";
+ export function ViewEscapeHatch() {
+   const { setView } = useView();
+   return (
+-    <div className="flex items-center gap-2">
++    <div className="flex flex-wrap items-center gap-2">
+       <button
+         type="button"
+         onClick={() => setView("classic")}

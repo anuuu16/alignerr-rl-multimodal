@@ -1,0 +1,496 @@
+{
+  "original": {
+    "overlaps": {
+      "390 /about (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /resume (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /projects (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /work (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /articles (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /projects/trelix (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 / (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "390 /?view=chat": [
+        "Grounded in real work · may simplify det"
+      ],
+      "390 /?view=developer": [],
+      "320 /about (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /resume (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /projects (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /work (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /articles (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /projects/trelix (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 / (bottom)": [
+        "© 2026 Sairam Ugge",
+        "Subscribe",
+        "RSS"
+      ],
+      "320 /?view=chat": [
+        "Ask a question about Sairam",
+        "Ask by voice",
+        "Grounded in real work · may simplify det"
+      ],
+      "320 /?view=developer": []
+    },
+    "drawer": {
+      "320": {
+        "backdrops": [
+          {
+            "h": 0,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.7)",
+            "parent": "DIV"
+          },
+          {
+            "h": 35,
+            "top": 513,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 506,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden auto",
+        "htmlOverflow": "",
+        "tapPoint": [
+          160,
+          448
+        ],
+        "closedByTapOutside": false,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      },
+      "390": {
+        "backdrops": [
+          {
+            "h": 0,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.7)",
+            "parent": "DIV"
+          },
+          {
+            "h": 35,
+            "top": 789,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 782,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden auto",
+        "htmlOverflow": "",
+        "tapPoint": [
+          195,
+          636
+        ],
+        "closedByTapOutside": false,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      }
+    },
+    "chatRow": {
+      "320": "no concierge",
+      "390": "no concierge"
+    },
+    "chips": {
+      "320": {
+        "total": 7,
+        "fullyVisibleAndClickable": 7,
+        "inputBottom": 537,
+        "vh": 568,
+        "pageScrollH": 568
+      },
+      "390": {
+        "total": 7,
+        "fullyVisibleAndClickable": 7,
+        "inputBottom": 775,
+        "vh": 844,
+        "pageScrollH": 844
+      }
+    },
+    "errors": [],
+    "desktop_about_bottom": {
+      "main": {
+        "top": -1583,
+        "h": 2294
+      },
+      "mainPad": "0px",
+      "footer": {
+        "top": 711,
+        "h": 189
+      },
+      "footerInner": "40px,0px,0px,0px,24px,0px",
+      "docH": 2539
+    },
+    "desktop_chat_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    },
+    "desktop_developer_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    }
+  },
+  "Astra": {
+    "overlaps": {
+      "390 /about (bottom)": [],
+      "390 /resume (bottom)": [],
+      "390 /projects (bottom)": [],
+      "390 /work (bottom)": [],
+      "390 /articles (bottom)": [],
+      "390 /projects/trelix (bottom)": [],
+      "390 / (bottom)": [],
+      "390 /?view=chat": [
+        "Which open-source projects are you proud"
+      ],
+      "390 /?view=developer": [],
+      "320 /about (bottom)": [],
+      "320 /resume (bottom)": [],
+      "320 /projects (bottom)": [],
+      "320 /work (bottom)": [],
+      "320 /articles (bottom)": [],
+      "320 /projects/trelix (bottom)": [],
+      "320 / (bottom)": [],
+      "320 /?view=chat": [],
+      "320 /?view=developer": []
+    },
+    "drawer": {
+      "320": {
+        "backdrops": [
+          {
+            "h": 35,
+            "top": 513,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 506,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 512,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.7)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden",
+        "htmlOverflow": "",
+        "tapPoint": [
+          160,
+          448
+        ],
+        "closedByTapOutside": true,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      },
+      "390": {
+        "backdrops": [
+          {
+            "h": 35,
+            "top": 789,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 782,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 788,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.7)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden",
+        "htmlOverflow": "",
+        "tapPoint": [
+          195,
+          636
+        ],
+        "closedByTapOutside": true,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      }
+    },
+    "chatRow": {
+      "320": "no concierge",
+      "390": "no concierge"
+    },
+    "chips": {
+      "320": {
+        "total": 14,
+        "fullyVisibleAndClickable": 0,
+        "inputBottom": 419,
+        "vh": 568,
+        "pageScrollH": 568
+      },
+      "390": {
+        "total": 14,
+        "fullyVisibleAndClickable": 2,
+        "inputBottom": 695,
+        "vh": 844,
+        "pageScrollH": 844
+      }
+    },
+    "errors": [],
+    "desktop_about_bottom": {
+      "main": {
+        "top": -1583,
+        "h": 2294
+      },
+      "mainPad": "0px",
+      "footer": {
+        "top": 711,
+        "h": 189
+      },
+      "footerInner": "40px,0px,0px,0px,24px,0px",
+      "docH": 2539
+    },
+    "desktop_chat_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    },
+    "desktop_developer_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    }
+  },
+  "Gemini": {
+    "overlaps": {
+      "390 /about (bottom)": [],
+      "390 /resume (bottom)": [],
+      "390 /projects (bottom)": [],
+      "390 /work (bottom)": [],
+      "390 /articles (bottom)": [],
+      "390 /projects/trelix (bottom)": [],
+      "390 / (bottom)": [],
+      "390 /?view=chat": [
+        "Which open-source projects are you proud"
+      ],
+      "390 /?view=developer": [],
+      "320 /about (bottom)": [],
+      "320 /resume (bottom)": [],
+      "320 /projects (bottom)": [],
+      "320 /work (bottom)": [],
+      "320 /articles (bottom)": [],
+      "320 /projects/trelix (bottom)": [],
+      "320 / (bottom)": [],
+      "320 /?view=chat": [
+        "Which open-source projects are you proud"
+      ],
+      "320 /?view=developer": []
+    },
+    "drawer": {
+      "320": {
+        "backdrops": [
+          {
+            "h": 35,
+            "top": 513,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 506,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 512,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.8)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden",
+        "htmlOverflow": "",
+        "tapPoint": [
+          160,
+          448
+        ],
+        "closedByTapOutside": true,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      },
+      "390": {
+        "backdrops": [
+          {
+            "h": 35,
+            "top": 789,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 42,
+            "top": 782,
+            "bg": "oklab(0.170302 0.0010713 -0.0170157 / 0.9)",
+            "parent": "BODY"
+          },
+          {
+            "h": 788,
+            "top": 56,
+            "bg": "oklab(0.135721 0.000935026 -0.0114846 / 0.8)",
+            "parent": "BODY"
+          }
+        ],
+        "bodyOverflow": "hidden",
+        "htmlOverflow": "",
+        "tapPoint": [
+          195,
+          636
+        ],
+        "closedByTapOutside": true,
+        "urlAfterTap": "/about",
+        "closedByEscape": true,
+        "bodyOverflowAfterClose": ""
+      }
+    },
+    "chatRow": {
+      "320": "no concierge",
+      "390": "no concierge"
+    },
+    "chips": {
+      "320": {
+        "total": 7,
+        "fullyVisibleAndClickable": 2,
+        "inputBottom": 443,
+        "vh": 568,
+        "pageScrollH": 568
+      },
+      "390": {
+        "total": 7,
+        "fullyVisibleAndClickable": 3,
+        "inputBottom": 719,
+        "vh": 844,
+        "pageScrollH": 844
+      }
+    },
+    "errors": [],
+    "desktop_about_bottom": {
+      "main": {
+        "top": -1583,
+        "h": 2294
+      },
+      "mainPad": "0px",
+      "footer": {
+        "top": 711,
+        "h": 189
+      },
+      "footerInner": "40px,0px,0px,0px,24px,0px",
+      "docH": 2539
+    },
+    "desktop_chat_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    },
+    "desktop_developer_view": {
+      "main": {
+        "top": 0,
+        "h": 0
+      },
+      "mainPad": "0px",
+      "footer": null,
+      "footerInner": null,
+      "docH": 900
+    }
+  }
+}
